@@ -16,7 +16,7 @@
   ],
   "license": "MIT",
   "bin": {
-    "winspect": "staging/dwtools/nodeWithDebug/NodeWithDebug.ss"
+    "nodewithdebug": "staging/dwtools/nodeWithDebug/NodeWithDebug.ss"
   },
   "main": "staging/dwtools/nodeWithDebug/NodeWithDebug.ss",
   "repository": {
