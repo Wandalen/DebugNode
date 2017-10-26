@@ -152,11 +152,10 @@ function helpGet()
 {
   var help =
   {
-    'NodeWithDebug' : ' ',
     Usage :
     [
       'nodewithdebug [ path ] [ args ]',
-      'NodeWithDebug expects path to script file and it arguments( optional ).'
+      'NodeWithDebug expects path to script file and its arguments( optional ).'
     ],
     Examples :
     [
