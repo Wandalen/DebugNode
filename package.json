@@ -29,10 +29,12 @@
   "dependencies": {
     "wTools": "",
     "wConsequence": "",
-    "wLogger": "",
     "wCopyable": "",
+    "wLogger": "",
     "wProto": "",
     "chromedriver": "",
+    "portscanner": "",
+    "request": "",
     "selenium-webdriver": ""
   },
   "devDependencies": {
