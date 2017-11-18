@@ -1,5 +1,5 @@
 {
-  "name": "nodewithdebug",
+  "name": "debugnode",
   "version": "0.0.4",
   "engine": "node >= 6.3.0",
   "description": "Launch nodejs with Chrome debugger.",
@@ -16,7 +16,7 @@
   ],
   "license": "MIT",
   "bin": {
-    "nodewithdebug": "staging/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
+    "debugnode": "staging/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
   },
   "main": "staging/dwtools/atop/nodeWithDebug/NodeWithDebug.ss",
   "repository": {
@@ -38,7 +38,7 @@
     "selenium-webdriver": ""
   },
   "devDependencies": {
-    "nodewithdebug": "."
+    "debugnode": "."
   },
   "keywords": [
     "node",
