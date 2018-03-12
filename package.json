@@ -27,15 +27,19 @@
     "url": "https://github.com/Wandalen/NodeWithDebug/issues"
   },
   "dependencies": {
-    "wTools": "",
+    "chrome-devtools-frontend": "^1.0.541714",
+    "chrome-remote-interface": "^0.25.5",
+    "chromedriver": "",
+    "electron": "",
+    "portscanner": "",
+    "request": "",
+    "selenium-webdriver": "^3.1.0",
     "wConsequence": "",
     "wCopyable": "",
     "wLogger": "",
+    "wPath": "",
     "wProto": "",
-    "chromedriver": "",
-    "portscanner": "",
-    "request": "",
-    "selenium-webdriver": ""
+    "wTools": ""
   },
   "devDependencies": {
     "debugnode": "."
