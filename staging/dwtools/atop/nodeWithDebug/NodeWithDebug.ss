@@ -186,13 +186,13 @@ function helpGet()
   {
     Usage :
     [
-      'nodewithdebug [ path ] [ args ]',
-      'NodeWithDebug expects path to script file and its arguments( optional ).'
+      'debugNode [ path ] [ args ]',
+      'debugNode expects path to script file and its arguments( optional ).'
     ],
     Examples :
     [
-      'nodewithdebug sample/Sample.js',
-      'nodewithdebug sample/Sample.js arg1 arg2 arg3',
+      'debugNode sample/Sample.js',
+      'debugNode sample/Sample.js arg1 arg2 arg3',
     ]
   }
 
