@@ -6,14 +6,12 @@ if( typeof module !== "undefined" )
   require( 'wPath' );
   require( 'wConsequence' );
   require( 'wFiles' );
-  require( 'chromedriver' );
 
+  // var Chrome = require( './browser/Chrome.ss' );
+  var Electron = require( './browser/electron/Electron.ss' );
   var portscanner = require('portscanner')
 
   var _ = wTools;
-
-  var webdriver = require( 'selenium-webdriver' );
-  var chrome = require( 'selenium-webdriver/chrome' );
 }
 
 //
@@ -21,71 +19,6 @@ if( typeof module !== "undefined" )
 var shell;
 var debuggerPort;
 var nodeVersion;
-
-//
-
-function launchChrome( url )
-{
-
-  var userPrefs =
-  { 'devtools' :
-    {
-    'preferences' : { 'inlineVariableValues' : 'false' }
-    }
-  }
-
-  var options = new chrome.Options();
-  options.setUserPreferences( userPrefs )
-  var driver = new webdriver.Builder()
-  .forBrowser('chrome')
-  .setChromeOptions( options )
-  .build();
-
-  var close = function()
-  {
-    this.driver.quit()
-    .catch( (e) => null )
-  }
-
-  var gotoUrl = function( url )
-  {
-    var p = this.driver.get( url );
-    return wConsequence.from( p );
-  }
-
-  var waitForPause = function()
-  {
-    var condition = new webdriver.Condition( 'Not paused', ( driver ) =>
-    {
-      var script =
-      `
-      try{ return window.Sources.SourcesPanel.instance()._paused; }
-      catch( err ){}
-      `
-      return driver.executeScript( script );
-    })
-
-    var p = this.driver.wait( condition, 5000, 'Pause condition timed out!.'  );
-    return wConsequence.from( p );
-  }
-
-  var unPause = function()
-  {
-    var script = `return window.Sources.SourcesPanel.instance()._togglePause();`
-    var p = this.driver.executeScript( script );
-    return wConsequence.from( p );
-  }
-
-  var browser =
-  {
-    driver  : driver,
-    close : close,
-    gotoUrl : gotoUrl,
-    waitForPause : waitForPause,
-    unPause : unPause
-  }
-  return browser;
-}
 
 //
 
@@ -187,19 +120,25 @@ function launch()
   .ifNoErrorThen( () => debuggerInfoGet( debuggerPort ) )
   .ifNoErrorThen( ( info ) =>
   {
-    var browser = launchChrome();
-    var onUrlLoaded = browser.gotoUrl( info.devtoolsFrontendUrl );
+    // var chrome = new Chrome();
+    // var browser = chrome.launchChrome();
+    // var onUrlLoaded = browser.gotoUrl( info.devtoolsFrontendUrl );
 
-    if( nodeVersion.major >= 8 )
-    {
-      onUrlLoaded
-      .doThen( () => browser.waitForPause() )
-      .doThen( () => browser.unPause() );
-    }
+    // if( nodeVersion.major >= 8 )
+    // {
+    //   onUrlLoaded
+    //   .doThen( () => browser.waitForPause() )
+    //   .doThen( () => browser.unPause() );
+    // }
 
-    process.on( 'SIGINT', () => browser.close() );
+    var electron = new Electron();
+    var browser = electron.launchElectron( info.devtoolsFrontendUrl );
 
-    shell.doThen( () =>  browser.close() );
+    process.on( 'SIGINT', () => browser.process.kill() );
+
+    // shell.doThen( () =>  browser.close() );
+
+    shell.doThen( browser.launched );
 
     return shell;
   })
