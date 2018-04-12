@@ -26,6 +26,7 @@
   "bugs": {
     "url": "https://github.com/Wandalen/NodeWithDebug/issues"
   },
+
   "dependencies": {
     "chrome-devtools-frontend": "^1.0.541714",
     "chrome-remote-interface": "^0.25.5",
