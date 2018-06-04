@@ -7,6 +7,8 @@
 
     require( 'wTools' );
     require( 'wConsequence' );
+    require( 'wPath' );
+    require( 'wstringsextra' );
     var electron = require( 'electron' );
 
   }
@@ -48,7 +50,7 @@
       var checkPause = 'window.Sources ? window.Sources.SourcesPanel.instance()._paused : false';
       var unPause = 'window.Sources.SourcesPanel.instance()._togglePause()';
 
-      console.log( 'Check for pause' );
+      // console.log( 'Check for pause' );
 
       var con = executeJs( checkPause )
       con.doThen( ( err, got ) =>
