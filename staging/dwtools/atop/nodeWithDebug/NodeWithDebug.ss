@@ -67,14 +67,14 @@ function launchDebugger( port )
     mode : 'spawn',
     path : 'node',
     args : flags,
-    stdio : 'pipe',
+    stdio : 'inherit',
     outputPiping : 0
   }
 
   shell = _.shell( shellOptions );
 
-  shellOptions.process.stdout.pipe( process.stdout );
-  shellOptions.process.stderr.pipe( process.stderr );
+  // shellOptions.process.stdout.pipe( process.stdout );
+  // shellOptions.process.stderr.pipe( process.stderr );
 
   process.on( 'SIGINT', () => shellOptions.process.kill( 'SIGINT' ) );
 }
@@ -186,13 +186,13 @@ function helpGet()
   {
     Usage :
     [
-      'nodewithdebug [ path ] [ args ]',
-      'NodeWithDebug expects path to script file and its arguments( optional ).'
+      'debugNode [ path ] [ args ]',
+      'debugNode expects path to script file and its arguments( optional ).'
     ],
     Examples :
     [
-      'nodewithdebug sample/Sample.js',
-      'nodewithdebug sample/Sample.js arg1 arg2 arg3',
+      'debugNode sample/Sample.js',
+      'debugNode sample/Sample.js arg1 arg2 arg3',
     ]
   }
 

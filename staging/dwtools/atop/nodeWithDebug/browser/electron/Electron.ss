@@ -56,7 +56,7 @@ function launchElectron( url )
     mode : 'spawn',
     path : appPath,
     args : flags,
-    stdio : 'ignore',
+    stdio : 'inherit',
     outputPiping : 0,
   }
 
