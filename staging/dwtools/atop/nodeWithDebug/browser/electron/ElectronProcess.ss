@@ -9,6 +9,7 @@
     require( 'wConsequence' );
     require( 'wPath' );
     require( 'wstringsextra' );
+    require( 'wExecTools' );
     var electron = require( 'electron' );
 
   }
