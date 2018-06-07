@@ -6,15 +6,17 @@
   {
 
     require( 'wTools' );
-    require( 'wConsequence' );
-    require( 'wPath' );
-    require( 'wstringsextra' );
-    require( 'wExecTools' );
+
+    var _ = _global_.wTools;
+
+    _.include( 'wConsequence' );
+    _.include( 'wPath' );
+    _.include( 'wStringsExtra' );
+    _.include( 'wExecTools' );
+
     var electron = require( 'electron' );
 
   }
-
-  var _ = wTools;
 
   var app = electron.app;
   var BrowserWindow = electron.BrowserWindow;
