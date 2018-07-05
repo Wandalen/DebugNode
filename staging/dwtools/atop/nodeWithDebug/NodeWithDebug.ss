@@ -9,7 +9,7 @@ if( typeof module !== "undefined" )
 
   // var Chrome = require( './browser/Chrome.ss' );
   var Electron = require( './browser/electron/Electron.ss' );
-  var portscanner = require('portscanner')
+  var portscanner = require( 'portscanner' );
 
   var _ = wTools;
 }
