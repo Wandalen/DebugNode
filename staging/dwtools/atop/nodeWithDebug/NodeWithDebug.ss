@@ -29,7 +29,7 @@ function getFreePort()
   portscanner.findAPortNotInUse( 1024, 65535, ( err, port ) =>
   {
     debuggerPort = port;
-    result.give( err, port );
+    result.give( err || undefined, port || undefined ); 
   });
 
   return result;
