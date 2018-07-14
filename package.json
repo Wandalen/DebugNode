@@ -3,11 +3,11 @@
   "version": "0.3.8",
   "engine": "node >= 6.3.0",
   "description": "Launch nodejs with Chrome debugger.",
-  "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
+  "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
   "contributors": [
     {
       "name": "Kostiantyn Wandalen",
-      "email": "wtory.net@domainsbyproxy.com>"
+      "email": "wanalen@willbe.so>"
     },
     {
       "name": "Volodymyr M.",
