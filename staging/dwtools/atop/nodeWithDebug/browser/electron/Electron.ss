@@ -101,7 +101,7 @@ var Proto =
 
   // relationships
 
-  constructor : Self,
+  // constructor : Self,
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
