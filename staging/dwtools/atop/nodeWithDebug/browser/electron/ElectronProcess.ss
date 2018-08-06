@@ -10,9 +10,10 @@
     var _ = _global_.wTools;
 
     _.include( 'wConsequence' );
-    _.include( 'wPath' );
     _.include( 'wStringsExtra' );
     _.include( 'wExecTools' );
+
+    var Path = _.include( 'wpathfundamentals' );
 
     var electron = require( 'electron' );
 

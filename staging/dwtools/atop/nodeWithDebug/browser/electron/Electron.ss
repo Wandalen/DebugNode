@@ -4,6 +4,7 @@
 
 if( typeof module !== 'undefined' )
 {
+  var Path = require( 'wpathfundamentals' );
 }
 
 //
@@ -42,7 +43,7 @@ function launchElectron( url )
 
   var appPath = require( 'electron' );
 
-  var launcherPath  = _.pathResolve( __dirname, './ElectronProcess.ss' );
+  var launcherPath  = Path.pathResolve( __dirname, './ElectronProcess.ss' );
   launcherPath  = _.fileProvider.pathNativize( launcherPath );
 
   var flags =

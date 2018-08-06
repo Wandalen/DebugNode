@@ -3,15 +3,16 @@
 if( typeof module !== "undefined" )
 {
   require( 'wTools' );
-  require( 'wPath' );
-  require( 'wConsequence' );
-  require( 'wFiles' );
+
+  var _ = _global_.wTools;
+
+  _.include( 'wPathFundamentals' )
+  _.include( 'wConsequence' )
+  _.include( 'wFiles' )
 
   // var Chrome = require( './browser/Chrome.ss' );
   var Electron = require( './browser/electron/Electron.ss' );
   var portscanner = require( 'portscanner' );
-
-  var _ = wTools;
 }
 
 //
@@ -134,7 +135,7 @@ function launch()
     // }
 
     var electron = new Electron();
-    var browser = electron.launchElectron( info.devtoolsFrontendUrl );
+    var browser = electron.launchElectron( info.devtoolsFrontendUrlCompat || info.devtoolsFrontendUrl );
 
     process.on( 'SIGINT', () => browser.process.kill() );
 
