@@ -50,6 +50,9 @@
 
     function waitForDebuggerPaused()
     {
+      if( !window )
+      return;
+
       var checkPause = 'window.Sources ? window.Sources.SourcesPanel.instance()._paused : false';
       var unPause = 'window.Sources.SourcesPanel.instance()._togglePause()';
 
