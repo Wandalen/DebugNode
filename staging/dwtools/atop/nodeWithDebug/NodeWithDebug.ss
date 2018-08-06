@@ -3,15 +3,16 @@
 if( typeof module !== "undefined" )
 {
   require( 'wTools' );
-  require( 'wPath' );
-  require( 'wConsequence' );
-  require( 'wFiles' );
+
+  var _ = _global_.wTools;
+
+  _.include( 'wPathFundamentals' )
+  _.include( 'wConsequence' )
+  _.include( 'wFiles' )
 
   // var Chrome = require( './browser/Chrome.ss' );
   var Electron = require( './browser/electron/Electron.ss' );
   var portscanner = require( 'portscanner' );
-
-  var _ = wTools;
 }
 
 //
@@ -29,7 +30,7 @@ function getFreePort()
   portscanner.findAPortNotInUse( 1024, 65535, ( err, port ) =>
   {
     debuggerPort = port;
-    result.give( err || undefined, port || undefined ); 
+    result.give( err || undefined, port || undefined );
   });
 
   return result;
@@ -77,6 +78,8 @@ function launchDebugger( port )
   // shellOptions.process.stderr.pipe( process.stderr );
 
   process.on( 'SIGINT', () => shellOptions.process.kill( 'SIGINT' ) );
+
+  return _.Consequence().give().eitherThen( [ shell, _.timeOut( 50 ) ] );
 }
 
 //
@@ -109,11 +112,11 @@ function launch()
     return helpGet();
   }
 
-  var scriptPath = process.argv[ 2 ];
-  scriptPath = _.pathJoin( _.pathCurrent(), scriptPath );
+  // var scriptPath = process.argv[ 2 ];
+  // scriptPath = _.pathJoin( _.pathCurrent(), scriptPath );
 
-  if( !_.fileProvider.fileStat( scriptPath ) )
-  throw _.err( 'Provided file path does not exist! ', process.argv[ 2 ] );
+  // if( !_.fileProvider.fileStat( scriptPath ) )
+  // throw _.err( 'Provided file path does not exist! ', process.argv[ 2 ] );
 
   return getFreePort()
   .ifNoErrorThen( () => launchDebugger( debuggerPort ) )
@@ -132,7 +135,7 @@ function launch()
     // }
 
     var electron = new Electron();
-    var browser = electron.launchElectron( info.devtoolsFrontendUrl );
+    var browser = electron.launchElectron( info.devtoolsFrontendUrlCompat || info.devtoolsFrontendUrl );
 
     process.on( 'SIGINT', () => browser.process.kill() );
 

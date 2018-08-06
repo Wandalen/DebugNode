@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
  * @class Electron
  */
 
-var _ = wTools;
+var _ = _global_.wTools;
 
 var Parent = null;
 var Self = function Electron( o )
@@ -42,8 +42,8 @@ function launchElectron( url )
 
   var appPath = require( 'electron' );
 
-  var launcherPath  = _.pathResolve( __dirname, './ElectronProcess.ss' );
-  launcherPath  = _.fileProvider.pathNativize( launcherPath );
+  var launcherPath  = _.path.resolve( __dirname, './ElectronProcess.ss' );
+  launcherPath  = _.fileProvider.nativize( launcherPath );
 
   var flags =
   [
@@ -112,7 +112,7 @@ var Proto =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,

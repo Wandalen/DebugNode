@@ -10,9 +10,9 @@
     var _ = _global_.wTools;
 
     _.include( 'wConsequence' );
-    _.include( 'wPath' );
     _.include( 'wStringsExtra' );
-    _.include( 'wExecTools' );
+    _.include( 'wExternalFundamentals' );
+    _.include( 'wPathFundamentals' );
 
     var electron = require( 'electron' );
 
@@ -50,6 +50,9 @@
 
     function waitForDebuggerPaused()
     {
+      if( !window )
+      return;
+
       var checkPause = 'window.Sources ? window.Sources.SourcesPanel.instance()._paused : false';
       var unPause = 'window.Sources.SourcesPanel.instance()._togglePause()';
 
