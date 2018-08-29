@@ -41,6 +41,8 @@
 
     window.loadURL( url );
 
+    window.webContents.on( 'devtools-focused', () => toogleScreencast() )
+
     // window.webContents.openDevTools();
 
     function executeJs( script )
@@ -69,12 +71,20 @@
       })
     }
 
+    function toogleScreencast()
+    { 
+      //to disable annoying blank window on left side that appears on newer versions of node
+      var toggleScreencast = 'try{ Screencast.ScreencastApp._appInstance._enabledSetting = false } catch{}';
+      executeJs( toggleScreencast );
+    }
+
     var e = /^v(\d+).(\d+).(\d+)/.exec( process.version );
     var nodeVersion =
     {
       major : Number.parseFloat( e[ 1 ] ),
       minor : Number.parseFloat( e[ 2 ] )
     }
+
 
     if( nodeVersion.major >= 8 )
     var interval = setInterval( waitForDebuggerPaused,100 );

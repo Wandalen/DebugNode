@@ -135,7 +135,7 @@ function launch()
     // }
 
     var electron = new Electron();
-    var browser = electron.launchElectron( info.devtoolsFrontendUrlCompat || info.devtoolsFrontendUrl );
+    var browser = electron.launchElectron( info.devtoolsFrontendUrl || info.devtoolsFrontendUrlCompat );
 
     process.on( 'SIGINT', () => browser.process.kill() );
 

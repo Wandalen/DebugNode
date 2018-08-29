@@ -43,7 +43,7 @@ function launchElectron( url )
   var appPath = require( 'electron' );
 
   var launcherPath  = _.path.resolve( __dirname, './ElectronProcess.ss' );
-  launcherPath  = _.fileProvider.nativize( launcherPath );
+  launcherPath  = _.fileProvider.path.nativize( launcherPath );
 
   var flags =
   [
