@@ -15,14 +15,35 @@
     _.include( 'wPathFundamentals' );
 
     var electron = require( 'electron' );
+    var ipc = require('node-ipc');
 
   }
 
   var app = electron.app;
   var BrowserWindow = electron.BrowserWindow;
+  var globalShortcut = electron.globalShortcut;
 
   var url = _.appArgs().scriptString;
   var window;
+
+  ipc.config.id = 'electon';
+  ipc.config.retry = 1500;
+  ipc.config.silent = true;
+  ipc.connectTo( 'main', ipcConnectHandler );
+
+  function ipcConnectHandler()
+  {
+    ipc.of.main.on( 'message', ipcOnMessageHandler );
+  }
+
+  function ipcOnMessageHandler( msg )
+  {
+    if( msg.type === 'loadURL' )
+    {
+      _.assert( _.strIs( msg.uri ) )
+      window.loadURL( msg.uri );
+    }
+  }
 
   function windowInit( )
   {
@@ -41,7 +62,13 @@
 
     window.loadURL( url );
 
-    window.webContents.on( 'devtools-focused', () => toogleScreencast() )
+    globalShortcut.register( 'F5', () =>
+    {
+      if( window.isFocused() )
+      ipc.of.main.emit( 'message', { type : 'reload' } );
+    })
+
+    toogleScreencast()
 
     // window.webContents.openDevTools();
 
@@ -72,7 +99,7 @@
     }
 
     function toogleScreencast()
-    { 
+    {
       //to disable annoying blank window on left side that appears on newer versions of node
       var toggleScreencast = 'try{ Screencast.ScreencastApp._appInstance._enabledSetting = false } catch{}';
       executeJs( toggleScreencast );
