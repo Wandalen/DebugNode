@@ -1,6 +1,6 @@
 {
   "name": "debugnode",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "engine": "node >= 6.3.0",
   "description": "Launch nodejs with Chrome debugger.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
