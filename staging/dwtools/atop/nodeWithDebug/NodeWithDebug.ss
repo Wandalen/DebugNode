@@ -13,13 +13,16 @@ if( typeof module !== "undefined" )
   // var Chrome = require( './browser/Chrome.ss' );
   var Electron = require( './browser/electron/Electron.ss' );
   var portscanner = require( 'portscanner' );
+
+  var ipc = require('node-ipc');
 }
 
 //
 
-var shell;
+var mainCon = new _.Consequence().give();
 var debuggerPort;
 var nodeVersion;
+var nodeProcess;
 
 //
 
@@ -72,14 +75,15 @@ function launchDebugger( port )
     outputPiping : 0
   }
 
-  shell = _.shell( shellOptions );
+  let shell = _.shell( shellOptions );
+  nodeProcess = shellOptions.process;
+
+  mainCon.doThen( () => shell );
 
   // shellOptions.process.stdout.pipe( process.stdout );
   // shellOptions.process.stderr.pipe( process.stderr );
 
-  process.on( 'SIGINT', () => shellOptions.process.kill( 'SIGINT' ) );
-
-  return _.Consequence().give().eitherThen( [ shell, _.timeOut( 50 ) ] );
+  process.on( 'SIGINT', () => nodeProcess.kill( 'SIGINT' ) );
 }
 
 //
@@ -112,6 +116,8 @@ function launch()
     return helpGet();
   }
 
+  ipcSetup();
+
   // var scriptPath = process.argv[ 2 ];
   // scriptPath = _.pathJoin( _.pathCurrent(), scriptPath );
 
@@ -123,6 +129,8 @@ function launch()
   .ifNoErrorThen( () => debuggerInfoGet( debuggerPort ) )
   .ifNoErrorThen( ( info ) =>
   {
+    ipc.server.start();
+
     // var chrome = new Chrome();
     // var browser = chrome.launchChrome();
     // var onUrlLoaded = browser.gotoUrl( info.devtoolsFrontendUrl );
@@ -141,9 +149,13 @@ function launch()
 
     // shell.doThen( () =>  browser.close() );
 
-    shell.doThen( browser.launched );
+    mainCon.lateThen( browser.launched );
+    mainCon.lateThen( () =>
+    {
+      ipc.server.stop();
+    })
 
-    return shell;
+    return mainCon;
   })
 
   // var debugUrlFinded = false;
@@ -179,6 +191,36 @@ function launch()
   //     }
   //   }
   // })
+}
+
+//
+
+function ipcSetup()
+{
+  ipc.config.id = 'main';
+  ipc.config.retry = 1500;
+  ipc.config.silent = true;
+  ipc.serve( () =>
+  {
+    ipc.server.on( 'message', ipcOnMessageHandler );
+  });
+
+  function ipcOnMessageHandler( message,socket )
+  {
+    if( message.type === 'reload' )
+    {
+      nodeProcess.kill();
+      return getFreePort()
+      .ifNoErrorThen( () => launchDebugger( debuggerPort ) )
+      .ifNoErrorThen( () => debuggerInfoGet( debuggerPort ) )
+      .ifNoErrorThen( ( info ) =>
+      {
+        let uri = info.devtoolsFrontendUrl || info.devtoolsFrontendUrlCompat;
+        ipc.server.emit( socket, 'message',{ type : 'loadURL', uri : uri });
+      })
+    }
+  }
+
 }
 
 //
