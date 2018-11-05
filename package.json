@@ -16,9 +16,9 @@
   ],
   "license": "MIT",
   "bin": {
-    "debugnode": "staging/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
+    "debugnode": "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
   },
-  "main": "staging/dwtools/atop/nodeWithDebug/NodeWithDebug.ss",
+  "main": "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss",
   "repository": {
     "type": "git",
     "url": "https://github.com/Wandalen/NodeWithDebug.git"
