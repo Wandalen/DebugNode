@@ -2,7 +2,7 @@ format: willfile-1.0.0
 about:
   name: DebugNode
   description: Launch nodejs with Chrome debugger.
-  version: 0.3.22
+  version: 0.3.23
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -83,7 +83,7 @@ path:
 submodule: {}
 reflector:
   reflect.proto.0:
-    reflectMap:
+    filePath:
       ./proto: ./out.release
     srcFilter:
       maskAll:
@@ -107,7 +107,7 @@ reflector:
     inherit:
       - predefined.*
   reflect.proto.1:
-    reflectMap:
+    filePath:
       ./proto: ./out.debug
     srcFilter:
       maskAll:
@@ -153,15 +153,14 @@ reflector:
     inherit:
       - predefined.*
   exported.0:
-    reflectMap:
-      ./proto: true
+    filePath: ./proto
     srcFilter:
       prefixPath: .
     dstFilter:
       prefixPath: .
   exportedFiles.0:
     recursive: 0
-    reflectMap:
+    filePath:
       ./dwtools/Tools.s: true
       ./dwtools/atop/nodeWithDebug/NodeWithDebug.ss: true
       ./dwtools/atop/nodeWithDebug/browser/Chrome.ss: true
@@ -274,7 +273,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.3.22
+    version: 0.3.23
     criterion:
       default: 1
       debug: 1
