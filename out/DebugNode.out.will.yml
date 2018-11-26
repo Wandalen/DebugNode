@@ -168,7 +168,7 @@ reflector:
       ./dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: true
     srcFilter:
       basePath: ./proto
-      prefixPath: proto
+      prefixPath: .
     dstFilter:
       basePath: .
       prefixPath: .
