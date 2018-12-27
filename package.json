@@ -45,7 +45,7 @@
     "node-ipc": ""
   },
   "devDependencies": {
-    "debugnode": "."
+    
   },
   "keywords": [
     "node",
