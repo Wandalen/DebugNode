@@ -1,6 +1,6 @@
 {
   "name": "debugnode",
-  "version": "0.3.28",
+  "version": "0.3.29",
   "engine": "node >= 6.3.0",
   "description": "Launch nodejs with Chrome debugger.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
@@ -44,9 +44,7 @@
     "selenium-webdriver": "^3.1.0",
     "node-ipc": ""
   },
-  "devDependencies": {
-    
-  },
+  "devDependencies": {},
   "keywords": [
     "node",
     "debug",
