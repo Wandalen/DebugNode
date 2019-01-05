@@ -19,7 +19,7 @@ if( typeof module !== "undefined" )
 
 //
 
-var mainCon = new _.Consequence().give();
+var mainCon = new _.Consequence().take( null );
 var debuggerPort;
 var nodeVersion;
 var nodeProcess;
@@ -31,9 +31,13 @@ function getFreePort()
   var result = new wConsequence();
 
   portscanner.findAPortNotInUse( 1024, 65535, ( err, port ) =>
-  {
+  { 
     debuggerPort = port;
-    result.give( err || undefined, port || undefined );
+    if( err )
+    result.error( err );
+    else
+    result.take( port )
+    return null;
   });
 
   return result;
@@ -78,12 +82,14 @@ function launchDebugger( port )
   let shell = _.shell( shellOptions );
   nodeProcess = shellOptions.process;
 
-  mainCon.doThen( () => shell );
+  mainCon.finally( () => shell );
 
   // shellOptions.process.stdout.pipe( process.stdout );
   // shellOptions.process.stderr.pipe( process.stderr );
 
   process.on( 'SIGINT', () => nodeProcess.kill( 'SIGINT' ) );
+
+  return true;
 }
 
 //
@@ -101,7 +107,7 @@ function debuggerInfoGet( port )
     return result.error( err );
 
     var info = JSON.parse( data )[ 0 ];
-    result.give( info );
+    result.take( info );
   })
 
   return result;
@@ -138,8 +144,8 @@ function launch()
     // if( nodeVersion.major >= 8 )
     // {
     //   onUrlLoaded
-    //   .doThen( () => browser.waitForPause() )
-    //   .doThen( () => browser.unPause() );
+    //   .finally( () => browser.waitForPause() )
+    //   .finally( () => browser.unPause() );
     // }
 
     var electron = new Electron();
@@ -147,13 +153,14 @@ function launch()
 
     process.on( 'SIGINT', () => browser.process.kill() );
 
-    // shell.doThen( () =>  browser.close() );
+    // shell.finally( () =>  browser.close() );
 
-    mainCon.lateThen( browser.launched );
-    mainCon.lateThen( () =>
-    {
-      ipc.server.stop();
-    })
+    // mainCon.finally( browser.launched );
+    // mainCon.finally( () =>
+    // {
+    //   ipc.server.stop();
+    //   return true;
+    // })
 
     return mainCon;
   })
@@ -185,7 +192,7 @@ function launch()
   //         components.query += '&ws=' + _.strRemoveBegin( url, 'ws://' );
   //         url = _.urlStr( components );
   //       }
-  //       onDebugReady.give( url );
+  //       onDebugReady.take( url );
   //       debugUrlFinded = true;
   //       break;
   //     }
@@ -217,7 +224,12 @@ function ipcSetup()
       {
         let uri = info.devtoolsFrontendUrl || info.devtoolsFrontendUrlCompat;
         ipc.server.emit( socket, 'message',{ type : 'loadURL', uri : uri });
+        return true;
       })
+    }
+    else if( message.type === 'quit' )
+    {
+      ipc.server.stop();
     }
   }
 
