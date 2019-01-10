@@ -74,7 +74,7 @@
 
     function executeJs( script )
     {
-      return _.Consequence.from( window.webContents.executeJavaScript( script,true ) )
+      return _.Consequence.From( window.webContents.executeJavaScript( script,true ) )
     }
 
     function waitForDebuggerPaused()
@@ -88,13 +88,14 @@
       // console.log( 'Check for pause' );
 
       var con = executeJs( checkPause )
-      con.doThen( ( err, got ) =>
+      con.finally( ( err, got ) =>
       {
         if( got === true )
         {
           clearInterval( interval );
           return executeJs( unPause );
         }
+        return true;
       })
     }
 
@@ -113,8 +114,8 @@
     }
 
 
-    if( nodeVersion.major >= 8 )
-    var interval = setInterval( waitForDebuggerPaused,100 );
+    // if( nodeVersion.major >= 8 )
+    // var interval = setInterval( waitForDebuggerPaused,100 );
 
     window.on( 'closed', function ()
     {
@@ -130,7 +131,8 @@
   })
 
   app.on( 'window-all-closed', function ()
-  {
+  { 
+    ipc.of.main.emit( 'message', { type : 'quit' } );
     app.quit();
   });
 
