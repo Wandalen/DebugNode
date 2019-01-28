@@ -89,6 +89,8 @@ reflector:
     filePath:
       ./proto: ./out.release
     srcFilter:
+      filePath:
+        ./proto: ./out.release
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -112,6 +114,8 @@ reflector:
     filePath:
       ./proto: ./out.debug
     srcFilter:
+      filePath:
+        ./proto: ./out.debug
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -151,6 +155,7 @@ reflector:
   exported.0:
     filePath: ./proto
     srcFilter:
+      filePath: ./proto
       prefixPath: .
     dstFilter:
       prefixPath: .
@@ -163,12 +168,32 @@ reflector:
       ./dwtools/atop/nodeWithDebug/browser/electron/Electron.ss: true
       ./dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: true
     srcFilter:
+      filePath:
+        ./dwtools/Tools.s: true
+        ./dwtools/atop/nodeWithDebug/NodeWithDebug.ss: true
+        ./dwtools/atop/nodeWithDebug/browser/Chrome.ss: true
+        ./dwtools/atop/nodeWithDebug/browser/electron/Electron.ss: true
+        ./dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: true
       basePath: .
       prefixPath: proto
     dstFilter:
       basePath: .
       prefixPath: .
 step:
+  clean.out.0:
+    criterion:
+      debug: 0
+    opts:
+      filePath: 'path::out.debug'
+    inherit:
+      - predefined.delete
+  clean.out.1:
+    criterion:
+      debug: 1
+    opts:
+      filePath: 'path::out.debug'
+    inherit:
+      - predefined.delete
   reflect.proto.0:
     criterion:
       debug: 0
@@ -233,24 +258,28 @@ build:
       debug: 1
       raw: 1
     steps:
+      - 'step::clean.out*=1'
       - 'step::reflect.proto.*=1'
   debug.compiled:
     criterion:
       debug: 1
       raw: 0
     steps:
+      - 'step::clean.out*=1'
       - 'step::reflect.proto.*=1'
   release.raw:
     criterion:
       debug: 0
       raw: 1
     steps:
+      - 'step::clean.out*=1'
       - 'step::reflect.proto.*=1'
   release.compiled:
     criterion:
       debug: 0
       raw: 0
     steps:
+      - 'step::clean.out*=1'
       - 'step::reflect.proto.*=1'
   all:
     steps:
