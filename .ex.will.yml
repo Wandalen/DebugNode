@@ -3,7 +3,7 @@ about :
 
   name : "DebugNode"
   description : "Launch nodejs with Chrome debugger."
-  version : "0.3.26"
+  version : "0.3.31"
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0
@@ -26,7 +26,7 @@ path :
 step :
 
   export.proto :
-    inherit : export
+    inherit : predefined.export
     export : path::proto
     tar : 0
     criterion :
