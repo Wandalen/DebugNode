@@ -1,9 +1,10 @@
 
+
 about :
 
   name : "DebugNode"
   description : "Launch nodejs with Chrome debugger."
-  version : "0.3.32"
+  version : "0.3.33"
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0
