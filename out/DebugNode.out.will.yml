@@ -2,7 +2,7 @@ format: willfile-1.0.0
 about:
   name: DebugNode
   description: Launch nodejs with Chrome debugger.
-  version: 0.3.33
+  version: 0.3.34
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -33,7 +33,7 @@ path:
     path: 'git+https://github.com/Wandalen/DebugNode.git'
   bugs:
     path: 'https://github.com/Wandalen/DebugNode/issues'
-  exportedDir.0:
+  exportedDir.proto.export:
     path: ./proto
     criterion:
       default: 1
@@ -43,7 +43,7 @@ path:
       export: 1
       tar: 1
       public: 1
-  exportedFiles.0:
+  exportedFiles.proto.export:
     path:
       - .
       - ./dwtools
@@ -69,8 +69,6 @@ path:
 submodule: {}
 reflector:
   reflect.proto.:
-    filePath:
-      ./proto: ./out.release
     srcFilter:
       filePath:
         ./proto: ./out.release
@@ -92,8 +90,6 @@ reflector:
     inherit:
       - predefined.*
   reflect.proto.debug:
-    filePath:
-      ./proto: ./out.debug
     srcFilter:
       filePath:
         ./proto: ./out.debug
@@ -129,27 +125,12 @@ reflector:
       debug: 1
     inherit:
       - predefined.*
-  exported.0:
-    filePath: ./proto
+  exported.proto.export:
     srcFilter:
       filePath: ./proto
       prefixPath: .
-  exportedFiles.0:
+  exportedFiles.proto.export:
     recursive: 0
-    filePath:
-      .: true
-      ./dwtools: true
-      ./dwtools/Tools.s: true
-      ./dwtools/abase: true
-      ./dwtools/amid: true
-      ./dwtools/atop: true
-      ./dwtools/atop/nodeWithDebug: true
-      ./dwtools/atop/nodeWithDebug/NodeWithDebug.ss: true
-      ./dwtools/atop/nodeWithDebug/browser: true
-      ./dwtools/atop/nodeWithDebug/browser/Chrome.ss: true
-      ./dwtools/atop/nodeWithDebug/browser/electron: true
-      ./dwtools/atop/nodeWithDebug/browser/electron/Electron.ss: true
-      ./dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: true
     srcFilter:
       filePath:
         .: true
@@ -287,7 +268,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.3.33
+    version: 0.3.34
     criterion:
       default: 1
       debug: 1
@@ -296,7 +277,7 @@ exported:
       export: 1
       tar: 1
       public: 1
-    exportedReflector: 'reflector::exported.0'
-    exportedFilesReflector: 'reflector::exportedFiles.0'
-    exportedDirPath: 'path::exportedDir.0'
-    exportedFilesPath: 'path::exportedFiles.0'
+    exportedReflector: 'reflector::exported.proto.export'
+    exportedFilesReflector: 'reflector::exportedFiles.proto.export'
+    exportedDirPath: 'path::exportedDir.proto.export'
+    exportedFilesPath: 'path::exportedFiles.proto.export'
