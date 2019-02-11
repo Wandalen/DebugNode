@@ -2,7 +2,7 @@ format: willfile-1.0.0
 about:
   name: DebugNode
   description: Launch nodejs with Chrome debugger.
-  version: 0.3.34
+  version: 0.3.35
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -22,11 +22,11 @@ path:
   out:
     path: out
   out.debug:
-    path: ./out.debug
+    path: ./out/debug
     criterion:
       debug: 1
   out.release:
-    path: ./out.release
+    path: ./out/release
     criterion:
       debug: 0
   repository:
@@ -45,19 +45,19 @@ path:
       public: 1
   exportedFiles.proto.export:
     path:
-      - .
-      - ./dwtools
-      - ./dwtools/Tools.s
-      - ./dwtools/abase
-      - ./dwtools/amid
-      - ./dwtools/atop
-      - ./dwtools/atop/nodeWithDebug
-      - ./dwtools/atop/nodeWithDebug/NodeWithDebug.ss
-      - ./dwtools/atop/nodeWithDebug/browser
-      - ./dwtools/atop/nodeWithDebug/browser/Chrome.ss
-      - ./dwtools/atop/nodeWithDebug/browser/electron
-      - ./dwtools/atop/nodeWithDebug/browser/electron/Electron.ss
-      - ./dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss
+      - proto
+      - proto/dwtools
+      - proto/dwtools/Tools.s
+      - proto/dwtools/abase
+      - proto/dwtools/amid
+      - proto/dwtools/atop
+      - proto/dwtools/atop/nodeWithDebug
+      - proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
+      - proto/dwtools/atop/nodeWithDebug/browser
+      - proto/dwtools/atop/nodeWithDebug/browser/Chrome.ss
+      - proto/dwtools/atop/nodeWithDebug/browser/electron
+      - proto/dwtools/atop/nodeWithDebug/browser/electron/Electron.ss
+      - proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss
     criterion:
       default: 1
       debug: 1
@@ -71,7 +71,7 @@ reflector:
   reflect.proto.:
     srcFilter:
       filePath:
-        ./proto: ./out.release
+        ./proto: ./out/release
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -92,7 +92,7 @@ reflector:
   reflect.proto.debug:
     srcFilter:
       filePath:
-        ./proto: ./out.debug
+        ./proto: ./out/debug
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -127,27 +127,44 @@ reflector:
       - predefined.*
   exported.proto.export:
     srcFilter:
-      filePath: ./proto
+      filePath:
+        ./proto: true
       prefixPath: .
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
   exportedFiles.proto.export:
     recursive: 0
     srcFilter:
       filePath:
         .: true
-        ./dwtools: true
-        ./dwtools/Tools.s: true
-        ./dwtools/abase: true
-        ./dwtools/amid: true
-        ./dwtools/atop: true
-        ./dwtools/atop/nodeWithDebug: true
-        ./dwtools/atop/nodeWithDebug/NodeWithDebug.ss: true
-        ./dwtools/atop/nodeWithDebug/browser: true
-        ./dwtools/atop/nodeWithDebug/browser/Chrome.ss: true
-        ./dwtools/atop/nodeWithDebug/browser/electron: true
-        ./dwtools/atop/nodeWithDebug/browser/electron/Electron.ss: true
-        ./dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: true
+        dwtools: true
+        dwtools/Tools.s: true
+        dwtools/abase: true
+        dwtools/amid: true
+        dwtools/atop: true
+        dwtools/atop/nodeWithDebug: true
+        dwtools/atop/nodeWithDebug/NodeWithDebug.ss: true
+        dwtools/atop/nodeWithDebug/browser: true
+        dwtools/atop/nodeWithDebug/browser/Chrome.ss: true
+        dwtools/atop/nodeWithDebug/browser/electron: true
+        dwtools/atop/nodeWithDebug/browser/electron/Electron.ss: true
+        dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: true
       basePath: .
       prefixPath: proto
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
 step:
   clean.out.:
     criterion:
@@ -268,7 +285,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.3.34
+    version: 0.3.35
     criterion:
       default: 1
       debug: 1
