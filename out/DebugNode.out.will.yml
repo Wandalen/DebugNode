@@ -53,6 +53,7 @@ path:
       - proto/dwtools/atop
       - proto/dwtools/atop/nodeWithDebug
       - proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
+      - proto/dwtools/atop/nodeWithDebug/Preload.ss
       - proto/dwtools/atop/nodeWithDebug/browser
       - proto/dwtools/atop/nodeWithDebug/browser/Chrome.ss
       - proto/dwtools/atop/nodeWithDebug/browser/electron
@@ -150,6 +151,7 @@ reflector:
         dwtools/atop: true
         dwtools/atop/nodeWithDebug: true
         dwtools/atop/nodeWithDebug/NodeWithDebug.ss: true
+        dwtools/atop/nodeWithDebug/Preload.ss: true
         dwtools/atop/nodeWithDebug/browser: true
         dwtools/atop/nodeWithDebug/browser/Chrome.ss: true
         dwtools/atop/nodeWithDebug/browser/electron: true
