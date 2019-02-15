@@ -1,8 +1,5 @@
 
-debugger
-console.log( process.argv )
+var _ = require( 'wExternalFundamentals' );
 
-/*
-  How to run :
-  debugnode sample/Sample.js abc
-*/
+debugger
+_.shellNode( _.path.join( __dirname, 'Sample2.js' ) )
