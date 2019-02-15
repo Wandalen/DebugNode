@@ -1,6 +1,6 @@
 {
   "name": "debugnode",
-  "version": "0.3.13",
+  "version": "0.3.36",
   "engine": "node >= 6.3.0",
   "description": "Launch nodejs with Chrome debugger.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
@@ -16,9 +16,9 @@
   ],
   "license": "MIT",
   "bin": {
-    "debugnode": "staging/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
+    "debugnode": "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
   },
-  "main": "staging/dwtools/atop/nodeWithDebug/NodeWithDebug.ss",
+  "main": "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss",
   "repository": {
     "type": "git",
     "url": "https://github.com/Wandalen/NodeWithDebug.git"
@@ -45,9 +45,7 @@
     "wexectools": "",
     "wpathfundamentals": ""
   },
-  "devDependencies": {
-    "debugnode": "."
-  },
+  "devDependencies": {},
   "keywords": [
     "node",
     "debug",
