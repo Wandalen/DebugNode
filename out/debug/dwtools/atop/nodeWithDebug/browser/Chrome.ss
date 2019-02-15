@@ -66,7 +66,7 @@ function launchChrome( url )
   var gotoUrl = function( url )
   {
     var p = this.driver.get( url );
-    return wConsequence.from( p );
+    return wConsequence.From( p );
   }
 
   var waitForPause = function()
@@ -82,14 +82,14 @@ function launchChrome( url )
     })
 
     var p = this.driver.wait( condition, 5000, 'Pause condition timed out!.'  );
-    return wConsequence.from( p );
+    return wConsequence.From( p );
   }
 
   var unPause = function()
   {
     var script = `return window.Sources.SourcesPanel.instance()._togglePause();`
     var p = this.driver.executeScript( script );
-    return wConsequence.from( p );
+    return wConsequence.From( p );
   }
 
   var browser =

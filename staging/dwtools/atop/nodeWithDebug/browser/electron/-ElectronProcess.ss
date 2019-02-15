@@ -25,9 +25,25 @@
 
   var url = _.appArgs().scriptString;
   var window;
-  let ready = new _.Consequence();
 
-  /*  */
+  ipc.config.id = 'electon';
+  ipc.config.retry = 1500;
+  ipc.config.silent = true;
+  ipc.connectTo( 'main', ipcConnectHandler );
+
+  function ipcConnectHandler()
+  {
+    ipc.of.main.on( 'message', ipcOnMessageHandler );
+  }
+
+  function ipcOnMessageHandler( msg )
+  {
+    if( msg.type === 'loadURL' )
+    {
+      _.assert( _.strIs( msg.uri ) )
+      window.loadURL( msg.uri );
+    }
+  }
 
   function windowInit( )
   {
@@ -49,10 +65,10 @@
     globalShortcut.register( 'F5', () =>
     {
       if( window.isFocused() )
-      ipc.of.nodewithdebug.emit( 'reload', { type : 'reload' } );
+      ipc.of.main.emit( 'message', { type : 'reload' } );
     })
 
-    toogleScreencast();
+    toogleScreencast()
 
     // window.webContents.openDevTools();
 
@@ -108,74 +124,21 @@
 
   }
 
-  /*  */
-
-  function setup()
+  app.on( 'ready', windowInit );
+  app.on( 'browser-window-created', function (e, window )
   {
-    ipc.config.id = 'electon';
-    ipc.config.retry = 1500;
-    ipc.config.silent = true;
-    ipc.connectTo( 'nodewithdebug', () =>  ready.take( null ) );
+    window.setMenu( null );
+  })
 
-    ready.thenKeep( () =>
-    {
-      ipc.of.nodewithdebug.on( 'newNodeElectron', ( data ) =>
-      {
-        var url = data.message.url;
-        _.assert( _.strIs( url ) )
+  app.on( 'window-all-closed', function ()
+  { 
+    ipc.of.main.emit( 'message', { type : 'quit' } );
+    app.quit();
+  });
 
-        var o =
-        {
-          parent: window,
-          modal: false,
-          width : 1280,
-          height : 720,
-          webPreferences :
-          {
-            nodeIntegration : true
-          },
-          title : 'DebugNode',
-          show: false
-        }
-        let child = new BrowserWindow( o );
-
-        child.loadURL( url );
-
-        child.once( 'ready-to-show', () =>
-        {
-          child.show();
-        })
-
-      });
-
-      /*  */
-
-      app.on( 'ready', windowInit );
-      app.on( 'browser-window-created', function (e, window )
-      {
-        window.setMenu( null );
-      })
-
-      app.on( 'window-all-closed', function ()
-      {
-        ipc.of.nodewithdebug.emit( 'electronExit', { type : 'exit' } );
-        app.quit();
-      });
-
-      app.on( 'activate', function ()
-      {
-        if ( window === null && !self.headless )
-        windowInit();
-      })
-
-      /*  */
-
-      return true;
-
-    })
-
-  }
-
-  setup();
-
+  app.on( 'activate', function ()
+  {
+    if ( window === null && !self.headless )
+    windowInit();
+  })
 })();

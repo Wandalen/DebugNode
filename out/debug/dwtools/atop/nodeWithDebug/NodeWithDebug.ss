@@ -15,247 +15,290 @@ if( typeof module !== "undefined" )
   var portscanner = require( 'portscanner' );
 
   var ipc = require('node-ipc');
+  var request = require( 'request' );
 }
 
-//
-
-var mainCon = new _.Consequence().give();
-var debuggerPort;
-var nodeVersion;
-var nodeProcess;
-
-//
-
-function getFreePort()
+var Parent = null;
+var Self = function NodeWithDebug( o )
 {
-  var result = new wConsequence();
+  if( !( this instanceof Self ) )
+  if( o instanceof Self )
+  return o;
+  else
+  return new( _.routineJoin( Self, Self, arguments ) );
+  return Self.prototype.init.apply( this,arguments );
+}
 
-  portscanner.findAPortNotInUse( 1024, 65535, ( err, port ) =>
+Self.nameShort = 'DebugNode';
+
+//
+
+function init( o )
+{
+  var self = this;
+
+  o = o || Object.create( null );
+
+  _.assert( arguments.length === 0 | arguments.length === 1 );
+
+  self.ready = new _.Consequence();
+  self.nodes = [];
+
+}
+
+
+/* Setup */
+
+function setup()
+{
+  let self = this;
+
+  self.ready.take( null );
+
+  self.ready
+  .thenKeep( () => self.setupIpc() )
+
+  process.on( 'SIGINT', () =>
   {
-    debuggerPort = port;
-    result.give( err || undefined, port || undefined );
+    self.close();
+  });
+}
+
+function setupIpc()
+{
+  let self = this;
+  let con = new _.Consequence();
+
+  ipc.config.id = 'nodewithdebug';
+  ipc.config.retry= 1500;
+  ipc.config.silent = true;
+  ipc.config.logger = null;
+
+  ipc.serve( () =>
+  {
+    ipc.server.on( 'newNode', _.routineJoin( self, self.onNewNode ) );
+    ipc.server.on( 'newElectron', _.routineJoin( self, self.onNewElectron ) );
+    ipc.server.on( 'electronExit', _.routineJoin( self, self.onElectronExit ) );
+    ipc.server.on( 'reload', _.routineJoin( self, self.onReload ) );
+    con.take( true );
   });
 
-  return result;
+  ipc.server.start();
+
+  return con;
+}
+
+/* node */
+
+function onNewNode( data,socket )
+{
+  let self = this;
+
+  debugger
+
+  let node = data.message;
+
+  var port = node.debugPort;
+  var requestUrl = 'http://localhost:' + port + '/json/list';
+
+  var con = new wConsequence();
+
+  ipc.server.emit( socket, 'newNodeReady', { id : ipc.config.id, message : { ready : 1 } } )
+
+  request( requestUrl, ( err, res, data ) =>
+  {
+    if( err )
+    return con.error( err );
+
+    var info = JSON.parse( data )[ 0 ];
+    con.take( info );
+  })
+
+  node.info = con.finallyDeasyncKeep();
+
+  let url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
+
+  if( !self.nodes.length )
+  {
+    let electron = new Electron();
+    self.electron = electron.launchElectron( url );
+  }
+  else
+  {
+    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : { url : url } } );
+  }
+
+  self.nodes.push( node )
 }
 
 //
 
-function launchDebugger( port )
+function onNewElectron( data, socket )
 {
-  var e = /^v(\d+).(\d+).(\d+)/.exec( process.version );
+  let self = this;
 
-  if( !e )
-  throw _.err( 'Cant parse node version', process.version );
+  if( !self.electron.socket )
+  self.electron.socket = socket;
 
-  nodeVersion =
-  {
-    major : Number.parseFloat( e[ 1 ] ),
-    minor : Number.parseFloat( e[ 2 ] )
-  }
+  ipc.server.emit( socket, 'newElectronReady', { id : ipc.config.id, message : { ready : 1 } } )
+}
 
-  if( nodeVersion.major < 6 || nodeVersion.major === 6 && nodeVersion.minor < 3 )
-  throw _.err( 'Incompatible node version: ', process.version, ', use 6.3.0 or higher!' );
+//
 
-  var flags = [];
+function onElectronExit( data, socket )
+{
+  let self = this;
+  self.close();
+}
 
-  if( nodeVersion.major < 8 )
-  flags.push( '--inspect=' + port,'--debug-brk' )
-  else
-  flags.push( '--inspect-brk=' + port )
+function onReload( data, socket )
+{
+  let self = this;
 
-  flags.push.apply( flags, process.argv.slice( 2 ) );
+  if( self.nodeProcess )
+  self.nodeProcess.kill()
+
+  if( self.electron )
+  self.electron.process.kill();
+
+  self.nodes = [];
+
+  self.ready.finallyDeasyncKeep();
+
+  self.runNode();
+}
+
+//
+
+function runNode()
+{
+  let self = this;
+
+  var path =
+  [
+    'node',
+    '-r',
+    _.path.nativize( _.path.join( __dirname, 'Preload.ss' ) ),
+    process.argv[ 2 ]
+  ]
+  .join( ' ' );
 
   var shellOptions =
   {
     mode : 'spawn',
-    path : 'node',
-    args : flags,
+    path : path,
     stdio : 'inherit',
     outputPiping : 0
   }
 
   let shell = _.shell( shellOptions );
-  nodeProcess = shellOptions.process;
 
-  mainCon.doThen( () => shell );
+  self.nodeProcess = shellOptions.process;
 
-  // shellOptions.process.stdout.pipe( process.stdout );
-  // shellOptions.process.stderr.pipe( process.stderr );
+  self.ready.thenKeep( shell );
 
-  process.on( 'SIGINT', () => nodeProcess.kill( 'SIGINT' ) );
 }
 
 //
 
-function debuggerInfoGet( port )
+function close()
 {
-  var request = require( 'request' );
-  var requestUrl = 'http://localhost:' + port + '/json/list';
+  let self = this;
 
-  var result = new wConsequence();
+  if( self.nodeProcess )
+  self.nodeProcess.kill()
 
-  request( requestUrl, ( err, res, data ) =>
-  {
-    if( err )
-    return result.error( err );
+  if( self.electron )
+  self.electron.process.kill()
 
-    var info = JSON.parse( data )[ 0 ];
-    result.give( info );
-  })
+  self.nodes = [];
 
-  return result;
+  ipc.server.stop();
 }
 
-//
+/* Launch */
 
-function launch()
+function Launch()
 {
-  if( !process.argv[ 2 ] )
-  {
-    return helpGet();
-  }
-
-  ipcSetup();
-
-  // var scriptPath = process.argv[ 2 ];
-  // scriptPath = _.pathJoin( _.pathCurrent(), scriptPath );
-
-  // if( !_.fileProvider.fileStat( scriptPath ) )
-  // throw _.err( 'Provided file path does not exist! ', process.argv[ 2 ] );
-
-  return getFreePort()
-  .ifNoErrorThen( () => launchDebugger( debuggerPort ) )
-  .ifNoErrorThen( () => debuggerInfoGet( debuggerPort ) )
-  .ifNoErrorThen( ( info ) =>
-  {
-    ipc.server.start();
-
-    // var chrome = new Chrome();
-    // var browser = chrome.launchChrome();
-    // var onUrlLoaded = browser.gotoUrl( info.devtoolsFrontendUrl );
-
-    // if( nodeVersion.major >= 8 )
-    // {
-    //   onUrlLoaded
-    //   .doThen( () => browser.waitForPause() )
-    //   .doThen( () => browser.unPause() );
-    // }
-
-    var electron = new Electron();
-    var browser = electron.launchElectron( info.devtoolsFrontendUrl || info.devtoolsFrontendUrlCompat );
-
-    process.on( 'SIGINT', () => browser.process.kill() );
-
-    // shell.doThen( () =>  browser.close() );
-
-    mainCon.lateThen( browser.launched );
-    mainCon.lateThen( () =>
-    {
-      ipc.server.stop();
-    })
-
-    return mainCon;
-  })
-
-  // var debugUrlFinded = false;
-  // var onDebugReady = new wConsequence();
-
-  // shellOptions.process.stderr.on( 'data', ( data ) =>
-  // {
-  //   data = data.toString();
-
-  //   if( debugUrlFinded )
-  //   return;
-
-  //   var regexs = [ /chrome-devtools:\/\/.*/, /ws:\/\/.*/ ];
-  //   for( var i = 0; i < regexs.length; i++  )
-  //   {
-  //     var regexp = regexs[ i ];
-  //     if( regexp.test( data ) )
-  //     {
-  //       var url = data.match( regexp )[ 0 ];
-  //       if( _.strBegins( url, 'ws://' ) )
-  //       {
-  //         var components =
-  //         {
-  //           origin : 'chrome-devtools://devtools/bundled/inspector.html',
-  //           query : 'experiments=true&v8only=true'
-  //         }
-  //         components.query += '&ws=' + _.strRemoveBegin( url, 'ws://' );
-  //         url = _.urlStr( components );
-  //       }
-  //       onDebugReady.give( url );
-  //       debugUrlFinded = true;
-  //       break;
-  //     }
-  //   }
-  // })
+  let node = new Self();
+  node.setup();
+  node.runNode();
 }
 
-//
+// --
+// relationships
+// --
 
-function ipcSetup()
+var Composes =
 {
-  ipc.config.id = 'main';
-  ipc.config.retry = 1500;
-  ipc.config.silent = true;
-  ipc.serve( () =>
-  {
-    ipc.server.on( 'message', ipcOnMessageHandler );
-  });
-
-  function ipcOnMessageHandler( message,socket )
-  {
-    if( message.type === 'reload' )
-    {
-      nodeProcess.kill();
-      return getFreePort()
-      .ifNoErrorThen( () => launchDebugger( debuggerPort ) )
-      .ifNoErrorThen( () => debuggerInfoGet( debuggerPort ) )
-      .ifNoErrorThen( ( info ) =>
-      {
-        let uri = info.devtoolsFrontendUrl || info.devtoolsFrontendUrlCompat;
-        ipc.server.emit( socket, 'message',{ type : 'loadURL', uri : uri });
-      })
-    }
-  }
-
 }
 
-//
-
-function helpGet()
+var Aggregates =
 {
-  var help =
-  {
-    Usage :
-    [
-      'debugNode [ path ] [ args ]',
-      'debugNode expects path to script file and its arguments( optional ).'
-    ],
-    Examples :
-    [
-      'debugNode sample/Sample.js',
-      'debugNode sample/Sample.js arg1 arg2 arg3',
-    ]
-  }
+}
 
-  var strOptions =
-  {
-    levels : 3,
-    wrap : 0,
-    stringWrapper : '',
-    multiline : 1
-  };
+var Associates =
+{
+}
 
-  var help = _.toStr( help, strOptions );
+var Restricts =
+{
+  ready : null,
+  nodeProcess : null,
+  electron : null,
+  nodes : null
+}
 
-  logger.log( help );
+var Statics =
+{
+  Launch : Launch
+}
 
-  return help;
+// --
+// prototype
+// --
+
+var Proto =
+{
+
+  init : init,
+
+  setup : setup,
+  setupIpc : setupIpc,
+  runNode : runNode,
+
+  onNewNode : onNewNode,
+  onNewElectron : onNewElectron,
+  onElectronExit : onElectronExit,
+  onReload : onReload,
+
+  close : close,
+
+  // relationships
+
+  // constructor : Self,
+  Composes : Composes,
+  Aggregates : Aggregates,
+  Associates : Associates,
+  Restricts : Restricts,
+  Statics : Statics,
+
 }
 
 //
 
-launch();
+_.classDeclare
+({
+  cls : Self,
+  parent : Parent,
+  extend : Proto,
+});
+
+Launch();
+
+//
+// export
+// --
+
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = Self;
