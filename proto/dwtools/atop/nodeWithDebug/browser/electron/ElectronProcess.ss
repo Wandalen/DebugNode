@@ -115,6 +115,7 @@
     ipc.config.id = 'electon';
     ipc.config.retry = 1500;
     ipc.config.silent = true;
+
     ipc.connectTo( 'nodewithdebug', () =>  ready.take( null ) );
 
     ready.thenKeep( () =>
@@ -158,7 +159,7 @@
 
       app.on( 'window-all-closed', function ()
       {
-        ipc.of.nodewithdebug.emit( 'electronExit', { type : 'exit' } );
+        // ipc.of.nodewithdebug.emit( 'electronExit', { id : ipc.config.id, message : 'exit' } ); //qqq : problem, process hangs
         app.quit();
       });
 

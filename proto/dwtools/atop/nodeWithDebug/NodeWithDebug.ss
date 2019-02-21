@@ -72,7 +72,6 @@ function setupIpc()
   ipc.config.id = 'nodewithdebug';
   ipc.config.retry= 1500;
   ipc.config.silent = true;
-  ipc.config.logger = null;
 
   ipc.serve( () =>
   {
@@ -149,6 +148,7 @@ function onElectronExit( data, socket )
 {
   let self = this;
   self.close();
+  process.exit();
 }
 
 function onReload( data, socket )
@@ -195,7 +195,7 @@ function runNode()
 
   self.nodeProcess = shellOptions.process;
 
-  self.ready.thenKeep( shell );
+  self.ready.thenKeep( () => shell );
 
 }
 
@@ -223,6 +223,8 @@ function Launch()
   let node = new Self();
   node.setup();
   node.runNode();
+
+  node.ready.got( () => node.close() );
 }
 
 // --

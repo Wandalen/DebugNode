@@ -10,6 +10,7 @@
 
   ipc.config.id = process.pid;
   ipc.config.retry = 1000;
+  ipc.config.silent = true;
 
   let connectTo = deasyncEmptyCb( ipc, ipc.connectTo );
   connectTo( 'nodewithdebug' );
@@ -31,13 +32,13 @@
 
   inspector.close();
 
-//   process.on( 'exit', () => _.fileProvider.fileDelete( processInfoPath ) );
-
   nodeWithDebug.emit( 'newNode', { id :  process.pid, message : processInfo } )
 
   nodeWithDebugOn( 'newNodeReady' );
 
   inspector.open( port, undefined, true );
+
+  ipc.disconnect( 'nodewithdebug' );
 
 /**/
 
