@@ -37,7 +37,7 @@ todo:
 
   + resume execution of child nodes( remove preload script ) when main electron window is closed
     close electron child window when node process exits
-
+    change focus of electron window when breakpoint is fired
 */
 
 //
@@ -137,7 +137,7 @@ function onNewNode( data,socket )
   }
   else
   {
-    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : { url : url } } );
+    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : { url : url, pid : node.id } } );
   }
 
   self.nodes.push( node )
