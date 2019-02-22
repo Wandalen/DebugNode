@@ -31,6 +31,15 @@ var Self = function NodeWithDebug( o )
 
 Self.nameShort = 'DebugNode';
 
+/*
+
+todo:
+
+  + resume execution of child nodes( remove preload script ) when main electron window is closed
+    close electron child window when node process exits
+
+*/
+
 //
 
 function init( o )
@@ -43,6 +52,8 @@ function init( o )
 
   self.ready = new _.Consequence();
   self.nodes = [];
+  self.state = Object.create( null );
+  self.state.debug = 1;
 
 }
 
@@ -72,11 +83,11 @@ function setupIpc()
   ipc.config.id = 'nodewithdebug';
   ipc.config.retry= 1500;
   ipc.config.silent = true;
-  ipc.config.logger = null;
 
   ipc.serve( () =>
   {
     ipc.server.on( 'newNode', _.routineJoin( self, self.onNewNode ) );
+    ipc.server.on( 'currentStateGet', _.routineJoin( self, self.onCurrentStateGet) );
     ipc.server.on( 'newElectron', _.routineJoin( self, self.onNewElectron ) );
     ipc.server.on( 'electronExit', _.routineJoin( self, self.onElectronExit ) );
     ipc.server.on( 'reload', _.routineJoin( self, self.onReload ) );
@@ -122,6 +133,7 @@ function onNewNode( data,socket )
   {
     let electron = new Electron();
     self.electron = electron.launchElectron( url );
+    self.electron.process.on( 'exit', () => { self.state.debug = 0 } )
   }
   else
   {
@@ -129,6 +141,14 @@ function onNewNode( data,socket )
   }
 
   self.nodes.push( node )
+}
+
+//
+
+function onCurrentStateGet( data,socket )
+{
+  let self = this;
+  ipc.server.emit( socket, 'currentState', { id : ipc.config.id, message : self.state } )
 }
 
 //
@@ -149,6 +169,7 @@ function onElectronExit( data, socket )
 {
   let self = this;
   self.close();
+  process.exit();
 }
 
 function onReload( data, socket )
@@ -195,7 +216,12 @@ function runNode()
 
   self.nodeProcess = shellOptions.process;
 
-  self.ready.thenKeep( shell );
+  // self.nodeProcess.on( 'exit', () =>
+  // {
+  //   console.log( 'main node exit' )
+  // })
+
+  self.ready.thenKeep( () => shell );
 
 }
 
@@ -214,6 +240,7 @@ function close()
   self.nodes = [];
 
   ipc.server.stop();
+
 }
 
 /* Launch */
@@ -223,6 +250,8 @@ function Launch()
   let node = new Self();
   node.setup();
   node.runNode();
+
+  node.ready.got( () => node.close() );
 }
 
 // --
@@ -246,7 +275,8 @@ var Restricts =
   ready : null,
   nodeProcess : null,
   electron : null,
-  nodes : null
+  nodes : null,
+  state : null
 }
 
 var Statics =
@@ -268,6 +298,7 @@ var Proto =
   runNode : runNode,
 
   onNewNode : onNewNode,
+  onCurrentStateGet : onCurrentStateGet,
   onNewElectron : onNewElectron,
   onElectronExit : onElectronExit,
   onReload : onReload,
