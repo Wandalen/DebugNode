@@ -1,7 +1,10 @@
-debugger
-console.log( process.argv )
 
-/*
-  How to run :
-  debugnode sample/Sample.js abc
-*/
+var _ = require( 'wExternalFundamentals' );
+
+debugger
+_.shellNode({ path : _.path.join( __dirname, 'Sample3.js' ), mode : 'spawn', stdio : 'inherit' })
+.thenKeep( () =>
+{
+  debugger
+  return null;
+})
