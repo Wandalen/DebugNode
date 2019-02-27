@@ -200,9 +200,10 @@ function runNode()
     'node',
     '-r',
     _.path.nativize( _.path.join( __dirname, 'Preload.ss' ) ),
-    process.argv[ 2 ]
   ]
-  .join( ' ' );
+
+  path.push.apply( path, process.argv.slice( 2 ) );
+  path = path.join( ' ' );
 
   var shellOptions =
   {
