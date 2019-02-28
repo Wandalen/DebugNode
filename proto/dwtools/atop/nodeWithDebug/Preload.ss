@@ -5,8 +5,7 @@
   var inspector = require( 'inspector' );
   var ipc = require( 'node-ipc' );
   var deasync = require( 'deasync' );
-  require( 'wFiles' );
-  var _ = _global_.wTools;
+  var url = require('url');
 
   ipc.config.id = process.pid;
   ipc.config.retry = 1000;
@@ -26,18 +25,18 @@
 
   if( !currentState.debug )
   {
-    process.env.NODE_OPTIONS = _.strReplaceAll( process.env.NODE_OPTIONS, preload, '' );
+    process.env.NODE_OPTIONS = strReplaceAll( process.env.NODE_OPTIONS, preload, '' );
     ipc.disconnect( 'nodewithdebug' );
     return;
   }
 
   if( !process.env.NODE_OPTIONS )
   process.env.NODE_OPTIONS = '';
-  process.env.NODE_OPTIONS = _.strAppendOnce( process.env.NODE_OPTIONS, preload )
+  process.env.NODE_OPTIONS = strAppendOnce( process.env.NODE_OPTIONS, preload )
 
   inspector.open( 0, undefined, false );
 
-  let uri = _.uri.parse( inspector.url() );
+  let uri = url.parse( inspector.url() );
 
   let port = Number( uri.port );
 
@@ -75,5 +74,18 @@ function deasyncEmptyCb( context, routine )
       }
   }
 }
+
+ function strReplaceAll( str, search, replacement)
+ {
+   return str.replace(new RegExp( search, 'g' ), replacement );
+ };
+
+ function strAppendOnce( src,end )
+ {
+   if( src.indexOf( end, src.length - end.length ) !== -1 )
+   return src;
+   else
+   return src + end;
+ }
 
 })();
