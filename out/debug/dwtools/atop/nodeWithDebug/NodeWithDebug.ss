@@ -37,7 +37,7 @@ todo:
 
   + resume execution of child nodes( remove preload script ) when main electron window is closed
     close electron child window when node process exits
-
+    change focus of electron window when breakpoint is fired
 */
 
 //
@@ -137,7 +137,7 @@ function onNewNode( data,socket )
   }
   else
   {
-    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : { url : url } } );
+    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : { url : url, pid : node.id } } );
   }
 
   self.nodes.push( node )
@@ -200,9 +200,10 @@ function runNode()
     'node',
     '-r',
     _.path.nativize( _.path.join( __dirname, 'Preload.ss' ) ),
-    process.argv[ 2 ]
   ]
-  .join( ' ' );
+
+  path.push.apply( path, process.argv.slice( 2 ) );
+  path = path.join( ' ' );
 
   var shellOptions =
   {

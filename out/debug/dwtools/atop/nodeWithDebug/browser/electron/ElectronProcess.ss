@@ -26,6 +26,7 @@
   var url = _.appArgs().scriptString;
   var window;
   let ready = new _.Consequence();
+  let nodes = Object.create( null );
 
   /*  */
 
@@ -37,7 +38,8 @@
       height : 720,
       webPreferences :
       {
-        nodeIntegration : true
+        nodeIntegration : true,
+        preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
       },
       title : 'DebugNode',
     }
@@ -53,41 +55,15 @@
     })
 
     toogleScreencast();
+    closeWindowOnDisconnect( window );
 
     // window.webContents.openDevTools();
-
-    function executeJs( script )
-    {
-      return _.Consequence.From( window.webContents.executeJavaScript( script,true ) )
-    }
-
-    function waitForDebuggerPaused()
-    {
-      if( !window )
-      return;
-
-      var checkPause = 'window.Sources ? window.Sources.SourcesPanel.instance()._paused : false';
-      var unPause = 'window.Sources.SourcesPanel.instance()._togglePause()';
-
-      // console.log( 'Check for pause' );
-
-      var con = executeJs( checkPause )
-      con.finally( ( err, got ) =>
-      {
-        if( got === true )
-        {
-          clearInterval( interval );
-          return executeJs( unPause );
-        }
-        return true;
-      })
-    }
 
     function toogleScreencast()
     {
       //to disable annoying blank window on left side that appears on newer versions of node
       var toggleScreencast = 'try{ Screencast.ScreencastApp._appInstance._enabledSetting = false } catch{}';
-      executeJs( toggleScreencast );
+      executeJs( window,toggleScreencast );
     }
 
     var e = /^v(\d+).(\d+).(\d+)/.exec( process.version );
@@ -123,7 +99,10 @@
       ipc.of.nodewithdebug.on( 'newNodeElectron', ( data ) =>
       {
         var url = data.message.url;
+        var pid = data.message.pid;
+
         _.assert( _.strIs( url ) )
+        _.assert( _.definedIs( pid ) )
 
         var o =
         {
@@ -133,12 +112,17 @@
           height : 720,
           webPreferences :
           {
-            nodeIntegration : true
+            nodeIntegration : true,
+            preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
           },
           title : 'DebugNode',
           show: false
         }
         let child = new BrowserWindow( o );
+
+        nodes[ pid ] = child;
+
+        closeWindowOnDisconnect( child );
 
         child.loadURL( url );
 
@@ -148,6 +132,27 @@
         })
 
       });
+
+      ipc.of.nodewithdebug.on( 'nodeExitElectron', ( data ) =>
+      {
+        var pid = data.message.pid;
+
+        _.assert( _.definedIs( pid ) );
+
+        let child = nodes[ pid ];
+
+        delete nodes[ pid ];
+
+        if( child )
+        {
+          child.close();
+        }
+        else if( _.mapOwnKeys( nodes ).length === 0 )
+        {
+          window.close();
+        }
+
+      })
 
       /*  */
 
@@ -176,6 +181,61 @@
     })
 
   }
+
+  /* helpers */
+
+  function executeJs( window,script )
+  {
+    return _.Consequence.From( window.webContents.executeJavaScript( script,true ) )
+  }
+
+  //
+
+  function closeWindowOnDisconnect( window )
+  {
+    let source =
+    `
+    new Promise(function(resolve, reject)
+    {
+      SDK.targetManager.addModelListener( SDK.RuntimeModel, SDK.RuntimeModel.Events.ExecutionContextDestroyed, () => resolve(true), this );
+    });
+    `
+
+    executeJs( window,source )
+    .thenKeep( ( got ) =>
+    {
+      if( got === true )
+      window.close();
+      return true;
+    })
+  }
+
+  //
+
+  // function waitForDebuggerPaused()
+    // {
+    //   if( !window )
+    //   return;
+
+    //   var checkPause = 'window.Sources ? window.Sources.SourcesPanel.instance()._paused : false';
+    //   var unPause = 'window.Sources.SourcesPanel.instance()._togglePause()';
+
+    //   // console.log( 'Check for pause' );
+
+    //   var con = executeJs( checkPause )
+    //   con.finally( ( err, got ) =>
+    //   {
+    //     if( got === true )
+    //     {
+    //       clearInterval( interval );
+    //       return executeJs( unPause );
+    //     }
+    //     return true;
+    //   })
+    // }
+
+
+  /* main */
 
   setup();
 
