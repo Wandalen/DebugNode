@@ -33,6 +33,7 @@
     "chromedriver": "",
     "deasync": "^0.1.14",
     "electron": "^3.0.0-beta.8",
+    "has-ansi": "^3.0.0",
     "node-ipc": "",
     "portscanner": "",
     "request": "",

@@ -1,4 +1,5 @@
 let ansi = require ('ansicolor')
+let hasAnsi = require('has-ansi');
 
 ansi.rgb =
 {
@@ -31,9 +32,12 @@ window.onload = function()
     let original = SDK.consoleModel.addMessage;
     SDK.consoleModel.addMessage = function addMessage( message )
     {
-        let parsed = ansi.parse( message.messageText );
-        message.parameters = parsed.asChromeConsoleLogArguments;
-        message.messageText = message.parameters[ 0 ];
+        if( hasAnsi( message.messageText ) )
+        {
+          let parsed = ansi.parse( message.messageText );
+          message.parameters = parsed.asChromeConsoleLogArguments;
+          message.messageText = message.parameters[ 0 ];
+        }
         original.call( SDK.consoleModel, message );
     }
 }
