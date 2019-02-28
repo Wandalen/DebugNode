@@ -1,6 +1,23 @@
 # NodeWithDebug
-Launch nodejs with Chrome debugger.
+Node.js debugging tool based on electron and Chrome DevTools.
 
+## Features
+* Default DevTools functionality
+* Child process debugging
+* Console supports ansi styles
+* Restart debugging( F5 )
+* Debugger window closing resumes execution
+
+## Installation
+
+``` npm install -g debugnode```
+
+## Usage
+
+``` debugnode sample/Sample.js arg1 arg2 ```
+
+## Screenshot
+![image](doc/img.png)
 
 
 
