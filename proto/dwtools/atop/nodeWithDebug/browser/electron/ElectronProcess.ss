@@ -112,7 +112,8 @@
           height : 720,
           webPreferences :
           {
-            nodeIntegration : true
+            nodeIntegration : true,
+            preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
           },
           title : 'DebugNode',
           show: false
