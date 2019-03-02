@@ -37,7 +37,7 @@ function init( o )
 
 }
 
-function launchElectron( url )
+function launchElectron( args )
 {
 
   var appPath = require( 'electron' );
@@ -48,8 +48,9 @@ function launchElectron( url )
   var flags =
   [
     launcherPath,
-    url
   ];
+
+  _.arrayAppendArray( flags, args );
 
   var o =
   {

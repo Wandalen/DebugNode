@@ -108,6 +108,9 @@ function onNewNode( data,socket )
   debugger
 
   let node = data.message;
+  node.filePath = _.path.relative( process.cwd(), node.args[ 1 ] );
+  node.args = node.args.slice( 2 );
+  node.title = node.filePath + ' ' + node.args.join( ' ' );
 
   var port = node.debugPort;
   var requestUrl = 'http://localhost:' + port + '/json/list';
@@ -127,17 +130,18 @@ function onNewNode( data,socket )
 
   node.info = con.finallyDeasyncKeep();
 
-  let url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
+  node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
 
   if( !self.nodes.length )
   {
     let electron = new Electron();
-    self.electron = electron.launchElectron( url );
+    self.electron = electron.launchElectron( [ node.url, node.title ] );
     self.electron.process.on( 'exit', () => { self.state.debug = 0 } )
   }
   else
-  {
-    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : { url : url, pid : node.id } } );
+  { 
+    let message = { url : node.url, pid : node.id, args : node.args, title : node.title };
+    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
   }
 
   self.nodes.push( node )
