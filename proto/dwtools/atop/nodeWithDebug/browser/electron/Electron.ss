@@ -57,7 +57,8 @@ function launchElectron( args )
     mode : 'spawn',
     path : appPath,
     args : flags,
-    stdio : 'inherit',
+    stdio : 'ignore',
+    verbosity : 0,
     outputPiping : 0,
   }
 

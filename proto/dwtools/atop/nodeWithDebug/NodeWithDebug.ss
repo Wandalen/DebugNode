@@ -213,11 +213,32 @@ function runNode()
   {
     mode : 'spawn',
     path : path,
-    stdio : 'inherit',
+    stdio : 'pipe',
+    verbosity : 0,
     outputPiping : 0
   }
 
   let shell = _.shell( shellOptions );
+
+  const stdErrFilter = 
+  [
+    'Debugger listening',
+    'Waiting for the debugger',
+    'Debugger attached.'
+  ];
+
+  shellOptions.process.stdout.pipe( process.stdout );
+  shellOptions.process.stderr.on( 'data', ( data ) => 
+  { 
+    if( _.bufferAnyIs( data ) )
+    data = _.bufferToStr( data );
+
+    for( var f in stdErrFilter )
+    if( _.strHas( data, stdErrFilter[ f ] ) )
+    return;
+
+    process.stderr.write( data );
+  });
 
   self.nodeProcess = shellOptions.process;
 
