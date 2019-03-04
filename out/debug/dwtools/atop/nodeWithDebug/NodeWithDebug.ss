@@ -108,6 +108,12 @@ function onNewNode( data,socket )
   debugger
 
   let node = data.message;
+  node.filePath = _.path.relative( process.cwd(), node.args[ 1 ] );
+  node.args = node.args.slice( 2 );
+  node.title = node.filePath;
+
+  if( node.args.length )
+  node.title += ' ' + node.args.join( ' ' );
 
   var port = node.debugPort;
   var requestUrl = 'http://localhost:' + port + '/json/list';
@@ -127,17 +133,18 @@ function onNewNode( data,socket )
 
   node.info = con.finallyDeasyncKeep();
 
-  let url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
+  node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
 
   if( !self.nodes.length )
   {
     let electron = new Electron();
-    self.electron = electron.launchElectron( url );
+    self.electron = electron.launchElectron( [ node.title, node.url ] );
     self.electron.process.on( 'exit', () => { self.state.debug = 0 } )
   }
   else
   {
-    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : { url : url, pid : node.id } } );
+    let message = { url : node.url, pid : node.id, args : node.args, title : node.title };
+    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
   }
 
   self.nodes.push( node )
@@ -208,12 +215,33 @@ function runNode()
   var shellOptions =
   {
     mode : 'spawn',
-    path : path,
-    stdio : 'inherit',
+    execPath : path,
+    stdio : 'pipe',
+    verbosity : 0,
     outputPiping : 0
   }
 
   let shell = _.shell( shellOptions );
+
+  const stdErrFilter =
+  [
+    'Debugger listening',
+    'Waiting for the debugger',
+    'Debugger attached.'
+  ];
+
+  shellOptions.process.stdout.pipe( process.stdout );
+  shellOptions.process.stderr.on( 'data', ( data ) =>
+  {
+    if( _.bufferAnyIs( data ) )
+    data = _.bufferToStr( data );
+
+    for( var f in stdErrFilter )
+    if( _.strHas( data, stdErrFilter[ f ] ) )
+    return;
+
+    process.stderr.write( data );
+  });
 
   self.nodeProcess = shellOptions.process;
 

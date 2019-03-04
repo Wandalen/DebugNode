@@ -23,7 +23,7 @@
   var BrowserWindow = electron.BrowserWindow;
   var globalShortcut = electron.globalShortcut;
 
-  var url = _.appArgs().scriptString;
+  var args = _.appArgs();
   var window;
   let ready = new _.Consequence();
   let nodes = Object.create( null );
@@ -41,10 +41,12 @@
         nodeIntegration : true,
         preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
       },
-      title : 'DebugNode',
+      title : '[main] ' + args.scriptArgs[ 0 ]
     }
 
     window = new BrowserWindow( o );
+
+    let url = args.scriptArgs[ 1 ];
 
     window.loadURL( url );
 
@@ -100,6 +102,7 @@
       {
         var url = data.message.url;
         var pid = data.message.pid;
+        var title = data.message.title;
 
         _.assert( _.strIs( url ) )
         _.assert( _.definedIs( pid ) )
@@ -115,7 +118,7 @@
             nodeIntegration : true,
             preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
           },
-          title : 'DebugNode',
+          title : title,
           show: false
         }
         let child = new BrowserWindow( o );
