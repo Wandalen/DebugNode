@@ -37,7 +37,7 @@ function init( o )
 
 }
 
-function launchElectron( url )
+function launchElectron( args )
 {
 
   var appPath = require( 'electron' );
@@ -48,19 +48,21 @@ function launchElectron( url )
   var flags =
   [
     launcherPath,
-    url
   ];
+
+  _.arrayAppendArray( flags, args );
 
   var o =
   {
     mode : 'spawn',
-    path : appPath,
+    execPath : appPath,
     args : flags,
-    stdio : 'inherit',
+    stdio : 'ignore',
+    verbosity : 0,
     outputPiping : 0,
   }
 
-  o.launched = _.shell( o );
+  _.shell( o );
   return o;
 }
 
