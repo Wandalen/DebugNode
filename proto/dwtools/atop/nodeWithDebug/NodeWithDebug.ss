@@ -110,7 +110,10 @@ function onNewNode( data,socket )
   let node = data.message;
   node.filePath = _.path.relative( process.cwd(), node.args[ 1 ] );
   node.args = node.args.slice( 2 );
-  node.title = node.filePath + ' ' + node.args.join( ' ' );
+  node.title = node.filePath;
+
+  if( node.args.length )
+  node.title += ' ' + node.args.join( ' ' );
 
   var port = node.debugPort;
   var requestUrl = 'http://localhost:' + port + '/json/list';
@@ -135,11 +138,11 @@ function onNewNode( data,socket )
   if( !self.nodes.length )
   {
     let electron = new Electron();
-    self.electron = electron.launchElectron( [ node.url, node.title ] );
+    self.electron = electron.launchElectron( [ node.title, node.url ] );
     self.electron.process.on( 'exit', () => { self.state.debug = 0 } )
   }
   else
-  { 
+  {
     let message = { url : node.url, pid : node.id, args : node.args, title : node.title };
     ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
   }
@@ -212,7 +215,7 @@ function runNode()
   var shellOptions =
   {
     mode : 'spawn',
-    path : path,
+    execPath : path,
     stdio : 'pipe',
     verbosity : 0,
     outputPiping : 0
@@ -220,7 +223,7 @@ function runNode()
 
   let shell = _.shell( shellOptions );
 
-  const stdErrFilter = 
+  const stdErrFilter =
   [
     'Debugger listening',
     'Waiting for the debugger',
@@ -228,8 +231,8 @@ function runNode()
   ];
 
   shellOptions.process.stdout.pipe( process.stdout );
-  shellOptions.process.stderr.on( 'data', ( data ) => 
-  { 
+  shellOptions.process.stderr.on( 'data', ( data ) =>
+  {
     if( _.bufferAnyIs( data ) )
     data = _.bufferToStr( data );
 

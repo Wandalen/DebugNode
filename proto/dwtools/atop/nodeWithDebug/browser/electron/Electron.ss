@@ -55,14 +55,14 @@ function launchElectron( args )
   var o =
   {
     mode : 'spawn',
-    path : appPath,
+    execPath : appPath,
     args : flags,
     stdio : 'ignore',
     verbosity : 0,
     outputPiping : 0,
   }
 
-  o.launched = _.shell( o );
+  _.shell( o );
   return o;
 }
 

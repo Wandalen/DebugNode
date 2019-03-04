@@ -41,12 +41,12 @@
         nodeIntegration : true,
         preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
       },
-      title : '[main] ' + args.scriptArgs[ 1 ]
+      title : '[main] ' + args.scriptArgs[ 0 ]
     }
 
     window = new BrowserWindow( o );
 
-    let url = args.scriptArgs[ 0 ];
+    let url = args.scriptArgs[ 1 ];
 
     window.loadURL( url );
 
