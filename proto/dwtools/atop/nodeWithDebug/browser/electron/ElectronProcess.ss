@@ -32,10 +32,12 @@
 
   function windowInit( )
   {
+    let workArea = electron.screen.getPrimaryDisplay().workAreaSize; // window.maximize() works with some artifact
+
     var o =
     {
-      width : 1280,
-      height : 720,
+      width : workArea.width,
+      height : workArea.height,
       webPreferences :
       {
         nodeIntegration : true,
