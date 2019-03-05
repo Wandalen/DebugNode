@@ -2,7 +2,7 @@
   "name": "debugnode",
   "version": "0.3.43",
   "engine": "node >= 6.3.0",
-  "description": "Launch nodejs with Chrome debugger.",
+  "description": "Nodejs debugger",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
   "contributors": [
     {
@@ -50,6 +50,10 @@
   "keywords": [
     "node",
     "debug",
-    "inspect"
+    "debugger",
+    "inspect",
+    "debug node",
+    "node debug",
+    "trace"
   ]
 }
