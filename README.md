@@ -1,5 +1,5 @@
 # NodeWithDebug
-Node.js debugging tool based on electron and Chrome DevTools.
+Nodejs debugger based on Electron and Chrome DevTools.
 
 ## Features
 * Default DevTools functionality
