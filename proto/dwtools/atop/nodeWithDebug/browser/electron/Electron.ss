@@ -60,9 +60,11 @@ function launchElectron( args )
     stdio : 'ignore',
     verbosity : 0,
     outputPiping : 0,
+    throwingExitCode : 0
   }
 
   _.shell( o );
+
   return o;
 }
 

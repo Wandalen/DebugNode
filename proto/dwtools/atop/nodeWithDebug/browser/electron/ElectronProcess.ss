@@ -41,7 +41,7 @@
         nodeIntegration : true,
         preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
       },
-      title : '[main] ' + args.scriptArgs[ 0 ]
+      title : args.scriptArgs[ 0 ] + ' [main]'
     }
 
     window = new BrowserWindow( o );
@@ -50,11 +50,11 @@
 
     window.loadURL( url );
 
-    globalShortcut.register( 'F5', () =>
-    {
-      if( window.isFocused() )
-      ipc.of.nodewithdebug.emit( 'reload', { type : 'reload' } );
-    })
+    // globalShortcut.register( 'F5', () =>
+    // {
+    //   if( window.isFocused() )
+    //   ipc.of.nodewithdebug.emit( 'reload', { type : 'reload' } );
+    // })
 
     toogleScreencast();
     closeWindowOnDisconnect( window );
@@ -155,6 +155,14 @@
           window.close();
         }
 
+      })
+
+      ipc.of.nodewithdebug.on( 'exitElectron', ( data ) =>
+      {
+        for( var n in nodes )
+        nodes[ n ].close();
+        window.close();
+        app.quit();
       })
 
       /*  */

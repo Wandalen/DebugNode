@@ -69,7 +69,7 @@ function setup()
   self.ready
   .thenKeep( () => self.setupIpc() )
 
-  process.on( 'SIGINT', () =>
+  process.once( 'SIGINT', () =>
   {
     self.close();
   });
@@ -164,8 +164,8 @@ function onNewElectron( data, socket )
 {
   let self = this;
 
-  if( !self.electron.socket )
-  self.electron.socket = socket;
+  if( !self.electronSocket )
+  self.electronSocket = socket;
 
   ipc.server.emit( socket, 'newElectronReady', { id : ipc.config.id, message : { ready : 1 } } )
 }
@@ -182,18 +182,6 @@ function onElectronExit( data, socket )
 function onReload( data, socket )
 {
   let self = this;
-
-  if( self.nodeProcess )
-  self.nodeProcess.kill()
-
-  if( self.electron )
-  self.electron.process.kill();
-
-  self.nodes = [];
-
-  self.ready.finallyDeasyncKeep();
-
-  self.runNode();
 }
 
 //
@@ -218,7 +206,8 @@ function runNode()
     execPath : path,
     stdio : 'pipe',
     verbosity : 0,
-    outputPiping : 0
+    outputPiping : 0,
+    throwingExitCode : 0
   }
 
   let shell = _.shell( shellOptions );
@@ -260,11 +249,13 @@ function close()
 {
   let self = this;
 
+  ipc.server.broadcast( 'exitElectron', { id : ipc.config.id, message : { ready : 1 } } )
+
+  // if( self.electron )
+  // self.electron.process.kill();
+
   if( self.nodeProcess )
   self.nodeProcess.kill()
-
-  if( self.electron )
-  self.electron.process.kill()
 
   self.nodes = [];
 
@@ -304,6 +295,7 @@ var Restricts =
   ready : null,
   nodeProcess : null,
   electron : null,
+  electronSocket : null,
   nodes : null,
   state : null
 }
