@@ -23,18 +23,21 @@
   var BrowserWindow = electron.BrowserWindow;
   var globalShortcut = electron.globalShortcut;
 
-  var args = _.appArgs();
   var window;
   let ready = new _.Consequence();
   let nodes = Object.create( null );
 
   /*  */
 
-  function windowInit( )
+  launch();
+
+  /*  */
+
+  function masterInit( o )
   {
     let workArea = electron.screen.getPrimaryDisplay().workAreaSize; // window.maximize() works with some artifact
 
-    var o =
+    var options =
     {
       width : workArea.width,
       height : workArea.height,
@@ -43,213 +46,154 @@
         nodeIntegration : true,
         preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
       },
-      title : args.scriptArgs[ 0 ] + ' [main]'
+      title : o.title + ' [main]'
     }
 
-    window = new BrowserWindow( o );
+    window = new BrowserWindow( options );
 
-    let url = args.scriptArgs[ 1 ];
-
-    window.loadURL( url );
-
-    // globalShortcut.register( 'F5', () =>
-    // {
-    //   if( window.isFocused() )
-    //   ipc.of.nodewithdebug.emit( 'reload', { type : 'reload' } );
-    // })
-
-    toogleScreencast();
-    closeWindowOnDisconnect( window );
+    window.loadURL( o.url );
 
     // window.webContents.openDevTools();
-
-    function toogleScreencast()
-    {
-      //to disable annoying blank window on left side that appears on newer versions of node
-      var toggleScreencast = 'try{ Screencast.ScreencastApp._appInstance._enabledSetting = false } catch{}';
-      executeJs( window,toggleScreencast );
-    }
-
-    var e = /^v(\d+).(\d+).(\d+)/.exec( process.version );
-    var nodeVersion =
-    {
-      major : Number.parseFloat( e[ 1 ] ),
-      minor : Number.parseFloat( e[ 2 ] )
-    }
-
-
-    // if( nodeVersion.major >= 8 )
-    // var interval = setInterval( waitForDebuggerPaused,100 );
 
     window.on( 'closed', function ()
     {
       window = null;
     })
 
+    return true;
   }
 
-  /*  */
 
-  function setup()
+  function childInit( o )
   {
+    _.assert( window );
+
+    var options =
+    {
+      parent: window,
+      modal: false,
+      width : 1280,
+      height : 720,
+      webPreferences :
+      {
+        nodeIntegration : true,
+        preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
+      },
+      title : o.title,
+      show: false
+    }
+
+    let child = new BrowserWindow( options );
+
+    nodes[ o.pid ] = child;
+
+    child.loadURL( o.url );
+
+    child.once( 'ready-to-show', () =>
+    {
+      child.show();
+    })
+
+    return true;
+  }
+
+  //
+
+  function launch()
+  {
+    process.on( 'message', ( msg ) =>
+    {
+      if( msg.exit )
+      app.quit()
+    })
+
+    setupIpc();
+
+    app.on( 'ready', () => ready.take( true ) );
+
+    app.on('window-all-closed', () =>  app.quit() )
+
+    app.on( 'browser-window-created', function (e, window )
+    {
+      window.setMenu( null );
+    })
+
+  }
+
+  function setupIpc()
+  {
+    let con = new _.Consequence();
+
     ipc.config.id = 'electon';
     ipc.config.retry = 1500;
-    ipc.config.silent = true;
+    ipc.config.silent = false;
 
-    ipc.connectTo( 'nodewithdebug', () =>  ready.take( null ) );
-
-    ready.thenKeep( () =>
+    ipc.connectTo( 'nodewithdebug', () =>
     {
+      /* creates window for new node process */
+
       ipc.of.nodewithdebug.on( 'newNodeElectron', ( data ) =>
       {
-        var url = data.message.url;
-        var pid = data.message.pid;
-        var title = data.message.title;
+        var o = data.message;
 
-        _.assert( _.strIs( url ) )
-        _.assert( _.definedIs( pid ) )
+        console.log( o )
 
-        var o =
-        {
-          parent: window,
-          modal: false,
-          width : 1280,
-          height : 720,
-          webPreferences :
-          {
-            nodeIntegration : true,
-            preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
-          },
-          title : title,
-          show: false
-        }
-        let child = new BrowserWindow( o );
-
-        nodes[ pid ] = child;
-
-        closeWindowOnDisconnect( child );
-
-        child.loadURL( url );
-
-        child.once( 'ready-to-show', () =>
-        {
-          child.show();
-        })
+        if( o.isMaster )
+        ready.then( () => masterInit( o ) );
+        else
+        ready.then( () => childInit( o ) );
 
       });
 
-      ipc.of.nodewithdebug.on( 'nodeExitElectron', ( data ) =>
-      {
-        var pid = data.message.pid;
-
-        _.assert( _.definedIs( pid ) );
-
-        let child = nodes[ pid ];
-
-        delete nodes[ pid ];
-
-        if( child )
-        {
-          child.close();
-        }
-        else if( _.mapOwnKeys( nodes ).length === 0 )
-        {
-          window.close();
-        }
-
-      })
-
-      ipc.of.nodewithdebug.on( 'exitElectron', ( data ) =>
-      {
-        for( var n in nodes )
-        nodes[ n ].close();
-        window.close();
-        app.quit();
-      })
-
       /*  */
 
-      app.on( 'ready', windowInit );
-      app.on( 'browser-window-created', function (e, window )
-      {
-        window.setMenu( null );
-      })
+      ipc.of.nodewithdebug.emit( 'electronReady', { id : ipc.config.id, message : { ready : 1 } } );
 
-      app.on( 'window-all-closed', function ()
-      {
-        // ipc.of.nodewithdebug.emit( 'electronExit', { id : ipc.config.id, message : 'exit' } ); //qqq : problem, process hangs
-        app.quit();
-      });
-
-      app.on( 'activate', function ()
-      {
-        if ( window === null && !self.headless )
-        windowInit();
-      })
-
-      /*  */
-
-      return true;
-
-    })
-
-  }
-
-  /* helpers */
-
-  function executeJs( window,script )
-  {
-    return _.Consequence.From( window.webContents.executeJavaScript( script,true ) )
-  }
-
-  //
-
-  function closeWindowOnDisconnect( window )
-  {
-    let source =
-    `
-    new Promise(function(resolve, reject)
-    {
-      SDK.targetManager.addModelListener( SDK.RuntimeModel, SDK.RuntimeModel.Events.ExecutionContextDestroyed, () => resolve(true), this );
     });
-    `
 
-    executeJs( window,source )
-    .thenKeep( ( got ) =>
-    {
-      if( got === true )
-      window.close();
-      return true;
-    })
   }
-
-  //
-
-  // function waitForDebuggerPaused()
-    // {
-    //   if( !window )
-    //   return;
-
-    //   var checkPause = 'window.Sources ? window.Sources.SourcesPanel.instance()._paused : false';
-    //   var unPause = 'window.Sources.SourcesPanel.instance()._togglePause()';
-
-    //   // console.log( 'Check for pause' );
-
-    //   var con = executeJs( checkPause )
-    //   con.finally( ( err, got ) =>
-    //   {
-    //     if( got === true )
-    //     {
-    //       clearInterval( interval );
-    //       return executeJs( unPause );
-    //     }
-    //     return true;
-    //   })
-    // }
-
-
-  /* main */
-
-  setup();
 
 })();
+
+/*  */
+
+// function experiment()
+// {
+//   const { app, BrowserWindow } = require('electron')
+
+//   process.on( 'message', ( msg ) =>
+//   {
+//     if( msg.exit )
+//     app.quit()
+//   })
+
+//   let win
+
+//   function createWindow () {
+//     win = new BrowserWindow({ width: 800, height: 600 })
+
+//     win.loadURL('https://electronjs.org/docs/tutorial/first-app')
+
+//     win.webContents.openDevTools()
+
+//     win.on('closed', () => {
+//       win = null
+//     })
+//   }
+
+//   app.on('ready', createWindow)
+
+//   app.on('window-all-closed', () => {
+//     if (process.platform !== 'darwin') {
+//       app.quit()
+//     }
+//   })
+
+//   app.on('activate', () => {
+//     if (win === null) {
+//       createWindow()
+//     }
+//   })
+// }
+
+

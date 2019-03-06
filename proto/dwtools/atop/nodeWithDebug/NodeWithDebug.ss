@@ -10,10 +10,6 @@ if( typeof module !== "undefined" )
   _.include( 'wConsequence' )
   _.include( 'wFiles' )
 
-  // var Chrome = require( './browser/Chrome.ss' );
-  var Electron = require( './browser/electron/Electron.ss' );
-  var portscanner = require( 'portscanner' );
-
   var ipc = require('node-ipc');
   var request = require( 'request' );
 }
@@ -36,8 +32,8 @@ Self.nameShort = 'DebugNode';
 todo:
 
   + resume execution of child nodes( remove preload script ) when main electron window is closed
-    close electron child window when node process exits
-    change focus of electron window when breakpoint is fired
+  + close electron child window when node process exits
+  + change focus of electron window when breakpoint is fired
 */
 
 //
@@ -54,6 +50,9 @@ function init( o )
   self.nodes = [];
   self.state = Object.create( null );
   self.state.debug = 1;
+  self.electronReady = new _.Consequence();
+  self.closed = false;
+  self.verbosity = 0;
 
 }
 
@@ -64,15 +63,14 @@ function setup()
 {
   let self = this;
 
-  self.ready.take( null );
-
-  self.ready
-  .thenKeep( () => self.setupIpc() )
-
   process.once( 'SIGINT', () =>
   {
+    if( self.verbosity )
+    console.log( 'SIGINT' );
     self.close();
   });
+
+  return self.setupIpc();
 }
 
 function setupIpc()
@@ -88,9 +86,11 @@ function setupIpc()
   {
     ipc.server.on( 'newNode', _.routineJoin( self, self.onNewNode ) );
     ipc.server.on( 'currentStateGet', _.routineJoin( self, self.onCurrentStateGet) );
-    ipc.server.on( 'newElectron', _.routineJoin( self, self.onNewElectron ) );
-    ipc.server.on( 'electronExit', _.routineJoin( self, self.onElectronExit ) );
-    ipc.server.on( 'reload', _.routineJoin( self, self.onReload ) );
+    ipc.server.on( 'electronReady', _.routineJoin( self, self.onElectronReady ) );
+
+    // ipc.server.on( 'newElectron', _.routineJoin( self, self.onNewElectron ) );
+    // ipc.server.on( 'electronExit', _.routineJoin( self, self.onElectronExit ) );
+    // ipc.server.on( 'reload', _.routineJoin( self, self.onReload ) );
     con.take( true );
   });
 
@@ -135,17 +135,19 @@ function onNewNode( data,socket )
 
   node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
 
-  if( !self.nodes.length )
+  let message =
   {
-    let electron = new Electron();
-    self.electron = electron.launchElectron( [ node.title, node.url ] );
-    self.electron.process.on( 'exit', () => { self.state.debug = 0 } )
-  }
-  else
-  {
-    let message = { url : node.url, pid : node.id, args : node.args, title : node.title };
-    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
-  }
+    url : node.url,
+    pid : node.id,
+    args : node.args,
+    title : node.title,
+    isMaster : !self.nodes.length
+  };
+
+  if( self.verbosity )
+  console.log( 'newNode:', message )
+
+  ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
 
   self.nodes.push( node )
 }
@@ -190,6 +192,8 @@ function runNode()
 {
   let self = this;
 
+  /* prepare args */
+
   var path =
   [
     'node',
@@ -210,7 +214,12 @@ function runNode()
     throwingExitCode : 0
   }
 
-  let shell = _.shell( shellOptions );
+  /* run main node */
+
+  self.nodeCon = _.shell( shellOptions );
+  self.nodeProcess = shellOptions.process;
+
+  /* filter stderr */
 
   const stdErrFilter =
   [
@@ -232,15 +241,48 @@ function runNode()
     process.stderr.write( data );
   });
 
-  self.nodeProcess = shellOptions.process;
 
-  // self.nodeProcess.on( 'exit', () =>
-  // {
-  //   console.log( 'main node exit' )
-  // })
+  return true;
+}
 
-  self.ready.thenKeep( () => shell );
+//
 
+function runElectron()
+{
+  let self = this;
+
+  var appPath = require( 'electron' );
+
+  var launcherPath  = _.path.resolve( __dirname, './browser/electron/ElectronProcess.ss' );
+  launcherPath  = _.fileProvider.path.nativize( launcherPath );
+
+  var o =
+  {
+    mode : 'spawn',
+    execPath : appPath,
+    args : [ launcherPath ],
+    stdio : 'pipe',
+    ipc : 1,
+    verbosity : 0,
+    outputPiping : self.verbosity,
+    throwingExitCode : 0
+  }
+
+  self.electronCon = _.shell( o );
+  self.electronProcess = o.process;
+
+  self.electronProcess.once( 'exit', () => { self.state.debug = 0; })
+  self.electronProcess.once( 'SIGINT', () => { self.state.debug = 0; })
+
+  return self.electronReady;
+}
+
+//
+
+function onElectronReady()
+{
+  let self = this;
+  self.electronReady.take( null );
 }
 
 //
@@ -249,18 +291,25 @@ function close()
 {
   let self = this;
 
-  ipc.server.broadcast( 'exitElectron', { id : ipc.config.id, message : { ready : 1 } } )
+  if( self.closed )
+  return;
 
-  // if( self.electron )
-  // self.electron.process.kill();
+  self.closed = true;
+
+  if( self.verbosity )
+  console.log( 'closing' )
+
+  if( self.electronProcess )
+  self.electronProcess.send({ exit : 1 } );
 
   if( self.nodeProcess )
-  self.nodeProcess.kill()
+  self.nodeProcess.kill();
 
   self.nodes = [];
 
   ipc.server.stop();
 
+  /**/
 }
 
 /* Launch */
@@ -268,10 +317,36 @@ function close()
 function Launch()
 {
   let node = new Self();
-  node.setup();
-  node.runNode();
+  let ready = node.ready;
 
-  node.ready.got( () => node.close() );
+  ready.take( null )
+  ready.then( () => node.setup() );
+  ready.then( () => node.runElectron() );
+  ready.then( () => node.runNode() );
+
+  ready.then( () => AndKeep([ node.nodeCon, node.electronCon ]) )
+
+  ready.got( ( err, got ) =>
+  {
+    if( node.verbosity )
+    console.log( 'terminated/finished' );
+    node.state.debug = 0;
+
+    if( err )
+    _.errLogOnce( err );
+
+    if( node.verbosity )
+    console.log( 'exiting...' )
+
+    node.close();
+  });
+
+  /*  */
+
+  function AndKeep( cons )
+  {
+    return new _.Consequence().take( null ).andKeep( cons );
+  }
 }
 
 // --
@@ -280,6 +355,7 @@ function Launch()
 
 var Composes =
 {
+  verbosity : 0
 }
 
 var Aggregates =
@@ -294,10 +370,14 @@ var Restricts =
 {
   ready : null,
   nodeProcess : null,
-  electron : null,
+  nodeCon : null,
+  electronProcess : null,
+  electronCon : null,
   electronSocket : null,
+  electronReady : null,
   nodes : null,
-  state : null
+  state : null,
+  closed : null
 }
 
 var Statics =
@@ -317,18 +397,19 @@ var Proto =
   setup : setup,
   setupIpc : setupIpc,
   runNode : runNode,
+  runElectron : runElectron,
 
   onNewNode : onNewNode,
   onCurrentStateGet : onCurrentStateGet,
   onNewElectron : onNewElectron,
   onElectronExit : onElectronExit,
   onReload : onReload,
+  onElectronReady : onElectronReady,
 
   close : close,
 
   // relationships
 
-  // constructor : Self,
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,

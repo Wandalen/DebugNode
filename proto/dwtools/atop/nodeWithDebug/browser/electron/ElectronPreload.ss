@@ -1,5 +1,6 @@
-let ansi = require ('ansicolor')
-let hasAnsi = require('has-ansi');
+let ansi = require ( 'ansicolor' )
+let hasAnsi = require( 'has-ansi' );
+let _ = require( 'wConsequence' );
 
 ansi.rgb =
 {
@@ -40,4 +41,28 @@ window.onload = function()
         }
         original.call( SDK.consoleModel, message );
     }
+
+    closeWindowOnDisconnect();
+}
+
+
+function closeWindowOnDisconnect()
+{
+  let con = new wConsequence();
+
+  SDK.targetManager.addModelListener
+  (
+    SDK.RuntimeModel,
+    SDK.RuntimeModel.Events.ExecutionContextDestroyed,
+    () => con.take( true ),
+    this
+  );
+
+  con.thenKeep( ( got ) =>
+  {
+    if( got )
+    window.close();
+
+    return got;
+  })
 }
