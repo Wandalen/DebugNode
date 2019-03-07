@@ -59,7 +59,6 @@ path:
       - proto/dwtools/atop/nodeWithDebug/browser
       - proto/dwtools/atop/nodeWithDebug/browser/Chrome.ss
       - proto/dwtools/atop/nodeWithDebug/browser/electron
-      - proto/dwtools/atop/nodeWithDebug/browser/electron/Electron.ss
       - proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronPreload.ss
       - proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss
     criterion:
@@ -161,7 +160,6 @@ reflector:
         dwtools/atop/nodeWithDebug/browser: true
         dwtools/atop/nodeWithDebug/browser/Chrome.ss: true
         dwtools/atop/nodeWithDebug/browser/electron: true
-        dwtools/atop/nodeWithDebug/browser/electron/Electron.ss: true
         dwtools/atop/nodeWithDebug/browser/electron/ElectronPreload.ss: true
         dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: true
       basePath: .
