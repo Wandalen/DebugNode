@@ -75,6 +75,7 @@ reflector:
     src:
       filePath:
         .: .
+      prefixPath: proto
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -87,7 +88,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.debug($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.test($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.experiment($|\.|\/)/i
-      prefixPath: proto
     dst:
       prefixPath: out/release
     criterion:
@@ -98,6 +98,7 @@ reflector:
     src:
       filePath:
         .: .
+      prefixPath: proto
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -108,7 +109,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.DS_Store$/
           - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
           - !<tag:yaml.org,2002:js/regexp> /\.release($|\.|\/)/i
-      prefixPath: proto
     dst:
       prefixPath: out/debug
     criterion:
@@ -134,7 +134,7 @@ reflector:
   exported.proto.export:
     src:
       filePath:
-        .: true
+        .: null
       prefixPath: proto
     criterion:
       default: 1
@@ -148,20 +148,20 @@ reflector:
     recursive: 0
     src:
       filePath:
-        .: true
-        dwtools: true
-        dwtools/Tools.s: true
-        dwtools/abase: true
-        dwtools/amid: true
-        dwtools/atop: true
-        dwtools/atop/nodeWithDebug: true
-        dwtools/atop/nodeWithDebug/NodeWithDebug.ss: true
-        dwtools/atop/nodeWithDebug/Preload.ss: true
-        dwtools/atop/nodeWithDebug/browser: true
-        dwtools/atop/nodeWithDebug/browser/Chrome.ss: true
-        dwtools/atop/nodeWithDebug/browser/electron: true
-        dwtools/atop/nodeWithDebug/browser/electron/ElectronPreload.ss: true
-        dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: true
+        .: null
+        dwtools: null
+        dwtools/Tools.s: null
+        dwtools/abase: null
+        dwtools/amid: null
+        dwtools/atop: null
+        dwtools/atop/nodeWithDebug: null
+        dwtools/atop/nodeWithDebug/NodeWithDebug.ss: null
+        dwtools/atop/nodeWithDebug/Preload.ss: null
+        dwtools/atop/nodeWithDebug/browser: null
+        dwtools/atop/nodeWithDebug/browser/Chrome.ss: null
+        dwtools/atop/nodeWithDebug/browser/electron: null
+        dwtools/atop/nodeWithDebug/browser/electron/ElectronPreload.ss: null
+        dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss: null
       basePath: .
       prefixPath: proto
     criterion:
