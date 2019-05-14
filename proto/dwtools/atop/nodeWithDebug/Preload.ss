@@ -22,6 +22,13 @@
   nodeWithDebugOn( 'currentState' );
 
   let preload = ' --require ' + __filename;
+   
+  // skip node calls without script path, like node -e "..."
+  if( process.argv.length < 2 )
+  {
+    ipc.disconnect( 'nodewithdebug' );
+    return;
+  }
 
   if( !currentState.debug )
   {
@@ -51,6 +58,8 @@
   inspector.open( port, undefined, true );
 
   ipc.disconnect( 'nodewithdebug' );
+  
+  // debugger //uncomment to debug preload script
 
 /**/
 
