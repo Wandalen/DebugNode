@@ -172,18 +172,21 @@
   {
     ready.then( ( got ) => 
     { 
-      globalShortcut.register( 'F5', () => 
-      {
-        let windows = BrowserWindow.getAllWindows();
-        let focused = windows.filter( ( w ) => w.isFocused() );
-        if( !focused.length )
-        return;
-        ipc.of.nodewithdebug.emit( 'debuggerRestart', { id : ipc.config.id, message : { restart : 1 } } );
-        reload = true;
-        window.close();
-      })
+      globalShortcut.register( 'F5', handle );
+      globalShortcut.register( 'Ctrl+R', handle );
       return got;
     });
+    
+    function handle()
+    {
+      let windows = BrowserWindow.getAllWindows();
+      let focused = windows.filter( ( w ) => w.isFocused() );
+      if( !focused.length )
+      return;
+      ipc.of.nodewithdebug.emit( 'debuggerRestart', { id : ipc.config.id, message : { restart : 1 } } );
+      reload = true;
+      window.close();
+    }
   }
 
 })();
