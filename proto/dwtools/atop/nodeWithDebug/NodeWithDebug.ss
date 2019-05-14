@@ -48,6 +48,7 @@ function init( o )
 
   self.ready = new _.Consequence();
   self.nodes = [];
+  self.nodesMap = Object.create( null );
   self.state = Object.create( null );
   self.state.debug = 1;
   self.electronReady = new _.Consequence();
@@ -87,7 +88,8 @@ function setupIpc()
     ipc.server.on( 'newNode', _.routineJoin( self, self.onNewNode ) );
     ipc.server.on( 'currentStateGet', _.routineJoin( self, self.onCurrentStateGet) );
     ipc.server.on( 'electronReady', _.routineJoin( self, self.onElectronReady ) );
-
+    ipc.server.on( 'electronChildClosed', _.routineJoin( self, self.onElectronChildClose ) );
+    
     // ipc.server.on( 'newElectron', _.routineJoin( self, self.onNewElectron ) );
     // ipc.server.on( 'electronExit', _.routineJoin( self, self.onElectronExit ) );
     // ipc.server.on( 'reload', _.routineJoin( self, self.onReload ) );
@@ -139,6 +141,7 @@ function onNewNode( data,socket )
   {
     url : node.url,
     pid : node.id,
+    ppid : node.ppid,
     args : node.args,
     title : node.title,
     isMaster : !self.nodes.length
@@ -146,10 +149,20 @@ function onNewNode( data,socket )
 
   if( self.verbosity )
   console.log( 'newNode:', message )
+  
+  let parent;
+  if( node.ppid )
+  parent = self.nodesMap[ node.ppid ];
+  let skip = parent && !parent.isActive; // don't connect electron to child if parent is closed;
+  
+  if( !skip )
+  { 
+    node.isActive = true;
+    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
+  }
 
-  ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
-
-  self.nodes.push( node )
+  self.nodes.push( node );
+  self.nodesMap[ node.id ] = node;
 }
 
 //
@@ -157,7 +170,12 @@ function onNewNode( data,socket )
 function onCurrentStateGet( data,socket )
 {
   let self = this;
-  ipc.server.emit( socket, 'currentState', { id : ipc.config.id, message : self.state } )
+  let pid = data.message.pid;
+  let ppid = data.message.ppid;
+  
+  let parent = self.nodesMap[ ppid ];
+  let parentIsActive = parent ? parent.isActive : true;
+  ipc.server.emit( socket, 'currentState', { id : ipc.config.id, message : { state : self.state, parentIsActive : parentIsActive } } )
 }
 
 //
@@ -179,6 +197,17 @@ function onElectronExit( data, socket )
   let self = this;
   self.close();
   process.exit();
+}
+
+//
+
+function onElectronChildClose( data, socket )
+{
+  let self = this;
+  let pid = data.message.pid;
+  _.assert( _.definedIs( pid ) );
+  let node = self.nodesMap[ pid ];
+  node.isActive = false;
 }
 
 function onReload( data, socket )
@@ -376,6 +405,7 @@ var Restricts =
   electronSocket : null,
   electronReady : null,
   nodes : null,
+  nodesMap : null,
   state : null,
   closed : null
 }
@@ -405,6 +435,7 @@ var Proto =
   onElectronExit : onElectronExit,
   onReload : onReload,
   onElectronReady : onElectronReady,
+  onElectronChildClose : onElectronChildClose,
 
   close : close,
 

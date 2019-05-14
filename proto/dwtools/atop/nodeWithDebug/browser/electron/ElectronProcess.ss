@@ -84,10 +84,16 @@
     }
 
     let child = new BrowserWindow( options );
+    let pid = o.pid;
 
-    nodes[ o.pid ] = child;
+    nodes[ pid ] = child;
 
     child.loadURL( o.url );
+    
+    child.on( 'closed', function ()
+    {
+      ipc.of.nodewithdebug.emit( 'electronChildClosed', { id : ipc.config.id, message : { pid : pid } } );
+    })
 
     child.once( 'ready-to-show', () =>
     {

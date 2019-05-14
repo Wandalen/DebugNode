@@ -12,13 +12,15 @@
   ipc.config.silent = true;
 
   let currentState;
-
+  let parentIsActive; // debugger window is not closed
+  let ppid = process.env.ppid;
+  
   let connectTo = deasyncEmptyCb( ipc, ipc.connectTo );
   connectTo( 'nodewithdebug' );
   let nodeWithDebug = ipc.of.nodewithdebug;
   let nodeWithDebugOn = deasyncEmptyCb( nodeWithDebug, nodeWithDebug.on );
   nodeWithDebugOn( 'connect' );
-  nodeWithDebug.emit( 'currentStateGet', { id :  process.pid, message : process.pid } )
+  nodeWithDebug.emit( 'currentStateGet', { id :  process.pid, message : { pid : process.pid, ppid : ppid } } )
   nodeWithDebugOn( 'currentState' );
 
   let preload = ' --require ' + __filename;
@@ -29,8 +31,8 @@
     ipc.disconnect( 'nodewithdebug' );
     return;
   }
-
-  if( !currentState.debug )
+  
+  if( !parentIsActive || !currentState.debug )
   {
     process.env.NODE_OPTIONS = strReplaceAll( process.env.NODE_OPTIONS, preload, '' );
     ipc.disconnect( 'nodewithdebug' );
@@ -47,7 +49,7 @@
 
   let port = Number( uri.port );
 
-  var processInfo = { id : process.pid, debugPort : port, args : process.argv };
+  var processInfo = { id : process.pid, ppid : ppid, debugPort : port, args : process.argv };
 
   inspector.close();
 
@@ -58,6 +60,8 @@
   inspector.open( port, undefined, true );
 
   ipc.disconnect( 'nodewithdebug' );
+  
+  process.env.ppid = process.pid;
   
   // debugger //uncomment to debug preload script
 
@@ -77,7 +81,10 @@ function deasyncEmptyCb( context, routine )
       function cb( data )
       {
         if( e === 'currentState' )
-        currentState = data.message;
+        {
+          currentState = data.message.state;
+          parentIsActive = data.message.parentIsActive;
+        }
 
         ready = true
       }
