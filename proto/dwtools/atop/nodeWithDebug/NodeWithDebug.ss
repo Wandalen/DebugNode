@@ -49,6 +49,7 @@ function init( o )
   self.ready = new _.Consequence();
   self.nodes = [];
   self.nodesMap = Object.create( null );
+  self.nodeCons = [];
   self.state = Object.create( null );
   self.state.debug = 1;
   self.electronReady = new _.Consequence();
@@ -89,10 +90,9 @@ function setupIpc()
     ipc.server.on( 'currentStateGet', _.routineJoin( self, self.onCurrentStateGet) );
     ipc.server.on( 'electronReady', _.routineJoin( self, self.onElectronReady ) );
     ipc.server.on( 'electronChildClosed', _.routineJoin( self, self.onElectronChildClose ) );
+    ipc.server.on( 'debuggerRestart', _.routineJoin( self, self.onDebuggerRestart ) );
     
-    // ipc.server.on( 'newElectron', _.routineJoin( self, self.onNewElectron ) );
-    // ipc.server.on( 'electronExit', _.routineJoin( self, self.onElectronExit ) );
-    // ipc.server.on( 'reload', _.routineJoin( self, self.onReload ) );
+    
     con.take( true );
   });
 
@@ -207,12 +207,21 @@ function onElectronChildClose( data, socket )
   let pid = data.message.pid;
   _.assert( _.definedIs( pid ) );
   let node = self.nodesMap[ pid ];
+  if( node )
   node.isActive = false;
 }
 
-function onReload( data, socket )
+function onDebuggerRestart( data, socket )
 {
   let self = this;
+  
+  if( self.nodeProcess )
+  self.nodeProcess.kill();
+
+  self.nodes = [];
+  self.nodesMap = Object.create( null );
+  
+  self.runNode();
 }
 
 //
@@ -245,7 +254,8 @@ function runNode()
 
   /* run main node */
 
-  self.nodeCon = _.shell( shellOptions );
+  let nodeCon = _.shell( shellOptions );
+  self.nodeCons.push( nodeCon );
   self.nodeProcess = shellOptions.process;
 
   /* filter stderr */
@@ -353,7 +363,8 @@ function Launch()
   ready.then( () => node.runElectron() );
   ready.then( () => node.runNode() );
 
-  ready.then( () => AndKeep([ node.nodeCon, node.electronCon ]) )
+  ready.then( () => AndKeep([ node.electronCon ]) )
+  ready.then( () => AndKeep( node.nodeCons ) );
 
   ready.got( ( err, got ) =>
   {
@@ -399,7 +410,7 @@ var Restricts =
 {
   ready : null,
   nodeProcess : null,
-  nodeCon : null,
+  nodeCons : null,
   electronProcess : null,
   electronCon : null,
   electronSocket : null,
@@ -433,9 +444,9 @@ var Proto =
   onCurrentStateGet : onCurrentStateGet,
   onNewElectron : onNewElectron,
   onElectronExit : onElectronExit,
-  onReload : onReload,
   onElectronReady : onElectronReady,
   onElectronChildClose : onElectronChildClose,
+  onDebuggerRestart : onDebuggerRestart,
 
   close : close,
 
