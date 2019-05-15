@@ -1,6 +1,7 @@
 let ansi = require ( 'ansicolor' )
 let hasAnsi = require( 'has-ansi' );
 let _ = require( 'wConsequence' );
+let electron = require('electron');
 
 ansi.rgb =
 {
@@ -29,20 +30,30 @@ ansi.rgb =
 }
 
 window.onload = function()
-{
-    let original = SDK.consoleModel.addMessage;
-    SDK.consoleModel.addMessage = function addMessage( message )
+{   
+  window.electronWidnow = electron.remote.getCurrentWindow();
+  
+  /**/
+  
+  let original = SDK.consoleModel.addMessage;
+  SDK.consoleModel.addMessage = function addMessage( message )
+  {
+    if( hasAnsi( message.messageText ) )
     {
-        if( hasAnsi( message.messageText ) )
-        {
-          let parsed = ansi.parse( message.messageText );
-          message.parameters = parsed.asChromeConsoleLogArguments;
-          message.messageText = message.parameters[ 0 ];
-        }
-        original.call( SDK.consoleModel, message );
+      let parsed = ansi.parse( message.messageText );
+      message.parameters = parsed.asChromeConsoleLogArguments;
+      message.messageText = message.parameters[ 0 ];
     }
+    original.call( SDK.consoleModel, message );
+  }
+    
+  /**/
+  
+  focusWindowOnDebuggerPause();
+  
+  /**/
 
-    closeWindowOnDisconnect();
+  closeWindowOnDisconnect();
 }
 
 
@@ -65,4 +76,23 @@ function closeWindowOnDisconnect()
 
     return got;
   })
+}
+
+//
+
+function focusWindowOnDebuggerPause()
+{ 
+  SDK.targetManager.addModelListener
+  (
+    SDK.DebuggerModel,
+    SDK.DebuggerModel.Events.DebuggerPaused,
+    handler,
+    this
+  );
+  
+  function handler()
+  {
+    if( !electronWidnow.isFocused() )
+    electronWidnow.focus();
+  }
 }

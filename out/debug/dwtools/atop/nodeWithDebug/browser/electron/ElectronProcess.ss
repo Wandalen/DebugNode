@@ -25,7 +25,8 @@
 
   var window;
   let ready = new _.Consequence();
-  let nodes = Object.create( null );
+  let childWindows = Object.create( null );
+  let reload = false;
 
   /*  */
 
@@ -59,7 +60,7 @@
     {
       window = null;
     })
-
+    
     return true;
   }
 
@@ -84,10 +85,16 @@
     }
 
     let child = new BrowserWindow( options );
+    let pid = o.pid;
 
-    nodes[ o.pid ] = child;
+    childWindows[ pid ] = child;
 
     child.loadURL( o.url );
+    
+    child.on( 'closed', function ()
+    { 
+      ipc.of.nodewithdebug.emit( 'electronChildClosed', { id : ipc.config.id, message : { pid : pid } } );
+    })
 
     child.once( 'ready-to-show', () =>
     {
@@ -108,10 +115,16 @@
     })
 
     setupIpc();
+    setupKeyboardShortcuts();
 
     app.on( 'ready', () => ready.take( true ) );
 
-    app.on('window-all-closed', () =>  app.quit() )
+    app.on('window-all-closed', () =>  
+    { 
+      if( !reload )
+      app.quit()
+      reload = false; 
+    })
 
     app.on( 'browser-window-created', function (e, window )
     {
@@ -151,6 +164,29 @@
 
     });
 
+  }
+  
+  //
+  
+  function setupKeyboardShortcuts()
+  {
+    ready.then( ( got ) => 
+    { 
+      globalShortcut.register( 'F5', handle );
+      globalShortcut.register( 'Ctrl+R', handle );
+      return got;
+    });
+    
+    function handle()
+    {
+      let windows = BrowserWindow.getAllWindows();
+      let focused = windows.filter( ( w ) => w.isFocused() );
+      if( !focused.length )
+      return;
+      ipc.of.nodewithdebug.emit( 'debuggerRestart', { id : ipc.config.id, message : { restart : 1 } } );
+      reload = true;
+      window.close();
+    }
   }
 
 })();
