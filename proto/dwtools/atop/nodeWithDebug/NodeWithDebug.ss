@@ -107,10 +107,11 @@ function onNewNode( data,socket )
 {
   let self = this;
 
-  debugger
+  // debugger
 
   let node = data.message;
-  node.filePath = _.path.relative( process.cwd(), node.args[ 1 ] );
+  // node.filePath = _.path.relative( process.cwd(), node.args[ 1 ] );
+  node.filePath = node.args[ 1 ];
   node.args = node.args.slice( 2 );
   node.title = node.filePath;
 
