@@ -11,7 +11,6 @@
 
     _.include( 'wConsequence' );
     _.include( 'wStringsExtra' );
-    _.include( 'wExternalFundamentals' );
     _.include( 'wPathFundamentals' );
 
     var electron = require( 'electron' );
