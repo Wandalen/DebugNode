@@ -139,7 +139,7 @@
 
     ipc.config.id = 'electon';
     ipc.config.retry = 1500;
-    ipc.config.silent = false;
+    ipc.config.silent = true;
 
     ipc.connectTo( 'nodewithdebug', () =>
     {
@@ -149,7 +149,7 @@
       {
         var o = data.message;
 
-        console.log( o )
+        // console.log( o )
 
         if( o.isMaster )
         ready.then( () => masterInit( o ) );
