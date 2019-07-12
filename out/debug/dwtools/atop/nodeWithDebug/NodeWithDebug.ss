@@ -304,7 +304,7 @@ function runElectron()
     stdio : 'pipe',
     ipc : 1,
     verbosity : 0,
-    outputPiping : self.verbosity,
+    outputPiping : 1,
     throwingExitCode : 0
   }
 
