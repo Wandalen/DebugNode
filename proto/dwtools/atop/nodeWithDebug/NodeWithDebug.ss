@@ -82,7 +82,7 @@ function setupIpc()
 
   ipc.config.id = 'nodewithdebug.' + process.pid;
   ipc.config.retry= 1500;
-  ipc.config.silent = false;
+  ipc.config.silent = true;
 
   ipc.serve( () =>
   { 
@@ -249,8 +249,8 @@ function runNode()
     execPath : path,
     env : { nodewithdebugId : ipc.config.id },
     stdio : 'pipe',
-    verbosity : 5,
-    outputPiping : 1,
+    verbosity : 0,
+    outputPiping : 0,
     throwingExitCode : 0
   }
 
@@ -305,8 +305,8 @@ function runElectron()
     stdio : 'pipe',
     env : { nodewithdebugId : ipc.config.id },
     ipc : 1,
-    verbosity : 5,
-    outputPiping : 1,
+    verbosity : 0,
+    outputPiping : 0,
     throwingExitCode : 0
   }
 
