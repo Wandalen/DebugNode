@@ -80,12 +80,12 @@ function setupIpc()
   let self = this;
   let con = new _.Consequence();
 
-  ipc.config.id = 'nodewithdebug';
+  ipc.config.id = 'nodewithdebug.' + process.pid;
   ipc.config.retry= 1500;
-  ipc.config.silent = true;
+  ipc.config.silent = false;
 
   ipc.serve( () =>
-  {
+  { 
     ipc.server.on( 'newNode', _.routineJoin( self, self.onNewNode ) );
     ipc.server.on( 'currentStateGet', _.routineJoin( self, self.onCurrentStateGet) );
     ipc.server.on( 'electronReady', _.routineJoin( self, self.onElectronReady ) );
@@ -247,9 +247,10 @@ function runNode()
   {
     mode : 'spawn',
     execPath : path,
+    env : { nodewithdebugId : ipc.config.id },
     stdio : 'pipe',
-    verbosity : 0,
-    outputPiping : 0,
+    verbosity : 5,
+    outputPiping : 1,
     throwingExitCode : 0
   }
 
@@ -302,8 +303,9 @@ function runElectron()
     execPath : appPath,
     args : [ launcherPath ],
     stdio : 'pipe',
+    env : { nodewithdebugId : ipc.config.id },
     ipc : 1,
-    verbosity : 0,
+    verbosity : 5,
     outputPiping : 1,
     throwingExitCode : 0
   }
@@ -396,7 +398,7 @@ function Launch()
 
 var Composes =
 {
-  verbosity : 0
+  verbosity : 1
 }
 
 var Aggregates =
