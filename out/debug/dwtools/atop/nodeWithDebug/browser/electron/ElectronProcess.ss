@@ -169,11 +169,11 @@
   
   function setupKeyboardShortcuts()
   {
-    ready.then( ( got ) => 
+    ready.then( ( finallyGive ) => 
     { 
       globalShortcut.register( 'F5', handle );
       globalShortcut.register( 'Ctrl+R', handle );
-      return got;
+      return finallyGive;
     });
     
     function handle()
