@@ -247,7 +247,7 @@ function runNode()
   {
     mode : 'spawn',
     execPath : path,
-    env : { nodewithdebugId : ipc.config.id },
+    env : { nodewithdebugId : ipc.config.id, PATH: process.env.PATH },
     stdio : 'pipe',
     verbosity : 0,
     outputPiping : 0,
@@ -303,7 +303,7 @@ function runElectron()
     execPath : appPath,
     args : [ launcherPath ],
     stdio : 'pipe',
-    env : { nodewithdebugId : ipc.config.id },
+    env : { nodewithdebugId : ipc.config.id, 'DISPLAY': process.env.DISPLAY },
     ipc : 1,
     verbosity : 0,
     outputPiping : 0,
@@ -369,7 +369,7 @@ function Launch()
   ready.then( () => AndKeep([ node.electronCon ]) )
   ready.then( () => AndKeep( node.nodeCons ) );
 
-  ready.got( ( err, got ) =>
+  ready.give( ( err, got ) =>
   {
     if( node.verbosity )
     console.log( 'terminated/finished' );
