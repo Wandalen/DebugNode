@@ -69,12 +69,12 @@ function closeWindowOnDisconnect()
     this
   );
 
-  con.thenKeep( ( got ) =>
+  con.thenKeep( ( finallyGive ) =>
   {
-    if( got )
+    if( finallyGive )
     window.close();
 
-    return got;
+    return finallyGive;
   })
 }
 

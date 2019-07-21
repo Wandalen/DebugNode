@@ -367,7 +367,7 @@ function Launch()
   ready.then( () => AndKeep([ node.electronCon ]) )
   ready.then( () => AndKeep( node.nodeCons ) );
 
-  ready.got( ( err, got ) =>
+  ready.finallyGive( ( err, finallyGive ) =>
   {
     if( node.verbosity )
     console.log( 'terminated/finished' );
