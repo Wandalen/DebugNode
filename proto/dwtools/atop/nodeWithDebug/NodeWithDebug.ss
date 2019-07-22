@@ -251,6 +251,7 @@ function runNode()
     stdio : 'pipe',
     verbosity : 0,
     outputPiping : 0,
+    applyingExitCode : 1,
     throwingExitCode : 0
   }
 
@@ -266,15 +267,16 @@ function runNode()
   [
     'Debugger listening',
     'Waiting for the debugger',
-    'Debugger attached.'
+    'Debugger attached.',
+    'For help, see:'
   ];
-
+  
   shellOptions.process.stdout.pipe( process.stdout );
   shellOptions.process.stderr.on( 'data', ( data ) =>
   {
     if( _.bufferAnyIs( data ) )
     data = _.bufferToStr( data );
-
+    
     for( var f in stdErrFilter )
     if( _.strHas( data, stdErrFilter[ f ] ) )
     return;
@@ -301,12 +303,13 @@ function runElectron()
   {
     mode : 'spawn',
     execPath : appPath,
-    args : [ launcherPath ],
+    args : [ '--no-sandbox', launcherPath ],
     stdio : 'pipe',
     env : { nodewithdebugId : ipc.config.id, 'DISPLAY': process.env.DISPLAY },
     ipc : 1,
     verbosity : 0,
     outputPiping : 0,
+    applyingExitCode : 0,
     throwingExitCode : 0
   }
 
@@ -392,12 +395,14 @@ function Launch()
 
     if( err )
     _.errLogOnce( err );
-
+    
     if( node.verbosity )
     console.log( 'exiting...' );
     
     node.close();
   });
+  
+  return ready;
 
   /*  */
 
