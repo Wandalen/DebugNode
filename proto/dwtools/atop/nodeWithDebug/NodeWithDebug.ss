@@ -346,6 +346,21 @@ function close()
 
   if( self.nodeProcess )
   self.nodeProcess.kill();
+  
+  _.each( self.nodes, ( node ) => 
+  { 
+    try
+    {
+      process.kill( node.id, 'SIGKILL' );
+    }
+    catch( err )
+    {
+      if( err.errno === 'ESRCH' )
+      return;
+      
+      throw err;
+    }
+  });
 
   self.nodes = [];
 
@@ -379,8 +394,8 @@ function Launch()
     _.errLogOnce( err );
 
     if( node.verbosity )
-    console.log( 'exiting...' )
-
+    console.log( 'exiting...' );
+    
     node.close();
   });
 
