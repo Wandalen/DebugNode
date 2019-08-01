@@ -14,10 +14,11 @@
   let currentState;
   let parentIsActive; // debugger window is not closed
   let ppid = process.env.ppid;
+  let ipcHostId = process.env.nodewithdebugId;
   
   let connectTo = deasyncEmptyCb( ipc, ipc.connectTo );
-  connectTo( 'nodewithdebug' );
-  let nodeWithDebug = ipc.of.nodewithdebug;
+  connectTo( ipcHostId );
+  let nodeWithDebug = ipc.of[ ipcHostId ];
   let nodeWithDebugOn = deasyncEmptyCb( nodeWithDebug, nodeWithDebug.on );
   nodeWithDebugOn( 'connect' );
   nodeWithDebug.emit( 'currentStateGet', { id :  process.pid, message : { pid : process.pid, ppid : ppid } } )
@@ -28,14 +29,14 @@
   // skip node calls without script path, like node -e "..."
   if( process.argv.length < 2 )
   {
-    ipc.disconnect( 'nodewithdebug' );
+    ipc.disconnect( ipcHostId );
     return;
   }
   
   if( !parentIsActive || !currentState.debug )
   {
     process.env.NODE_OPTIONS = strReplaceAll( process.env.NODE_OPTIONS, preload, '' );
-    ipc.disconnect( 'nodewithdebug' );
+    ipc.disconnect( ipcHostId );
     return;
   }
 
@@ -59,7 +60,7 @@
 
   inspector.open( port, undefined, true );
 
-  ipc.disconnect( 'nodewithdebug' );
+  ipc.disconnect( ipcHostId );
   
   process.env.ppid = process.pid;
   
