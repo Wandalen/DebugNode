@@ -80,12 +80,12 @@ function setupIpc()
   let self = this;
   let con = new _.Consequence();
 
-  ipc.config.id = 'nodewithdebug';
+  ipc.config.id = 'nodewithdebug.' + process.pid;
   ipc.config.retry= 1500;
   ipc.config.silent = true;
 
   ipc.serve( () =>
-  {
+  { 
     ipc.server.on( 'newNode', _.routineJoin( self, self.onNewNode ) );
     ipc.server.on( 'currentStateGet', _.routineJoin( self, self.onCurrentStateGet) );
     ipc.server.on( 'electronReady', _.routineJoin( self, self.onElectronReady ) );
@@ -247,9 +247,11 @@ function runNode()
   {
     mode : 'spawn',
     execPath : path,
+    env : { nodewithdebugId : ipc.config.id, PATH: process.env.PATH },
     stdio : 'pipe',
     verbosity : 0,
     outputPiping : 0,
+    applyingExitCode : 1,
     throwingExitCode : 0
   }
 
@@ -265,15 +267,16 @@ function runNode()
   [
     'Debugger listening',
     'Waiting for the debugger',
-    'Debugger attached.'
+    'Debugger attached.',
+    'For help, see:'
   ];
-
+  
   shellOptions.process.stdout.pipe( process.stdout );
   shellOptions.process.stderr.on( 'data', ( data ) =>
   {
     if( _.bufferAnyIs( data ) )
     data = _.bufferToStr( data );
-
+    
     for( var f in stdErrFilter )
     if( _.strHas( data, stdErrFilter[ f ] ) )
     return;
@@ -300,11 +303,13 @@ function runElectron()
   {
     mode : 'spawn',
     execPath : appPath,
-    args : [ launcherPath ],
+    args : [ '--no-sandbox', launcherPath ],
     stdio : 'pipe',
+    env : { nodewithdebugId : ipc.config.id, 'DISPLAY': process.env.DISPLAY },
     ipc : 1,
     verbosity : 0,
-    outputPiping : 1,
+    outputPiping : 0,
+    applyingExitCode : 0,
     throwingExitCode : 0
   }
 
@@ -344,6 +349,21 @@ function close()
 
   if( self.nodeProcess )
   self.nodeProcess.kill();
+  
+  _.each( self.nodes, ( node ) => 
+  { 
+    try
+    {
+      process.kill( node.id, 'SIGKILL' );
+    }
+    catch( err )
+    {
+      if( err.errno === 'ESRCH' )
+      return;
+      
+      throw err;
+    }
+  });
 
   self.nodes = [];
 
@@ -367,7 +387,7 @@ function Launch()
   ready.then( () => AndKeep([ node.electronCon ]) )
   ready.then( () => AndKeep( node.nodeCons ) );
 
-  ready.finallyGive( ( err, finallyGive ) =>
+  ready.give( ( err, got ) =>
   {
     if( node.verbosity )
     console.log( 'terminated/finished' );
@@ -375,12 +395,14 @@ function Launch()
 
     if( err )
     _.errLogOnce( err );
-
+    
     if( node.verbosity )
-    console.log( 'exiting...' )
-
+    console.log( 'exiting...' );
+    
     node.close();
   });
+  
+  return ready;
 
   /*  */
 
@@ -396,7 +418,7 @@ function Launch()
 
 var Composes =
 {
-  verbosity : 0
+  verbosity : 1
 }
 
 var Aggregates =
