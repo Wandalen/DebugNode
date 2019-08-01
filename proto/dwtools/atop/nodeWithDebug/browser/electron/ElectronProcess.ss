@@ -26,6 +26,7 @@
   let ready = new _.Consequence();
   let childWindows = Object.create( null );
   let reload = false;
+  let ipcHostId = process.env.nodewithdebugId;
 
   /*  */
 
@@ -92,7 +93,7 @@
     
     child.on( 'closed', function ()
     { 
-      ipc.of.nodewithdebug.emit( 'electronChildClosed', { id : ipc.config.id, message : { pid : pid } } );
+      ipc.of[ ipcHostId ].emit( 'electronChildClosed', { id : ipc.config.id, message : { pid : pid } } );
     })
 
     child.once( 'ready-to-show', () =>
@@ -136,15 +137,15 @@
   {
     let con = new _.Consequence();
 
-    ipc.config.id = 'electon';
+    ipc.config.id = 'electon:' + process.pid;
     ipc.config.retry = 1500;
     ipc.config.silent = true;
-
-    ipc.connectTo( 'nodewithdebug', () =>
+    
+    ipc.connectTo( ipcHostId , () =>
     {
       /* creates window for new node process */
 
-      ipc.of.nodewithdebug.on( 'newNodeElectron', ( data ) =>
+      ipc.of[ ipcHostId ].on( 'newNodeElectron', ( data ) =>
       {
         var o = data.message;
 
@@ -159,7 +160,7 @@
 
       /*  */
 
-      ipc.of.nodewithdebug.emit( 'electronReady', { id : ipc.config.id, message : { ready : 1 } } );
+      ipc.of[ ipcHostId ].emit( 'electronReady', { id : ipc.config.id, message : { ready : 1 } } );
 
     });
 
@@ -182,7 +183,7 @@
       let focused = windows.filter( ( w ) => w.isFocused() );
       if( !focused.length )
       return;
-      ipc.of.nodewithdebug.emit( 'debuggerRestart', { id : ipc.config.id, message : { restart : 1 } } );
+      ipc.of[ ipcHostId ].emit( 'debuggerRestart', { id : ipc.config.id, message : { restart : 1 } } );
       reload = true;
       window.close();
     }
