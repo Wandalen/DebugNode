@@ -47,7 +47,7 @@
     "wProto": "^0.4.94",
     "wTools": "^0.8.433",
     "wexectools": "^0.3.51",
-    "wpathfundamentals": "^0.6.157"
+    "wpathbasic": "^0.6.157"
   },
   "devDependencies": {},
   "keywords": [

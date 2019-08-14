@@ -2,7 +2,7 @@ if( process.platform === 'linux' )
 {
   let _ = require( 'wTools' );
   _.include( 'wLogger' );
-  _.include( 'wExternalFundamentals' );
+  _.include( 'wAppBasic' );
   
   let electronPath = require( 'electron' );
   let electronDistPath = _.path.dir( electronPath );

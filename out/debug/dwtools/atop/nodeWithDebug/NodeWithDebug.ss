@@ -6,7 +6,7 @@ if( typeof module !== "undefined" )
 
   var _ = _global_.wTools;
 
-  _.include( 'wPathFundamentals' )
+  _.include( 'wPathBasic' )
   _.include( 'wConsequence' )
   _.include( 'wFiles' )
 

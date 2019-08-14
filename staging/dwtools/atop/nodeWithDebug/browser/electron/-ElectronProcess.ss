@@ -11,8 +11,8 @@
 
     _.include( 'wConsequence' );
     _.include( 'wStringsExtra' );
-    _.include( 'wExternalFundamentals' );
-    _.include( 'wPathFundamentals' );
+    _.include( 'wAppBasic' );
+    _.include( 'wPathBasic' );
 
     var electron = require( 'electron' );
     var ipc = require('node-ipc');
