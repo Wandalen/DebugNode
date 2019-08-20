@@ -40,14 +40,14 @@
     "portscanner": "^2.2.0",
     "request": "^2.88.0",
     "selenium-webdriver": "^3.1.0",
-    "wConsequence": "^0.4.123",
-    "wCopyable": "^0.4.107",
-    "wFiles": "^0.6.587",
-    "wLogger": "^0.5.167",
-    "wProto": "^0.4.94",
-    "wTools": "^0.8.433",
-    "wexectools": "^0.3.51",
-    "wpathbasic": "^0.6.157"
+    "wConsequence": "",
+    "wCopyable": "",
+    "wFiles": "",
+    "wLogger": "",
+    "wProto": "",
+    "wTools": "",
+    "wexectools": "",
+    "wpathbasic": ""
   },
   "devDependencies": {
     "wTesting": ""

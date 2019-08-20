@@ -357,7 +357,7 @@ function close()
       process.kill( node.id, 'SIGKILL' );
     }
     catch( err )
-    {
+    { 
       if( err.errno === 'ESRCH' )
       return;
       
