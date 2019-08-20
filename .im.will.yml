@@ -3,66 +3,66 @@ submodule :
 
   wTools :
     path : npm:///wTools#^0.8.433
-    enabled : 0
+    enabled : 0 # submodule
   ansicolor :
     path : npm:///ansicolor#^1.1.81
-    enabled : 0
+    enabled : 0 # submodule
   chrome-devtools-frontend :
     path : npm:///chrome-devtools-frontend#^1.0.541714
-    enabled : 0
+    enabled : 0 # submodule
   chrome-remote-interface :
     path : npm:///chrome-remote-interface#^0.25.5
-    enabled : 0
+    enabled : 0 # submodule
   deasync :
     path : npm:///deasync#^0.1.14
-    enabled : 0
+    enabled : 0 # submodule
   electron :
     path : npm:///electron#5.0.6
-    enabled : 0
+    enabled : 0 # submodule
   has-ansi :
     path : npm:///has-ansi#^3.0.0
-    enabled : 0
+    enabled : 0 # submodule
   node-ipc :
     path : npm:///node-ipc#^9.1.1
-    enabled : 0
+    enabled : 0 # submodule
   portscanner :
     path : npm:///portscanner#^2.2.0
-    enabled : 0
+    enabled : 0 # submodule
   request :
     path : npm:///request#^2.88.0
-    enabled : 0
+    enabled : 0 # submodule
   selenium-webdriver :
     path : npm:///selenium-webdriver#^3.1.0
-    enabled : 0
+    enabled : 0 # submodule
   wConsequence :
     path : npm:///wConsequence#^0.4.123
-    enabled : 0
+    enabled : 0 # submodule
   wCopyable :
     path : npm:///wCopyable#^0.4.107
-    enabled : 0
+    enabled : 0 # submodule
   wFiles :
     path : npm:///wFiles#^0.6.587
-    enabled : 0
+    enabled : 0 # submodule
   wLogger :
     path : npm:///wLogger#^0.5.167
-    enabled : 0
+    enabled : 0 # submodule
   wProto :
     path : npm:///wProto#^0.4.94
-    enabled : 0
-  wexectools :
+    enabled : 0 # submodule
+  wExecTools :
     path : npm:///wexectools#^0.3.51
-    enabled : 0
-  wpathbasic :
+    enabled : 0 # submodule
+  wPathBasic :
     path : npm:///wpathbasic#^0.6.157
-    enabled : 0
+    enabled : 0 # submodule
   debugnode :
     path : hd://.
-    enabled : 0
+    enabled : 0 # submodule
     criterion :
       development : 1
   wTesting :
     path : npm:///wTesting
-    enabled : 0
+    enabled : 0 # submodule
     criterion :
       development : 1
 
