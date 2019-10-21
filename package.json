@@ -37,15 +37,15 @@
     "portscanner" : "^2.2.0", 
     "request" : "^2.88.0", 
     "selenium-webdriver" : "^3.1.0", 
-    "wConsequence" : "", 
-    "wCopyable" : "", 
-    "wFiles" : "", 
-    "wLogger" : "", 
-    "wProto" : "", 
-    "wTools" : "", 
-    "wexectools" : "", 
-    "wpathbasic" : ""
+    "wConsequence" : "beta", 
+    "wCopyable" : "beta", 
+    "wFiles" : "beta", 
+    "wLogger" : "beta", 
+    "wProto" : "beta", 
+    "wTools" : "beta", 
+    "wexectools" : "beta", 
+    "wpathbasic" : "beta"
   }, 
-  "devDependencies" : { "wTesting" : "" }, 
+  "devDependencies" : { "wTesting" : "beta" }, 
   "keywords" : [ "node", "debug", "debugger", "inspect", "debug node", "node debug", "trace" ]
 }
