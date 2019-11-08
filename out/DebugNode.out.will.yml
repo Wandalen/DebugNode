@@ -3,18 +3,19 @@ root:
   - DebugNode.out
 consistency:
   DebugNode.out.will.yml: &ref_0
-    hash: 7b8aeb15e25da3b16a35fdae8e199a1c
-    size: 42267
+    hash: b52a9d5c985ddce341c2ec4a9d325dfd
+    size: 42296
   ../.ex.will.yml: &ref_1
     hash: 8766945c0ee6dc229ba7432f0432ccb4
     size: 1849
   ../.im.will.yml: &ref_2
-    hash: eb5f047850db74d997b3c654ede44a40
-    size: 6292
+    hash: c9d11f897e22197d6bf1fe63ca339994
+    size: 6366
 module:
   DebugNode.out:
     about:
       name: DebugNode
+      org: noorg
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
@@ -68,9 +69,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/NodeWithDebug.git'
       origins:
@@ -80,15 +78,15 @@ module:
       bugtracker:
         path: 'https:///github.com/Wandalen/NodeWithDebug/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: .
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - ../package-lock.json
+          - ../package.json
+          - ../node_modules
       proto:
         path: ../proto
       export:
@@ -153,11 +151,13 @@ module:
         path: '{path::out.*=}/source/Index.s'
       exported.dir.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path: ../proto
       exported.files.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path:
@@ -412,6 +412,7 @@ module:
           prefixPath: ../proto
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
       exported.files.proto.export:
@@ -424,6 +425,7 @@ module:
         recursive: 0
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
     step:
@@ -781,6 +783,7 @@ module:
         opts:
           reflector: 'reflector::exported.proto.export*'
         criterion:
+          generated: 1
           content: proto
           export: 1
         inherit:
@@ -789,6 +792,7 @@ module:
         opts:
           reflector: 'reflector::exported.files.proto.export*'
         criterion:
+          generated: 1
           content: proto
           export: 1
         inherit:
@@ -887,6 +891,7 @@ module:
   ../:
     about:
       name: DebugNode
+      org: noorg
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
@@ -940,9 +945,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/NodeWithDebug.git'
       origins:
@@ -952,21 +954,21 @@ module:
       bugtracker:
         path: 'https:///github.com/Wandalen/NodeWithDebug/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: out
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - package-lock.json
+          - package.json
+          - node_modules
       proto:
-        path: ./proto
+        path: proto
       export:
         path: '{path::proto}/**'
       doc:
-        path: ./doc
+        path: doc
       out.raw.debug:
         criterion:
           debug: debug
@@ -1652,6 +1654,6 @@ module:
         hash: 8766945c0ee6dc229ba7432f0432ccb4
         size: 1849
       ../.im.will.yml:
-        hash: eb5f047850db74d997b3c654ede44a40
-        size: 6292
+        hash: c9d11f897e22197d6bf1fe63ca339994
+        size: 6366
       DebugNode.out.will.yml: *ref_0
