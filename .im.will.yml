@@ -2,7 +2,7 @@
 submodule :
 
   wTools :
-    path : npm:///wTools#^0.8.433
+    path : npm:///wTools
     enabled : 0 # submodule
   ansicolor :
     path : npm:///ansicolor#^1.1.81
@@ -35,25 +35,25 @@ submodule :
     path : npm:///selenium-webdriver#^3.1.0
     enabled : 0 # submodule
   wConsequence :
-    path : npm:///wConsequence#^0.4.123
+    path : npm:///wConsequence
     enabled : 0 # submodule
   wCopyable :
-    path : npm:///wCopyable#^0.4.107
+    path : npm:///wCopyable
     enabled : 0 # submodule
   wFiles :
-    path : npm:///wFiles#^0.6.587
+    path : npm:///wFiles
     enabled : 0 # submodule
   wLogger :
-    path : npm:///wLogger#^0.5.167
+    path : npm:///wLogger
     enabled : 0 # submodule
   wProto :
-    path : npm:///wProto#^0.4.94
+    path : npm:///wProto
     enabled : 0 # submodule
   wExecTools :
-    path : npm:///wexectools#^0.3.51
+    path : npm:///wappbasic
     enabled : 0 # submodule
   wPathBasic :
-    path : npm:///wpathbasic#^0.6.157
+    path : npm:///wpathbasic
     enabled : 0 # submodule
   debugnode :
     path : hd://.
