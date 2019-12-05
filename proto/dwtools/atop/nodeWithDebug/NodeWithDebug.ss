@@ -17,15 +17,12 @@ if( typeof module !== "undefined" )
 var Parent = null;
 var Self = function NodeWithDebug( o )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.nameShort = 'DebugNode';
+
+let Debug = false;
 
 /*
 
@@ -249,15 +246,15 @@ function runNode()
     execPath : path,
     env : { nodewithdebugId : ipc.config.id, PATH: process.env.PATH },
     stdio : 'pipe',
-    verbosity : 0,
-    outputPiping : 0,
+    verbosity : Debug ? 2 : 0,
+    outputPiping : Debug,
     applyingExitCode : 1,
     throwingExitCode : 0
   }
 
   /* run main node */
 
-  let nodeCon = _.shell( shellOptions );
+  let nodeCon = _.process.start( shellOptions );
   self.nodeCons.push( nodeCon );
   self.nodeProcess = shellOptions.process;
 
@@ -307,13 +304,13 @@ function runElectron()
     stdio : 'pipe',
     env : { nodewithdebugId : ipc.config.id, 'DISPLAY': process.env.DISPLAY },
     ipc : 1,
-    verbosity : 0,
-    outputPiping : 0,
+    verbosity : Debug ? 2 : 0,
+    outputPiping : Debug,
     applyingExitCode : 0,
     throwingExitCode : 0
   }
 
-  self.electronCon = _.shell( o );
+  self.electronCon = _.process.start( o );
   self.electronProcess = o.process;
 
   self.electronProcess.once( 'exit', () => { self.state.debug = 0; })
@@ -453,7 +450,7 @@ var Statics =
 // prototype
 // --
 
-var Proto =
+var Extend =
 {
 
   init : init,
@@ -489,7 +486,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Proto,
+  extend : Extend,
 });
 
 Launch();

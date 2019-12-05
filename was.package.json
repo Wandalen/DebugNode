@@ -43,7 +43,7 @@
     "wLogger" : "", 
     "wProto" : "", 
     "wTools" : "", 
-    "wexectools" : "", 
+    "wappbasic" : "", 
     "wpathbasic" : ""
   }, 
   "devDependencies" : { "wTesting" : "" }, 

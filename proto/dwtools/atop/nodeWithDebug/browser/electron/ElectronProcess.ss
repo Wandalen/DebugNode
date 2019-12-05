@@ -27,6 +27,7 @@
   let childWindows = Object.create( null );
   let reload = false;
   let ipcHostId = process.env.nodewithdebugId;
+  let Debug = false;
 
   /*  */
 
@@ -53,6 +54,7 @@
     window = new BrowserWindow( options );
 
     window.loadURL( o.url );
+    window.show();
 
     // window.webContents.openDevTools();
 
@@ -139,7 +141,7 @@
 
     ipc.config.id = 'electon:' + process.pid;
     ipc.config.retry = 1500;
-    ipc.config.silent = true;
+    ipc.config.silent = !Debug;
     
     ipc.connectTo( ipcHostId , () =>
     {
