@@ -178,7 +178,11 @@ module:
           - >-
             ../proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss
           - ../proto/dwtools/atop/nodeWithDebug.test
-          - ../proto/dwtools/atop/nodeWithDebug.test/DebugNode.test.ss
+          - ../proto/dwtools/atop/nodeWithDebug.test/Ext.test.ss
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally
+          - >-
+            ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally/package.json
     submodule:
       wTools:
         path: 'npm:///wTools#^0.8.433'

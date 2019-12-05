@@ -1,64 +1,51 @@
 {
-  "name": "debugnode",
-  "version": "0.3.82",
-  "engine": "node >= 6.3.0",
-  "description": "Nodejs debugger",
-  "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
-  "contributors": [
-    {
-      "name": "Kostiantyn Wandalen",
-      "email": "wanalen@willbe.so>"
-    },
-    {
-      "name": "Volodymyr M.",
-      "email": "volodymyr.migdal@gmail.com"
-    }
-  ],
-  "license": "MIT",
-  "bin": {
-    "debugnode": "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
-  },
-  "main": "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Wandalen/NodeWithDebug.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Wandalen/NodeWithDebug/issues"
-  },
-  "scripts": {
-    "postinstall": "node ./postinstall.ss"
-  },
-  "dependencies": {
-    "ansicolor": "^1.1.81",
-    "chrome-devtools-frontend": "^1.0.541714",
-    "chrome-remote-interface": "^0.25.5",
-    "deasync": "^0.1.14",
-    "electron": "5.0.6",
-    "has-ansi": "^3.0.0",
-    "node-ipc": "^9.1.1",
-    "portscanner": "^2.2.0",
-    "request": "^2.88.0",
-    "selenium-webdriver": "^3.1.0",
-    "wConsequence": "alpha",
-    "wCopyable": "alpha",
-    "wFiles": "alpha",
-    "wLogger": "alpha",
-    "wProto": "alpha",
-    "wTools": "alpha",
-    "wappbasic": "alpha",
-    "wpathbasic": "alpha"
-  },
-  "devDependencies": {
-    "wTesting": "alpha"
-  },
-  "keywords": [
-    "node",
-    "debug",
-    "debugger",
-    "inspect",
-    "debug node",
-    "node debug",
-    "trace"
-  ]
+  "name" : "debugnode", 
+  "version" : "0.3.83", 
+  "engine" : "node >= 6.3.0", 
+  "description" : "Nodejs debugger", 
+  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
+  "contributors" : 
+  [
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so>" }, 
+    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
+  ], 
+  "license" : "MIT", 
+  "bin" : 
+  {
+    "debugnode" : "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
+  }, 
+  "main" : "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss", 
+  "repository" : 
+  {
+    "type" : "git", 
+    "url" : "https://github.com/Wandalen/NodeWithDebug.git"
+  }, 
+  "bugs" : 
+  {
+    "url" : "https://github.com/Wandalen/NodeWithDebug/issues"
+  }, 
+  "scripts" : { "postinstall" : "node ./postinstall.ss" }, 
+  "dependencies" : 
+  {
+    "ansicolor" : "^1.1.81", 
+    "chrome-devtools-frontend" : "^1.0.541714", 
+    "chrome-remote-interface" : "^0.25.5", 
+    "deasync" : "^0.1.14", 
+    "electron" : "5.0.6", 
+    "has-ansi" : "^3.0.0", 
+    "node-ipc" : "^9.1.1", 
+    "portscanner" : "^2.2.0", 
+    "request" : "^2.88.0", 
+    "selenium-webdriver" : "^3.1.0", 
+    "wConsequence" : "alpha", 
+    "wCopyable" : "alpha", 
+    "wFiles" : "alpha", 
+    "wLogger" : "alpha", 
+    "wProto" : "alpha", 
+    "wTools" : "alpha", 
+    "wappbasic" : "alpha", 
+    "wpathbasic" : "alpha"
+  }, 
+  "devDependencies" : { "wTesting" : "alpha" }, 
+  "keywords" : [ "node", "debug", "debugger", "inspect", "debug node", "node debug", "trace" ]
 }
