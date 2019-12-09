@@ -183,6 +183,8 @@ module:
           - ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally
           - >-
             ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally/package.json
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/run
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/run/Index.js
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -1660,6 +1662,4 @@ module:
       ../.im.will.yml:
         hash: 48b2531413bf59b1cdba3cda075ac124
         size: 6295
-      DebugNode.out.will.yml:
-        hash: 7aeeb43fcbe75994bb6094cf54df9719
-        size: 42388
+      DebugNode.out.will.yml: *ref_0
