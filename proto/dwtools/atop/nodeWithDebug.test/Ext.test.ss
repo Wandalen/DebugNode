@@ -9,9 +9,6 @@
     _.include( 'wTesting' );
     _.include( 'wAppBasic' );
     _.include( 'wFiles' );
-    
-    // var DebugNode = require( '../nodeWithDebug/NodeWithDebug.ss' );
-    // var DebugNodePath = require.resolve( '../nodeWithDebug/NodeWithDebug.ss' );
   }
   
   var _global = _global_;
@@ -27,6 +24,7 @@
     self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'DebugNode' );
     self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
     self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../Tools.s' ) );
+    self.defaultJsPath = _.path.join( __dirname, '../nodeWithDebug/NodeWithDebug.ss' );
   }
   
   function onSuiteEnd()
@@ -63,6 +61,25 @@
   `
   Install utility locally.
   `
+  
+  //
+  
+  function run( test )
+  {
+    let self = this;
+    let a = test.assetFor( 'run' );
+
+    a.reflect();
+    a.jsNonThrowing({ args : [ 'Index.js', 'arg1', 'arg2' ] })
+    .then( ( got ) =>
+    {
+      test.identical( got.exitCode, 0 );
+      test.is( _.strHas( got.output, `[ 'arg1', 'arg2' ]` ) )
+      return null;
+    })
+    
+    return a.ready;
+  }
   
   //
   
@@ -208,7 +225,8 @@
   
     tests :
     {
-      installLocally
+      installLocally,
+      run
     }
   
   }
