@@ -12,7 +12,7 @@ if( process.platform === 'linux' )
   
   logger.log( 'Setting permissions for chrome-sandbox.');
   
-  return _.shell
+  return _.process.start
   ({ 
     execPath : commands,
     currentPath : electronDistPath
