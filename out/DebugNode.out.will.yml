@@ -3,14 +3,14 @@ root:
   - DebugNode.out
 consistency:
   DebugNode.out.will.yml: &ref_0
-    hash: b52a9d5c985ddce341c2ec4a9d325dfd
-    size: 42296
+    hash: 7aeeb43fcbe75994bb6094cf54df9719
+    size: 42388
   ../.ex.will.yml: &ref_1
     hash: 8766945c0ee6dc229ba7432f0432ccb4
     size: 1849
   ../.im.will.yml: &ref_2
-    hash: c9d11f897e22197d6bf1fe63ca339994
-    size: 6366
+    hash: 48b2531413bf59b1cdba3cda075ac124
+    size: 6295
 module:
   DebugNode.out:
     about:
@@ -178,10 +178,16 @@ module:
           - >-
             ../proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss
           - ../proto/dwtools/atop/nodeWithDebug.test
-          - ../proto/dwtools/atop/nodeWithDebug.test/DebugNode.test.ss
+          - ../proto/dwtools/atop/nodeWithDebug.test/Ext.test.ss
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally
+          - >-
+            ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally/package.json
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/run
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/run/Index.js
     submodule:
       wTools:
-        path: 'npm:///wTools#^0.8.433'
+        path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
       ansicolor:
@@ -225,31 +231,31 @@ module:
         autoExporting: 0
         enabled: 0
       wConsequence:
-        path: 'npm:///wConsequence#^0.4.123'
+        path: 'npm:///wConsequence'
         autoExporting: 0
         enabled: 0
       wCopyable:
-        path: 'npm:///wCopyable#^0.4.107'
+        path: 'npm:///wCopyable'
         autoExporting: 0
         enabled: 0
       wFiles:
-        path: 'npm:///wFiles#^0.6.587'
+        path: 'npm:///wFiles'
         autoExporting: 0
         enabled: 0
       wLogger:
-        path: 'npm:///wLogger#^0.5.167'
+        path: 'npm:///wLogger'
         autoExporting: 0
         enabled: 0
       wProto:
-        path: 'npm:///wProto#^0.4.94'
+        path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
       wExecTools:
-        path: 'npm:///wexectools#^0.3.51'
+        path: 'npm:///wappbasic'
         autoExporting: 0
         enabled: 0
       wPathBasic:
-        path: 'npm:///wpathbasic#^0.6.157'
+        path: 'npm:///wpathbasic'
         autoExporting: 0
         enabled: 0
       debugnode:
@@ -1027,7 +1033,7 @@ module:
         path: '{path::out.*=}/source/Index.s'
     submodule:
       wTools:
-        path: 'npm:///wTools#^0.8.433'
+        path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
       ansicolor:
@@ -1071,31 +1077,31 @@ module:
         autoExporting: 0
         enabled: 0
       wConsequence:
-        path: 'npm:///wConsequence#^0.4.123'
+        path: 'npm:///wConsequence'
         autoExporting: 0
         enabled: 0
       wCopyable:
-        path: 'npm:///wCopyable#^0.4.107'
+        path: 'npm:///wCopyable'
         autoExporting: 0
         enabled: 0
       wFiles:
-        path: 'npm:///wFiles#^0.6.587'
+        path: 'npm:///wFiles'
         autoExporting: 0
         enabled: 0
       wLogger:
-        path: 'npm:///wLogger#^0.5.167'
+        path: 'npm:///wLogger'
         autoExporting: 0
         enabled: 0
       wProto:
-        path: 'npm:///wProto#^0.4.94'
+        path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
       wExecTools:
-        path: 'npm:///wexectools#^0.3.51'
+        path: 'npm:///wappbasic'
         autoExporting: 0
         enabled: 0
       wPathBasic:
-        path: 'npm:///wpathbasic#^0.6.157'
+        path: 'npm:///wpathbasic'
         autoExporting: 0
         enabled: 0
       debugnode:
@@ -1654,6 +1660,6 @@ module:
         hash: 8766945c0ee6dc229ba7432f0432ccb4
         size: 1849
       ../.im.will.yml:
-        hash: c9d11f897e22197d6bf1fe63ca339994
-        size: 6366
+        hash: 48b2531413bf59b1cdba3cda075ac124
+        size: 6295
       DebugNode.out.will.yml: *ref_0
