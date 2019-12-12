@@ -27,7 +27,8 @@
     "url": "https://github.com/Wandalen/NodeWithDebug/issues"
   },
   "scripts": {
-    "postinstall": "node ./postinstall.ss"
+    "postinstall": "node ./postinstall.ss",
+    "test" : "wtest .run proto/**"
   },
   "dependencies": {
     "ansicolor": "^1.1.81",
