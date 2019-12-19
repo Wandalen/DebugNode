@@ -213,7 +213,7 @@
   
     onSuiteBegin,
     onSuiteEnd,
-    routineTimeOut : 60000,
+    routineTimeOut : 300000,
   
     context :
     {
