@@ -62,7 +62,13 @@ function init( o )
 
 function checkScript()
 { 
-  let scriptPath = _.path.resolve( process.argv[ 2 ] );
+  let node = this;
+  let scriptPath = node.args[ 1 ];
+  
+  if( !_.strDefined( scriptPath ) )
+  throw _.errBrief( `Debugger expects path to script file.` )
+  
+  scriptPath = _.path.resolve( scriptPath );
   
   if( !_.fileProvider.fileExists( scriptPath ) )
   throw _.errBrief( `Provided script path:${ _.strQuote( _.path.nativize( scriptPath ) ) } doesn't exist.` )
@@ -254,8 +260,9 @@ function runNode()
     '-r',
     _.path.nativize( _.path.join( __dirname, 'Preload.ss' ) ),
   ]
-
-  path.push.apply( path, process.argv.slice( 2 ) );
+  
+  path.push.apply( path, self.args.slice( 1 ) );
+  
   path = path.join( ' ' );
 
   var shellOptions =
@@ -401,6 +408,7 @@ function exec()
   let node = this;
   let appArgs = _.process.args({ keyValDelimeter : 0 });
   let ca = node._commandsMake();
+  node.args = appArgs.scriptArgs;
 
   return ca.appArgsPerform({ appArgs : appArgs });
 }
@@ -445,7 +453,8 @@ function _commandHandleSyntaxError( o )
 {
   let node = this;
   let ca = node.ca;
-  return ca.commandPerform({ command : '.run ' + o.appArgs.subject });
+  node.args.unshift( '.run' );
+  return ca.commandPerform({ command : '.run' });
 }
 
 //
@@ -483,7 +492,7 @@ function commandRun( e )
   ready.then( () => AndKeep([ node.electronCon ]) )
   ready.then( () => AndKeep( node.nodeCons ) );
 
-  ready.give( ( err, got ) =>
+  ready.finally( ( err, got ) =>
   {
     if( node.verbosity )
     console.log( 'terminated/finished' );
@@ -496,6 +505,8 @@ function commandRun( e )
     console.log( 'exiting...' );
     
     node.close();
+    
+    return null;
   });
   
   return ready;
@@ -539,7 +550,8 @@ var Restricts =
   nodesMap : null,
   state : null,
   closed : null,
-  ca : null
+  ca : null,
+  args : null
 }
 
 var Statics =
