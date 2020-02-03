@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - DebugNode.out
 consistency:
-  DebugNode.out.will.yml: &ref_0
-    hash: 0a7999a9a57d4ad0a30ff898dc7d8160
-    size: 42559
-  ../.ex.will.yml: &ref_1
-    hash: 14724d2f1c1e307b08204786403008f7
-    size: 1882
-  ../.im.will.yml: &ref_2
-    hash: 48b2531413bf59b1cdba3cda075ac124
-    size: 6295
+  ../.ex.will.yml: &ref_0
+    hash: b3261613227363ba08c9361ede84c2bd
+    size: 1840
+  ../.im.will.yml: &ref_1
+    hash: 3f02488a0a53de3c9c8fdebac4178482
+    size: 5908
 module:
   DebugNode.out:
     about:
@@ -19,11 +16,11 @@ module:
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - node
         - debug
         - debugger
@@ -33,14 +30,13 @@ module:
         - trace
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@willbe.so>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: debugnode
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
-        postinstall: node ./postinstall.ss
-      npm.bin:
+      npm.bin: &ref_6
         debugnode: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
       module.willfiles:
@@ -195,18 +191,6 @@ module:
         path: 'npm:///ansicolor#^1.1.81'
         autoExporting: 0
         enabled: 0
-      chrome-devtools-frontend:
-        path: 'npm:///chrome-devtools-frontend#^1.0.541714'
-        autoExporting: 0
-        enabled: 0
-      chrome-remote-interface:
-        path: 'npm:///chrome-remote-interface#^0.25.5'
-        autoExporting: 0
-        enabled: 0
-      deasync:
-        path: 'npm:///deasync#^0.1.14'
-        autoExporting: 0
-        enabled: 0
       electron:
         path: 'npm:///electron#5.0.6'
         autoExporting: 0
@@ -225,10 +209,6 @@ module:
         enabled: 0
       request:
         path: 'npm:///request#^2.88.0'
-        autoExporting: 0
-        enabled: 0
-      selenium-webdriver:
-        path: 'npm:///selenium-webdriver#^3.1.0'
         autoExporting: 0
         enabled: 0
       wConsequence:
@@ -786,24 +766,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          reflector: 'reflector::exported.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          reflector: 'reflector::exported.files.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -892,9 +854,8 @@ module:
           content: proto
           export: 1
     consistency:
-      DebugNode.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: DebugNode
@@ -902,29 +863,14 @@ module:
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
-      interpreters:
-        - njs >= 8.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - node
-        - debug
-        - debugger
-        - inspect
-        - debug node
-        - node debug
-        - trace
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@willbe.so>
-        - Volodymyr M. <volodymyr.migdal@gmail.com>
+      contributors: *ref_4
       npm.name: debugnode
-      npm.scripts:
-        test: wtest .run proto/**
-        postinstall: node ./postinstall.ss
-      npm.bin:
-        debugnode: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
+      npm.scripts: *ref_5
+      npm.bin: *ref_6
     path:
       module.willfiles:
         criterion:
@@ -1042,18 +988,6 @@ module:
         path: 'npm:///ansicolor#^1.1.81'
         autoExporting: 0
         enabled: 0
-      chrome-devtools-frontend:
-        path: 'npm:///chrome-devtools-frontend#^1.0.541714'
-        autoExporting: 0
-        enabled: 0
-      chrome-remote-interface:
-        path: 'npm:///chrome-remote-interface#^0.25.5'
-        autoExporting: 0
-        enabled: 0
-      deasync:
-        path: 'npm:///deasync#^0.1.14'
-        autoExporting: 0
-        enabled: 0
       electron:
         path: 'npm:///electron#5.0.6'
         autoExporting: 0
@@ -1072,10 +1006,6 @@ module:
         enabled: 0
       request:
         path: 'npm:///request#^2.88.0'
-        autoExporting: 0
-        enabled: 0
-      selenium-webdriver:
-        path: 'npm:///selenium-webdriver#^3.1.0'
         autoExporting: 0
         enabled: 0
       wConsequence:
@@ -1659,9 +1589,8 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: 14724d2f1c1e307b08204786403008f7
-        size: 1882
+        hash: b3261613227363ba08c9361ede84c2bd
+        size: 1840
       ../.im.will.yml:
-        hash: 48b2531413bf59b1cdba3cda075ac124
-        size: 6295
-      DebugNode.out.will.yml: *ref_0
+        hash: 3f02488a0a53de3c9c8fdebac4178482
+        size: 5908
