@@ -43,6 +43,9 @@ submodule :
   wPathBasic :
     path : npm:///wpathbasic
     enabled : 0 # submodule
+  wCommandsAggregator :
+    path : npm:///wcommandsaggregator
+    enabled : 0 # submodule
   debugnode :
     path : hd://.
     enabled : 0 # submodule

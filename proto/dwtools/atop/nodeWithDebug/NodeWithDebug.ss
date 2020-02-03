@@ -9,10 +9,12 @@ if( typeof module !== "undefined" )
   _.include( 'wPathBasic' )
   _.include( 'wConsequence' )
   _.include( 'wFiles' )
+  _.include( 'wCommandsAggregator' )
 
   var ipc = require('node-ipc');
   var request = require( 'request' );
 }
+
 
 var Parent = null;
 var Self = function NodeWithDebug( o )
@@ -22,6 +24,7 @@ var Self = function NodeWithDebug( o )
 
 Self.nameShort = 'DebugNode';
 
+let _global = _global_;
 let Debug = false;
 
 /*
@@ -42,7 +45,7 @@ function init( o )
   o = o || Object.create( null );
 
   _.assert( arguments.length === 0 | arguments.length === 1 );
-
+  
   self.ready = new _.Consequence();
   self.nodes = [];
   self.nodesMap = Object.create( null );
@@ -51,7 +54,9 @@ function init( o )
   self.state.debug = 1;
   self.electronReady = new _.Consequence();
   self.closed = false;
-  self.verbosity = 0;
+  self.logger = new _.Logger({ output : _global.logger, name : Self.nameShort, verbosity : self.verbosity });
+  
+  _.workpiece.initFields( self );
 
 }
 
@@ -385,9 +390,88 @@ function close()
 
 /* Launch */
 
-function Launch()
+function Exec()
 {
   let node = new Self();
+  return node.exec();
+}
+
+function exec()
+{
+  let node = this;
+  let appArgs = _.process.args({ keyValDelimeter : 0 });
+  let ca = node._commandsMake();
+
+  return ca.appArgsPerform({ appArgs : appArgs });
+}
+
+//
+
+function _commandsMake()
+{
+  let node = this;
+  let fileProvider = _.fileProvider;
+
+  _.assert( _.instanceIs( node ) );
+  _.assert( arguments.length === 0 );
+
+  let commands =
+  {
+
+    'help' :                    { e : _.routineJoin( node, node.commandHelp ),                        h : 'Get help.' },
+    'run' :                     { e : _.routineJoin( node, node.commandRun ),                         h : 'Debug script.' },
+  }
+
+  let ca = node.ca = _.CommandsAggregator
+  ({
+    basePath : fileProvider.path.current(),
+    commands : commands,
+    commandPrefix : 'node ',
+    logger : node.logger,
+    onSyntaxError : ( o ) => node._commandHandleSyntaxError( o ),
+  })
+
+  _.assert( ca.logger === node.logger );
+  _.assert( ca.verbosity === node.verbosity );
+
+  ca.form();
+
+  return ca;
+}
+
+//
+
+function _commandHandleSyntaxError( o )
+{
+  let node = this;
+  let ca = node.ca;
+  return ca.commandPerform({ command : '.run ' + o.appArgs.subject });
+}
+
+//
+
+function commandHelp( e )
+{
+  let node = this;
+  let ca = e.ca;
+  let logger = node.logger;
+
+  logger.log( 'Known commands' );
+
+  ca._commandHelp( e );
+  
+  logger.log( '\nHow to use debugger:' );
+  logger.log( 'debugnode [script path] [arguments]' );
+  logger.log( 'debugnode .run [script path] [arguments]' );
+}
+
+//
+
+function commandRun( e )
+{
+  let node = this;
+  let ca = e.ca;
+  
   let ready = node.ready;
 
   ready.take( null )
@@ -430,7 +514,7 @@ function Launch()
 
 var Composes =
 {
-  verbosity : 1
+  verbosity : 0
 }
 
 var Aggregates =
@@ -439,6 +523,7 @@ var Aggregates =
 
 var Associates =
 {
+  logger : null
 }
 
 var Restricts =
@@ -453,12 +538,13 @@ var Restricts =
   nodes : null,
   nodesMap : null,
   state : null,
-  closed : null
+  closed : null,
+  ca : null
 }
 
 var Statics =
 {
-  Launch : Launch
+  Exec
 }
 
 // --
@@ -486,6 +572,16 @@ var Extend =
   onDebuggerRestart : onDebuggerRestart,
 
   close : close,
+  
+  //
+  
+  _commandsMake,
+  _commandHandleSyntaxError,
+  
+  commandHelp,
+  commandRun,
+  
+  exec,
 
   // relationships
 
@@ -506,7 +602,8 @@ _.classDeclare
   extend : Extend,
 });
 
-Launch();
+if( !module.parent )
+Self.Exec();
 
 //
 // export
