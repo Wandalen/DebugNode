@@ -25,7 +25,6 @@ about :
   npm.name : 'debugnode'
   npm.scripts :
     test : 'wtest .run proto/**'
-    postinstall : 'node ./postinstall.ss'
   npm.bin :
     debugnode : 'proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss'
 
