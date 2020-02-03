@@ -55,6 +55,19 @@ function init( o )
 
 }
 
+function checkScript()
+{ 
+  let scriptPath = _.path.resolve( process.argv[ 2 ] );
+  
+  if( !_.fileProvider.fileExists( scriptPath ) )
+  throw _.errBrief( `Provided script path:${ _.strQuote( _.path.nativize( scriptPath ) ) } doesn't exist.` )
+  
+  if( !_.fileProvider.isTerminal( scriptPath ) )
+  throw _.errBrief( `Provided script:${ _.strQuote( _.path.nativize( scriptPath ) ) } is not a terminal file.` )
+  
+  return null;
+}
+
 
 /* Setup */
 
@@ -363,7 +376,8 @@ function close()
   });
 
   self.nodes = [];
-
+  
+  if( ipc.server.stop )
   ipc.server.stop();
 
   /**/
@@ -377,6 +391,7 @@ function Launch()
   let ready = node.ready;
 
   ready.take( null )
+  ready.then( () => node.checkScript() );
   ready.then( () => node.setup() );
   ready.then( () => node.runElectron() );
   ready.then( () => node.runNode() );
@@ -454,6 +469,8 @@ var Extend =
 {
 
   init : init,
+  
+  checkScript,
 
   setup : setup,
   setupIpc : setupIpc,
