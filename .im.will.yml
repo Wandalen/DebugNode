@@ -7,15 +7,6 @@ submodule :
   ansicolor :
     path : npm:///ansicolor#^1.1.81
     enabled : 0 # submodule
-  chrome-devtools-frontend :
-    path : npm:///chrome-devtools-frontend#^1.0.541714
-    enabled : 0 # submodule
-  chrome-remote-interface :
-    path : npm:///chrome-remote-interface#^0.25.5
-    enabled : 0 # submodule
-  deasync :
-    path : npm:///deasync#^0.1.14
-    enabled : 0 # submodule
   electron :
     path : npm:///electron#5.0.6
     enabled : 0 # submodule
@@ -30,9 +21,6 @@ submodule :
     enabled : 0 # submodule
   request :
     path : npm:///request#^2.88.0
-    enabled : 0 # submodule
-  selenium-webdriver :
-    path : npm:///selenium-webdriver#^3.1.0
     enabled : 0 # submodule
   wConsequence :
     path : npm:///wConsequence
