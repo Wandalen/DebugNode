@@ -3,14 +3,14 @@ root:
   - DebugNode.out
 consistency:
   DebugNode.out.will.yml: &ref_0
-    hash: 0a7999a9a57d4ad0a30ff898dc7d8160
-    size: 42559
+    hash: 25973ed6765a18c3ec754a08daff5c03
+    size: 41550
   ../.ex.will.yml: &ref_1
-    hash: 14724d2f1c1e307b08204786403008f7
-    size: 1882
+    hash: b3261613227363ba08c9361ede84c2bd
+    size: 1840
   ../.im.will.yml: &ref_2
-    hash: 48b2531413bf59b1cdba3cda075ac124
-    size: 6295
+    hash: 3f02488a0a53de3c9c8fdebac4178482
+    size: 5908
 module:
   DebugNode.out:
     about:
@@ -39,7 +39,6 @@ module:
       npm.name: debugnode
       npm.scripts:
         test: wtest .run proto/**
-        postinstall: node ./postinstall.ss
       npm.bin:
         debugnode: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
@@ -195,18 +194,6 @@ module:
         path: 'npm:///ansicolor#^1.1.81'
         autoExporting: 0
         enabled: 0
-      chrome-devtools-frontend:
-        path: 'npm:///chrome-devtools-frontend#^1.0.541714'
-        autoExporting: 0
-        enabled: 0
-      chrome-remote-interface:
-        path: 'npm:///chrome-remote-interface#^0.25.5'
-        autoExporting: 0
-        enabled: 0
-      deasync:
-        path: 'npm:///deasync#^0.1.14'
-        autoExporting: 0
-        enabled: 0
       electron:
         path: 'npm:///electron#5.0.6'
         autoExporting: 0
@@ -225,10 +212,6 @@ module:
         enabled: 0
       request:
         path: 'npm:///request#^2.88.0'
-        autoExporting: 0
-        enabled: 0
-      selenium-webdriver:
-        path: 'npm:///selenium-webdriver#^3.1.0'
         autoExporting: 0
         enabled: 0
       wConsequence:
@@ -922,7 +905,6 @@ module:
       npm.name: debugnode
       npm.scripts:
         test: wtest .run proto/**
-        postinstall: node ./postinstall.ss
       npm.bin:
         debugnode: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
@@ -1042,18 +1024,6 @@ module:
         path: 'npm:///ansicolor#^1.1.81'
         autoExporting: 0
         enabled: 0
-      chrome-devtools-frontend:
-        path: 'npm:///chrome-devtools-frontend#^1.0.541714'
-        autoExporting: 0
-        enabled: 0
-      chrome-remote-interface:
-        path: 'npm:///chrome-remote-interface#^0.25.5'
-        autoExporting: 0
-        enabled: 0
-      deasync:
-        path: 'npm:///deasync#^0.1.14'
-        autoExporting: 0
-        enabled: 0
       electron:
         path: 'npm:///electron#5.0.6'
         autoExporting: 0
@@ -1072,10 +1042,6 @@ module:
         enabled: 0
       request:
         path: 'npm:///request#^2.88.0'
-        autoExporting: 0
-        enabled: 0
-      selenium-webdriver:
-        path: 'npm:///selenium-webdriver#^3.1.0'
         autoExporting: 0
         enabled: 0
       wConsequence:
@@ -1659,9 +1625,11 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: 14724d2f1c1e307b08204786403008f7
-        size: 1882
+        hash: b3261613227363ba08c9361ede84c2bd
+        size: 1840
       ../.im.will.yml:
-        hash: 48b2531413bf59b1cdba3cda075ac124
-        size: 6295
-      DebugNode.out.will.yml: *ref_0
+        hash: 3f02488a0a53de3c9c8fdebac4178482
+        size: 5908
+      DebugNode.out.will.yml:
+        hash: 25973ed6765a18c3ec754a08daff5c03
+        size: 41550
