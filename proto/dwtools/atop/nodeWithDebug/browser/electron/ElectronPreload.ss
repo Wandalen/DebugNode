@@ -1,6 +1,8 @@
 let ansi = require ( 'ansicolor' )
 let hasAnsi = require( 'has-ansi' );
-let _ = require( 'wConsequence' );
+let _ = require( 'wTools' );
+_.include( 'wConsequence' )
+_.include( 'wPathBasic' )
 let electron = require('electron');
 
 ansi.rgb =
@@ -37,13 +39,40 @@ window.onload = function()
   
   let original = SDK.consoleModel.addMessage;
   SDK.consoleModel.addMessage = function addMessage( message )
-  {
+  { 
     if( hasAnsi( message.messageText ) )
     {
       let parsed = ansi.parse( message.messageText );
       message.parameters = parsed.asChromeConsoleLogArguments;
       message.messageText = message.parameters[ 0 ];
     }
+    
+    if( message.level === "error" )
+    {
+      message.messageText = _.path.normalize( message.messageText );
+      
+      let regexps = [ /(@ )(.*\:[0-9]+\:[0-9]+)/gm, /(\()(.*\:[0-9]+\:[0-9]+)(\))/gm ]
+      
+      regexps.forEach(( r ) => 
+      {
+        message.messageText = _.strReplaceAll( message.messageText, r, ( match, it ) => 
+        { 
+          it.groups[ 1 ] = _.path.normalize( it.groups[ 1 ] );
+          
+          if( _.path.isRelative( it.groups[ 1 ] ) )
+          return it.groups.join( '' );
+          
+          it.groups[ 1 ] = _.path.nativize( it.groups[ 1 ] );
+          it.groups[ 1 ] = _.strReplaceAll( it.groups[ 1 ], '\\', '/' );
+          it.groups[ 1 ] = `file:///${it.groups[ 1 ]}`;
+          return it.groups.join( '' );
+        })
+      })
+      
+      
+      message.parameters[ 0 ].value = message.messageText;
+    }
+    
     original.call( SDK.consoleModel, message );
   }
     
