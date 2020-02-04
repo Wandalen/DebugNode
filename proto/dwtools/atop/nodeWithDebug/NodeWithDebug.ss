@@ -282,6 +282,8 @@ function runNode()
   let nodeCon = _.process.start( shellOptions );
   self.nodeCons.push( nodeCon );
   self.nodeProcess = shellOptions.process;
+  
+  var readline = require('readline');
 
   /* filter stderr */
 
@@ -289,23 +291,28 @@ function runNode()
   [
     'Debugger listening',
     'Waiting for the debugger',
-    'Debugger attached.',
-    'For help, see:'
+    'Debugger attached',
+    'For help, see:',
+    'https://nodejs.org/en/docs/inspector'
   ];
   
   shellOptions.process.stdout.pipe( process.stdout );
-  shellOptions.process.stderr.on( 'data', ( data ) =>
-  {
-    if( _.bufferAnyIs( data ) )
-    data = _.bufferToStr( data );
-    
-    for( var f in stdErrFilter )
-    if( _.strHas( data, stdErrFilter[ f ] ) )
-    return;
-
-    process.stderr.write( data );
+  
+  let rl = readline.createInterface
+  ({
+    input: shellOptions.process.stderr,
   });
-
+  
+  rl.on( 'line', output =>
+  {
+    for( var f in stdErrFilter )
+    if( _.strHas( output, stdErrFilter[ f ] ) )
+    return;
+    
+    output = _.color.strFormat( output, 'pipe.negative' );
+    
+    logger.error( output );
+  })
 
   return true;
 }
