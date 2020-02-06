@@ -40,7 +40,8 @@
     "wProto" : "", 
     "wTools" : "", 
     "wappbasic" : "", 
-    "wpathbasic" : ""
+    "wpathbasic" : "",
+    "wcommandsaggregator": ""
   }, 
   "devDependencies" : { "wTesting" : "" }, 
   "keywords" : [ "node", "debug", "debugger", "inspect", "debug node", "node debug", "trace" ]

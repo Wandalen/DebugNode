@@ -9,10 +9,12 @@ if( typeof module !== "undefined" )
   _.include( 'wPathBasic' )
   _.include( 'wConsequence' )
   _.include( 'wFiles' )
+  _.include( 'wCommandsAggregator' )
 
   var ipc = require('node-ipc');
   var request = require( 'request' );
 }
+
 
 var Parent = null;
 var Self = function NodeWithDebug( o )
@@ -22,6 +24,7 @@ var Self = function NodeWithDebug( o )
 
 Self.nameShort = 'DebugNode';
 
+let _global = _global_;
 let Debug = false;
 
 /*
@@ -42,7 +45,7 @@ function init( o )
   o = o || Object.create( null );
 
   _.assert( arguments.length === 0 | arguments.length === 1 );
-
+  
   self.ready = new _.Consequence();
   self.nodes = [];
   self.nodesMap = Object.create( null );
@@ -51,8 +54,29 @@ function init( o )
   self.state.debug = 1;
   self.electronReady = new _.Consequence();
   self.closed = false;
-  self.verbosity = 0;
+  self.logger = new _.Logger({ output : _global.logger, name : Self.nameShort, verbosity : self.verbosity });
+  
+  _.workpiece.initFields( self );
 
+}
+
+function checkScript()
+{ 
+  let node = this;
+  let scriptPath = node.args[ 1 ];
+  
+  if( !_.strDefined( scriptPath ) )
+  throw _.errBrief( `Debugger expects path to script file.` )
+  
+  scriptPath = _.path.resolve( scriptPath );
+  
+  if( !_.fileProvider.fileExists( scriptPath ) )
+  throw _.errBrief( `Provided script path:${ _.strQuote( _.path.nativize( scriptPath ) ) } doesn't exist.` )
+  
+  if( !_.fileProvider.isTerminal( scriptPath ) )
+  throw _.errBrief( `Provided script:${ _.strQuote( _.path.nativize( scriptPath ) ) } is not a terminal file.` )
+  
+  return null;
 }
 
 
@@ -236,8 +260,9 @@ function runNode()
     '-r',
     _.path.nativize( _.path.join( __dirname, 'Preload.ss' ) ),
   ]
-
-  path.push.apply( path, process.argv.slice( 2 ) );
+  
+  path.push.apply( path, self.args.slice( 1 ) );
+  
   path = path.join( ' ' );
 
   var shellOptions =
@@ -257,6 +282,8 @@ function runNode()
   let nodeCon = _.process.start( shellOptions );
   self.nodeCons.push( nodeCon );
   self.nodeProcess = shellOptions.process;
+  
+  var readline = require('readline');
 
   /* filter stderr */
 
@@ -264,23 +291,28 @@ function runNode()
   [
     'Debugger listening',
     'Waiting for the debugger',
-    'Debugger attached.',
-    'For help, see:'
+    'Debugger attached',
+    'For help, see:',
+    'https://nodejs.org/en/docs/inspector'
   ];
   
   shellOptions.process.stdout.pipe( process.stdout );
-  shellOptions.process.stderr.on( 'data', ( data ) =>
-  {
-    if( _.bufferAnyIs( data ) )
-    data = _.bufferToStr( data );
-    
-    for( var f in stdErrFilter )
-    if( _.strHas( data, stdErrFilter[ f ] ) )
-    return;
-
-    process.stderr.write( data );
+  
+  let rl = readline.createInterface
+  ({
+    input: shellOptions.process.stderr,
   });
-
+  
+  rl.on( 'line', output =>
+  {
+    for( var f in stdErrFilter )
+    if( _.strHas( output, stdErrFilter[ f ] ) )
+    return;
+    
+    output = _.color.strFormat( output, 'pipe.negative' );
+    
+    logger.error( output );
+  })
 
   return true;
 }
@@ -363,7 +395,8 @@ function close()
   });
 
   self.nodes = [];
-
+  
+  if( ipc.server.stop )
   ipc.server.stop();
 
   /**/
@@ -371,12 +404,94 @@ function close()
 
 /* Launch */
 
-function Launch()
+function Exec()
 {
   let node = new Self();
+  return node.exec();
+}
+
+function exec()
+{
+  let node = this;
+  let appArgs = _.process.args({ keyValDelimeter : 0 });
+  let ca = node._commandsMake();
+  node.args = appArgs.scriptArgs;
+
+  return ca.appArgsPerform({ appArgs : appArgs });
+}
+
+//
+
+function _commandsMake()
+{
+  let node = this;
+  let fileProvider = _.fileProvider;
+
+  _.assert( _.instanceIs( node ) );
+  _.assert( arguments.length === 0 );
+
+  let commands =
+  {
+
+    'help' :                    { e : _.routineJoin( node, node.commandHelp ),                        h : 'Get help.' },
+    'run' :                     { e : _.routineJoin( node, node.commandRun ),                         h : 'Debug script.' },
+  }
+
+  let ca = node.ca = _.CommandsAggregator
+  ({
+    basePath : fileProvider.path.current(),
+    commands : commands,
+    commandPrefix : 'node ',
+    logger : node.logger,
+    onSyntaxError : ( o ) => node._commandHandleSyntaxError( o ),
+  })
+
+  _.assert( ca.logger === node.logger );
+  _.assert( ca.verbosity === node.verbosity );
+
+  ca.form();
+
+  return ca;
+}
+
+//
+
+function _commandHandleSyntaxError( o )
+{
+  let node = this;
+  let ca = node.ca;
+  node.args.unshift( '.run' );
+  return ca.commandPerform({ command : '.run' });
+}
+
+//
+
+function commandHelp( e )
+{
+  let node = this;
+  let ca = e.ca;
+  let logger = node.logger;
+
+  logger.log( 'Known commands' );
+
+  ca._commandHelp( e );
+  
+  logger.log( '\nHow to use debugger:' );
+  logger.log( 'debugnode [script path] [arguments]' );
+  logger.log( 'debugnode .run [script path] [arguments]' );
+}
+
+//
+
+function commandRun( e )
+{
+  let node = this;
+  let ca = e.ca;
+  
   let ready = node.ready;
 
   ready.take( null )
+  ready.then( () => node.checkScript() );
   ready.then( () => node.setup() );
   ready.then( () => node.runElectron() );
   ready.then( () => node.runNode() );
@@ -384,7 +499,7 @@ function Launch()
   ready.then( () => AndKeep([ node.electronCon ]) )
   ready.then( () => AndKeep( node.nodeCons ) );
 
-  ready.give( ( err, got ) =>
+  ready.finally( ( err, got ) =>
   {
     if( node.verbosity )
     console.log( 'terminated/finished' );
@@ -397,6 +512,8 @@ function Launch()
     console.log( 'exiting...' );
     
     node.close();
+    
+    return null;
   });
   
   return ready;
@@ -415,7 +532,7 @@ function Launch()
 
 var Composes =
 {
-  verbosity : 1
+  verbosity : 0
 }
 
 var Aggregates =
@@ -424,6 +541,7 @@ var Aggregates =
 
 var Associates =
 {
+  logger : null
 }
 
 var Restricts =
@@ -438,12 +556,14 @@ var Restricts =
   nodes : null,
   nodesMap : null,
   state : null,
-  closed : null
+  closed : null,
+  ca : null,
+  args : null
 }
 
 var Statics =
 {
-  Launch : Launch
+  Exec
 }
 
 // --
@@ -454,6 +574,8 @@ var Extend =
 {
 
   init : init,
+  
+  checkScript,
 
   setup : setup,
   setupIpc : setupIpc,
@@ -469,6 +591,16 @@ var Extend =
   onDebuggerRestart : onDebuggerRestart,
 
   close : close,
+  
+  //
+  
+  _commandsMake,
+  _commandHandleSyntaxError,
+  
+  commandHelp,
+  commandRun,
+  
+  exec,
 
   // relationships
 
@@ -489,7 +621,8 @@ _.classDeclare
   extend : Extend,
 });
 
-Launch();
+if( !module.parent )
+Self.Exec();
 
 //
 // export
