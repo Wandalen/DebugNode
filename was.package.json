@@ -1,6 +1,6 @@
 {
   "name" : "debugnode", 
-  "version" : "0.3.115", 
+  "version" : "0.3.116", 
   "engine" : "node >= 6.3.0", 
   "description" : "Nodejs debugger", 
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
@@ -40,8 +40,8 @@
     "wProto" : "", 
     "wTools" : "", 
     "wappbasic" : "", 
-    "wpathbasic" : "",
-    "wcommandsaggregator": ""
+    "wpathbasic" : "", 
+    "wcommandsaggregator" : ""
   }, 
   "devDependencies" : { "wTesting" : "" }, 
   "keywords" : [ "node", "debug", "debugger", "inspect", "debug node", "node debug", "trace" ]
