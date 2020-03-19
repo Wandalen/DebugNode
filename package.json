@@ -1,6 +1,6 @@
 {
   "name" : "debugnode", 
-  "version" : "0.3.144", 
+  "version" : "0.3.145", 
   "engine" : "node >= 6.3.0", 
   "description" : "Nodejs debugger", 
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
@@ -33,9 +33,9 @@
     "node-ipc" : "^9.1.1", 
     "portscanner" : "^2.2.0", 
     "request" : "^2.88.0", 
+    "wFiles" : "", 
     "wConsequence" : "alpha", 
     "wCopyable" : "alpha", 
-    "wFiles" : "alpha", 
     "wLogger" : "alpha", 
     "wProto" : "alpha", 
     "wTools" : "alpha", 
