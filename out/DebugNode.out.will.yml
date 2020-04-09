@@ -180,6 +180,9 @@ module:
           - ../proto/dwtools/atop/nodeWithDebug.test
           - ../proto/dwtools/atop/nodeWithDebug.test/Ext.test.ss
           - ../proto/dwtools/atop/nodeWithDebug.test/_asset
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/env
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/env/Child.js
+          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/env/Index.js
           - ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally
           - >-
             ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally/package.json
