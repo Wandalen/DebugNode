@@ -45,7 +45,7 @@ function init( o )
   o = o || Object.create( null );
 
   _.assert( arguments.length === 0 | arguments.length === 1 );
-  
+
   self.ready = new _.Consequence();
   self.nodes = [];
   self.nodesMap = Object.create( null );
@@ -55,27 +55,27 @@ function init( o )
   self.electronReady = new _.Consequence();
   self.closed = false;
   self.logger = new _.Logger({ output : _global.logger, name : Self.nameShort, verbosity : self.verbosity });
-  
+
   _.workpiece.initFields( self );
 
 }
 
 function checkScript()
-{ 
+{
   let node = this;
   let scriptPath = node.args[ 1 ];
-  
+
   if( !_.strDefined( scriptPath ) )
   throw _.errBrief( `Debugger expects path to script file.` )
-  
+
   scriptPath = _.path.resolve( scriptPath );
-  
+
   if( !_.fileProvider.fileExists( scriptPath ) )
   throw _.errBrief( `Provided script path:${ _.strQuote( _.path.nativize( scriptPath ) ) } doesn't exist.` )
-  
+
   if( !_.fileProvider.isTerminal( scriptPath ) )
   throw _.errBrief( `Provided script:${ _.strQuote( _.path.nativize( scriptPath ) ) } is not a terminal file.` )
-  
+
   return null;
 }
 
@@ -106,14 +106,14 @@ function setupIpc()
   ipc.config.silent = true;
 
   ipc.serve( () =>
-  { 
+  {
     ipc.server.on( 'newNode', _.routineJoin( self, self.onNewNode ) );
     ipc.server.on( 'currentStateGet', _.routineJoin( self, self.onCurrentStateGet) );
     ipc.server.on( 'electronReady', _.routineJoin( self, self.onElectronReady ) );
     ipc.server.on( 'electronChildClosed', _.routineJoin( self, self.onElectronChildClose ) );
     ipc.server.on( 'debuggerRestart', _.routineJoin( self, self.onDebuggerRestart ) );
-    
-    
+
+
     con.take( true );
   });
 
@@ -171,14 +171,14 @@ function onNewNode( data,socket )
 
   if( self.verbosity )
   console.log( 'newNode:', message )
-  
+
   let parent;
   if( node.ppid )
   parent = self.nodesMap[ node.ppid ];
   let skip = parent && !parent.isActive; // don't connect electron to child if parent is closed;
-  
+
   if( !skip )
-  { 
+  {
     node.isActive = true;
     ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
   }
@@ -194,7 +194,7 @@ function onCurrentStateGet( data,socket )
   let self = this;
   let pid = data.message.pid;
   let ppid = data.message.ppid;
-  
+
   let parent = self.nodesMap[ ppid ];
   let parentIsActive = parent ? parent.isActive : true;
   ipc.server.emit( socket, 'currentState', { id : ipc.config.id, message : { state : self.state, parentIsActive : parentIsActive } } )
@@ -236,13 +236,13 @@ function onElectronChildClose( data, socket )
 function onDebuggerRestart( data, socket )
 {
   let self = this;
-  
+
   if( self.nodeProcess )
   self.nodeProcess.kill();
 
   self.nodes = [];
   self.nodesMap = Object.create( null );
-  
+
   self.runNode();
 }
 
@@ -254,21 +254,29 @@ function runNode()
 
   /* prepare args */
 
-  var path =
+  var execPath =
   [
     'node',
     '-r',
     _.path.nativize( _.path.join( __dirname, 'Preload.ss' ) ),
   ]
-  
-  path.push.apply( path, self.args.slice( 1 ) );
-  
-  path = path.join( ' ' );
+
+  let scriptArgs = self.args.slice( 1 );
+  let scriptPath = scriptArgs[ 0 ];
+
+  if( _.strHas( scriptPath, ' ' ) )
+  scriptPath = _.strQuote( scriptPath )
+
+  scriptArgs[ 0 ] = scriptPath;
+
+  execPath.push.apply( execPath, scriptArgs );
+
+  execPath = execPath.join( ' ' );
 
   var shellOptions =
   {
     mode : 'spawn',
-    execPath : path,
+    execPath,
     env : { nodewithdebugId : ipc.config.id, PATH: process.env.PATH },
     stdio : 'pipe',
     verbosity : Debug ? 2 : 0,
@@ -282,7 +290,7 @@ function runNode()
   let nodeCon = _.process.start( shellOptions );
   self.nodeCons.push( nodeCon );
   self.nodeProcess = shellOptions.process;
-  
+
   var readline = require('readline');
 
   /* filter stderr */
@@ -295,22 +303,22 @@ function runNode()
     'For help, see:',
     'https://nodejs.org/en/docs/inspector'
   ];
-  
+
   shellOptions.process.stdout.pipe( process.stdout );
-  
+
   let rl = readline.createInterface
   ({
     input: shellOptions.process.stderr,
   });
-  
+
   rl.on( 'line', output =>
   {
     for( var f in stdErrFilter )
     if( _.strHas( output, stdErrFilter[ f ] ) )
     return;
-    
+
     output = _.color.strFormat( output, 'pipe.negative' );
-    
+
     logger.error( output );
   })
 
@@ -378,24 +386,24 @@ function close()
 
   if( self.nodeProcess )
   self.nodeProcess.kill();
-  
-  _.each( self.nodes, ( node ) => 
-  { 
+
+  _.each( self.nodes, ( node ) =>
+  {
     try
     {
       process.kill( node.id, 'SIGKILL' );
     }
     catch( err )
-    { 
+    {
       if( err.errno === 'ESRCH' )
       return;
-      
+
       throw err;
     }
   });
 
   self.nodes = [];
-  
+
   if( ipc.server.stop )
   ipc.server.stop();
 
@@ -475,7 +483,7 @@ function commandHelp( e )
   logger.log( 'Known commands' );
 
   ca._commandHelp( e );
-  
+
   logger.log( '\nHow to use debugger:' );
   logger.log( 'debugnode [script path] [arguments]' );
   logger.log( 'debugnode .run [script path] [arguments]' );
@@ -487,7 +495,7 @@ function commandRun( e )
 {
   let node = this;
   let ca = e.ca;
-  
+
   let ready = node.ready;
 
   ready.take( null )
@@ -507,15 +515,15 @@ function commandRun( e )
 
     if( err )
     _.errLogOnce( err );
-    
+
     if( node.verbosity )
     console.log( 'exiting...' );
-    
+
     node.close();
-    
+
     return null;
   });
-  
+
   return ready;
 
   /*  */
@@ -574,7 +582,7 @@ var Extend =
 {
 
   init : init,
-  
+
   checkScript,
 
   setup : setup,
@@ -591,15 +599,15 @@ var Extend =
   onDebuggerRestart : onDebuggerRestart,
 
   close : close,
-  
+
   //
-  
+
   _commandsMake,
   _commandHandleSyntaxError,
-  
+
   commandHelp,
   commandRun,
-  
+
   exec,
 
   // relationships

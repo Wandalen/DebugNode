@@ -24,7 +24,7 @@
     self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'DebugNode' );
     self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
     self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../Tools.s' ) );
-    self.defaultJsPath = _.path.join( __dirname, '../nodeWithDebug/NodeWithDebug.ss' );
+    self.execJsPath = _.path.join( __dirname, '../nodeWithDebug/NodeWithDebug.ss' );
   }
   
   function onSuiteEnd()
@@ -80,6 +80,28 @@
     
     return a.ready;
   }
+  
+  //
+  
+  function env( test )
+  {
+    let self = this;
+    let a = test.assetFor( 'env' );
+
+    a.reflect();
+    a.jsNonThrowing({ args : [ 'Index.js' ] })
+    .then( ( got ) =>
+    {
+      test.identical( got.exitCode, 0 );
+      test.is( _.strHas( got.output, `Index.js executed` ) )
+      test.is( _.strHas( got.output, `Child.js executed` ) )
+      return null;
+    })
+    
+    return a.ready;
+  }
+  
+  env.timeOut = 30000;
   
   //
   
@@ -219,14 +241,15 @@
     {
       suiteTempPath : null,
       assetsOriginalSuitePath : null,
-      defaultJsPath : null,
+      execJsPath : null,
       toolsPath : null,
     },
   
     tests :
     {
       installLocally,
-      run
+      run,
+      env
     }
   
   }
