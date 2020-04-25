@@ -1,6 +1,6 @@
 {
   "name" : "debugnode", 
-  "version" : "0.3.173", 
+  "version" : "0.3.174", 
   "engine" : "node >= 6.3.0", 
   "description" : "Nodejs debugger", 
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
@@ -33,16 +33,16 @@
     "node-ipc" : "^9.1.1", 
     "portscanner" : "^2.2.0", 
     "request" : "^2.88.0", 
-    "wConsequence" : "gamma", 
-    "wCopyable" : "gamma", 
-    "wFiles" : "gamma", 
-    "wLogger" : "gamma", 
-    "wProto" : "gamma", 
-    "wTools" : "gamma", 
-    "wappbasic" : "gamma", 
-    "wpathbasic" : "gamma", 
-    "wcommandsaggregator" : "gamma"
+    "wConsequence" : "alpha", 
+    "wCopyable" : "alpha", 
+    "wFiles" : "alpha", 
+    "wLogger" : "alpha", 
+    "wProto" : "alpha", 
+    "wTools" : "alpha", 
+    "wappbasic" : "alpha", 
+    "wpathbasic" : "alpha", 
+    "wcommandsaggregator" : "alpha"
   }, 
-  "devDependencies" : { "wTesting" : "gamma" }, 
+  "devDependencies" : { "wTesting" : "alpha" }, 
   "keywords" : [ "node", "debug", "debugger", "inspect", "debug node", "node debug", "trace" ]
 }
