@@ -1,48 +1,48 @@
 {
-  "name" : "debugnode", 
-  "version" : "0.3.176", 
-  "engine" : "node >= 6.3.0", 
-  "description" : "Nodejs debugger", 
-  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
-  "contributors" : 
+  "name" : "debugnode",
+  "version" : "0.3.177",
+  "engine" : "node >= 6.3.0",
+  "description" : "Nodejs debugger",
+  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>",
+  "contributors" :
   [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so>" }, 
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so>" },
     { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
-  ], 
-  "license" : "MIT", 
-  "bin" : 
+  ],
+  "license" : "MIT",
+  "bin" :
   {
     "debugnode" : "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss"
-  }, 
-  "main" : "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss", 
-  "repository" : 
+  },
+  "main" : "proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss",
+  "repository" :
   {
-    "type" : "git", 
+    "type" : "git",
     "url" : "https://github.com/Wandalen/NodeWithDebug.git"
-  }, 
-  "bugs" : 
+  },
+  "bugs" :
   {
     "url" : "https://github.com/Wandalen/NodeWithDebug/issues"
-  }, 
-  "scripts" : { "test" : "wtest .run proto/**" }, 
-  "dependencies" : 
+  },
+  "scripts" : { "test" : "wtest .run proto/**" },
+  "dependencies" :
   {
-    "ansicolor" : "^1.1.81", 
-    "electron" : "5.0.6", 
-    "has-ansi" : "^3.0.0", 
-    "node-ipc" : "^9.1.1", 
-    "portscanner" : "^2.2.0", 
-    "request" : "^2.88.0", 
-    "wConsequence" : "", 
-    "wCopyable" : "", 
-    "wFiles" : "", 
-    "wLogger" : "", 
-    "wProto" : "", 
-    "wTools" : "", 
-    "wappbasic" : "", 
-    "wpathbasic" : "", 
+    "ansicolor" : "^1.1.81",
+    "electron" : "5.0.6",
+    "has-ansi" : "^3.0.0",
+    "node-ipc" : "^9.1.1",
+    "portscanner" : "^2.2.0",
+    "request" : "^2.88.0",
+    "wConsequence" : "",
+    "wCopyable" : "",
+    "wFiles" : "",
+    "wLogger" : "",
+    "wProto" : "",
+    "wTools" : "",
+    "wappbasic" : "",
+    "wpathbasic" : "",
     "wcommandsaggregator" : ""
-  }, 
-  "devDependencies" : { "wTesting" : "" }, 
+  },
+  "devDependencies" : { "wTesting" : "" },
   "keywords" : [ "node", "debug", "debugger", "inspect", "debug node", "node debug", "trace" ]
 }
