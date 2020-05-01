@@ -155,7 +155,7 @@ function onNewNode( data,socket )
     con.take( info );
   })
 
-  node.info = con.deasyncWait().sync();
+  node.info = con.deasync().sync();
 
   node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
 
