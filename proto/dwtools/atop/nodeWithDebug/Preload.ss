@@ -15,7 +15,7 @@
   let parentIsActive; // debugger window is not closed
   let ppid = process.env.ppid;
   let ipcHostId = process.env.nodewithdebugId;
-  
+
   let connectTo = deasyncEmptyCb( ipc, ipc.connectTo );
   connectTo( ipcHostId );
   let nodeWithDebug = ipc.of[ ipcHostId ];
@@ -25,14 +25,14 @@
   nodeWithDebugOn( 'currentState' );
 
   let preload = ' --require ' + __filename;
-   
+
   // skip node calls without script path, like node -e "..."
   if( process.argv.length < 2 )
   {
     ipc.disconnect( ipcHostId );
     return;
   }
-  
+
   if( !parentIsActive || !currentState.debug )
   {
     process.env.NODE_OPTIONS = strReplaceAll( process.env.NODE_OPTIONS, preload, '' );
@@ -61,9 +61,9 @@
   inspector.open( port, undefined, true );
 
   ipc.disconnect( ipcHostId );
-  
+
   process.env.ppid = process.pid;
-  
+
   // debugger //uncomment to debug preload script
 
 /**/
