@@ -1,0 +1,15 @@
+#! /usr/bin/env node
+
+if( typeof module !== 'undefined' )
+{
+  let _ = require( '../../../../dwtools/Tools.s' );
+  _.include( 'wAppBasic' );
+  _.include( 'wFiles' );
+}
+
+let _ = _global_.wTools;
+let shell = _.process.startPassingThrough
+({
+  execPath : 'debugnode',
+  args : [ _.path.nativize( _.path.join( __dirname, 'Include.s' ) ) ],
+});
