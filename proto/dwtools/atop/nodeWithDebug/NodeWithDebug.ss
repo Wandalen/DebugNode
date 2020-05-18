@@ -22,7 +22,7 @@ var Self = function NodeWithDebug( o )
   return _.workpiece.construct( Self, this, arguments );
 }
 
-Self.nameShort = 'DebugNode';
+Self.shortName = 'DebugNode';
 
 let _global = _global_;
 let Debug = false;
@@ -629,12 +629,12 @@ _.classDeclare
   extend : Extend,
 });
 
-if( !module.parent )
-Self.Exec();
-
 //
 // export
 // --
 
+_global_.wTools[ Self.shortName ] = Self;
+
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
+

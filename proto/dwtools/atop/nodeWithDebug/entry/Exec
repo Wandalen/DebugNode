@@ -1,0 +1,6 @@
+#! /usr/bin/env node
+
+require( '../NodeWithDebug.ss' );
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = _global_.wTools;
+_global_.wTools.DebugNode.Exec();
