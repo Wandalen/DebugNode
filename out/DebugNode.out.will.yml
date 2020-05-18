@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - DebugNode.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  DebugNode.out.will.yml: &ref_0
+    hash: 6c7c7ce1541516fbe12d40d8aa269b78
+    size: 42748
+  ../.ex.will.yml: &ref_1
     hash: 105a435aa89ce074cb4eb72c845ea62e
     size: 1840
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: 8b3bcfcdd6b79cde5e2c997c46334f03
     size: 5998
 module:
@@ -16,11 +19,11 @@ module:
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - node
         - debug
         - debugger
@@ -30,13 +33,13 @@ module:
         - trace
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: debugnode
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
-      npm.bin: &ref_6
+      npm.bin:
         debugnode: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
       module.willfiles:
@@ -174,6 +177,11 @@ module:
             ../proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronPreload.ss
           - >-
             ../proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss
+          - ../proto/dwtools/atop/nodeWithDebug/entry
+          - ../proto/dwtools/atop/nodeWithDebug/entry/Exec
+          - ../proto/dwtools/atop/nodeWithDebug/entry/ExecDebug
+          - ../proto/dwtools/atop/nodeWithDebug/entry/ExecUnrestricted
+          - ../proto/dwtools/atop/nodeWithDebug/entry/Include.s
           - ../proto/dwtools/atop/nodeWithDebug.test
           - ../proto/dwtools/atop/nodeWithDebug.test/Ext.test.ss
           - ../proto/dwtools/atop/nodeWithDebug.test/_asset
@@ -784,6 +792,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          filePath: 'reflector::exported.proto.export*'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          filePath: 'reflector::exported.files.proto.export*'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -872,8 +898,9 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      DebugNode.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: DebugNode
@@ -881,14 +908,28 @@ module:
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 8.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - node
+        - debug
+        - debugger
+        - inspect
+        - debug node
+        - node debug
+        - trace
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
+        - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: debugnode
-      npm.scripts: *ref_5
-      npm.bin: *ref_6
+      npm.scripts:
+        test: wtest .run proto/**
+      npm.bin:
+        debugnode: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
       module.willfiles:
         criterion:
@@ -1450,7 +1491,7 @@ module:
           debug: release
       reflect.proto.debug.raw:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto*'
         criterion:
           tests: no.tests
           debug: debug
@@ -1460,7 +1501,7 @@ module:
           - files.reflect
       reflect.proto.release.raw:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto*'
         criterion:
           tests: no.tests
           debug: release
@@ -1470,7 +1511,7 @@ module:
           - files.reflect
       reflect.proto.debug.compiled:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto*'
         criterion:
           tests: no.tests
           debug: debug
@@ -1480,7 +1521,7 @@ module:
           - files.reflect
       reflect.proto.release.compiled:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto*'
         criterion:
           tests: no.tests
           debug: release
@@ -1491,7 +1532,7 @@ module:
       transpile.proto.raw:
         opts:
           entry: 'path::entry.proto.no.tests'
-          reflector: 'reflector::transpile.proto.raw*'
+          filePath: 'reflector::transpile.proto.raw*'
         criterion:
           raw: raw
           debug: release
@@ -1501,7 +1542,7 @@ module:
       transpile.proto.no.tests.compiled.debug:
         opts:
           entry: 'path::entry.proto.*=1'
-          reflector: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled*'
         criterion:
           tests: no.tests
           raw: compiled
@@ -1512,7 +1553,7 @@ module:
       transpile.proto.no.tests.compiled.release:
         opts:
           entry: 'path::entry.proto.*=1'
-          reflector: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled*'
         criterion:
           tests: no.tests
           raw: compiled
@@ -1524,7 +1565,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          reflector: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled*'
         criterion:
           tests: only.tests
           raw: compiled
@@ -1536,7 +1577,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          reflector: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled*'
         criterion:
           tests: only.tests
           raw: compiled
@@ -1625,3 +1666,6 @@ module:
       ../.im.will.yml:
         hash: 8b3bcfcdd6b79cde5e2c997c46334f03
         size: 5998
+      DebugNode.out.will.yml:
+        hash: 6c7c7ce1541516fbe12d40d8aa269b78
+        size: 42748
