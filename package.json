@@ -27,7 +27,7 @@
   {
     "url" : "https://github.com/Wandalen/NodeWithDebug/issues"
   },
-  "scripts" : { "test" : "wtest .run proto/**" },
+  "scripts" : { "test" : "wtest .run 'proto/**'" },
   "dependencies" :
   {
     "ansicolor" : "^1.1.81",
