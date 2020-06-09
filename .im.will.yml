@@ -38,7 +38,7 @@ submodule :
     path : npm:///wProto
     enabled : 0 # submodule
   wExecTools :
-    path : npm:///wappbasic
+    path : npm:///wprocess
     enabled : 0 # submodule
   wPathBasic :
     path : npm:///wpathbasic

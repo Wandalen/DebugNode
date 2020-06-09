@@ -7,7 +7,7 @@
     let _ = require( '../../Tools.s' );
   
     _.include( 'wTesting' );
-    _.include( 'wAppBasic' );
+    _.include( 'wProcess' );
     _.include( 'wFiles' );
   }
   
