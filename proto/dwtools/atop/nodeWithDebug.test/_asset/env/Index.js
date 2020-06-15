@@ -16,7 +16,7 @@ let execPath = path.join( __dirname, 'Child.js' );
 
 var child = ChildProcess.fork( execPath, args, o )
 
-child.stdout.on( 'data', data =>
+child.stdout.on( 'data', ( data ) =>
 {
   console.log( data.toString() )
 })
