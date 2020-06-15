@@ -36,7 +36,6 @@
     "node-ipc" : "=9.1.1",
     "portscanner" : "=2.2.0",
     "request" : "=2.88.0",
-    "eslint" : "=7.1.0",
     "wConsequence" : "",
     "wCopyable" : "",
     "wFiles" : "",
@@ -47,6 +46,6 @@
     "wpathbasic" : "",
     "wcommandsaggregator" : ""
   },
-  "devDependencies" : { "wTesting" : "" },
+  "devDependencies" : { "wTesting" : "", "eslint" : "=7.1.0" },
   "keywords" : [ "node", "debug", "debugger", "inspect", "debug node", "node debug", "trace" ]
 }
