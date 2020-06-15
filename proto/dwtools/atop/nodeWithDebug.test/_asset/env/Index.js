@@ -9,7 +9,7 @@ env.var = 1;
 let o =
 {
   stdio : 'pipe',
-  env : env
+  env
 }
 let args = [];
 let execPath = path.join( __dirname, 'Child.js' );
