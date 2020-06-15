@@ -1,5 +1,5 @@
 
-name : Test
+name : VisualTest
 
 on :
   push :
@@ -38,7 +38,11 @@ jobs :
       with :
         node-version : ${{ matrix.node-version }}
     - run : npm i
+    - run : xvfb-run --auto-servernum npm test
+      if : startsWith( matrix.os, 'ubuntu' )
     - run : npm test
+      if : "!startsWith( matrix.os, 'ubuntu' )"
+
 
   Full :
     if : "startsWith( github.event.head_commit.message, 'version' )"
@@ -57,4 +61,9 @@ jobs :
       with :
         node-version : ${{ matrix.node-version }}
     - run : npm i
-    - run : npm test
+    - name : linux
+      if : startsWith( matrix.os, 'ubuntu' )
+      run : xvfb-run --auto-servernum npm test
+    - name : macos,windows
+      if : "!startsWith( matrix.os, 'ubuntu' )"
+      run : npm test
