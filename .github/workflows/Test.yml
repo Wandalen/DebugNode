@@ -28,7 +28,7 @@ jobs :
       fail-fast  : false
       matrix :
         os : [ ubuntu-latest, windows-latest, macos-latest ]
-        node-version : [ 14.x ]
+        node-version : [ 13.x ]
     steps :
     - uses : actions/checkout@v2
     - run : git config --global user.email "testrunner@example.com"
