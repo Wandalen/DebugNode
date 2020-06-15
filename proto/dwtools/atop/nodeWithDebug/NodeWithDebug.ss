@@ -273,11 +273,15 @@ function runNode()
 
   execPath = execPath.join( ' ' );
 
+  let env = process.env;
+  env.nodewithdebugId = ipc.config.id;
+  env.PATH = process.env.PATH;
+
   var shellOptions =
   {
     mode : 'spawn',
     execPath,
-    env : { nodewithdebugId : ipc.config.id, PATH: process.env.PATH },
+    env : env,
     stdio : 'pipe',
     verbosity : Debug ? 2 : 0,
     outputPiping : Debug,
@@ -336,13 +340,18 @@ function runElectron()
   var launcherPath  = _.path.resolve( __dirname, './browser/electron/ElectronProcess.ss' );
   launcherPath  = _.fileProvider.path.nativize( launcherPath );
 
+  let env = process.env;
+  env.nodewithdebugId = ipc.config.id;
+  env.DISPLAY = process.env.DISPLAY;
+  env.PATH = process.env.PATH;
+
   var o =
   {
     mode : 'spawn',
     execPath : appPath,
     args : [ '--no-sandbox', launcherPath ],
     stdio : 'pipe',
-    env : { nodewithdebugId : ipc.config.id, 'DISPLAY': process.env.DISPLAY },
+    env : env,
     ipc : 1,
     verbosity : Debug ? 2 : 0,
     outputPiping : Debug,
@@ -395,7 +404,7 @@ function close()
     }
     catch( err )
     {
-      if( err.errno === 'ESRCH' )
+      if( err.errno === 'ESRCH' || err.code === 'ESRCH' )
       return;
 
       throw err;
