@@ -1,23 +1,26 @@
-( function _ElectronProcess_ss_() {
+( function _ElectronProcess_ss_()
+{
 
-  'use strict';
+'use strict';
 
+let electron, ipc;
   if( typeof module !== 'undefined' )
   {
 
     require( 'wTools' );
 
-    var _ = _global_.wTools;
+    let _ = _global_.wTools;
 
     _.include( 'wConsequence' );
     _.include( 'wStringsExtra' );
     _.include( 'wPathBasic' );
 
-    var electron = require( 'electron' );
-    var ipc = require('node-ipc');
+    electron = require( 'electron' );
+    ipc = require( 'node-ipc' );
 
   }
 
+  let _ = _global_.wTools;
   var app = electron.app;
   var BrowserWindow = electron.BrowserWindow;
   var globalShortcut = electron.globalShortcut;
@@ -61,8 +64,8 @@
     window.on( 'closed', function ()
     {
       window = null;
-    })
-    
+    } )
+
     return true;
   }
 
@@ -73,8 +76,8 @@
 
     var options =
     {
-      parent: window,
-      modal: false,
+      parent : window,
+      modal : false,
       width : 1280,
       height : 720,
       webPreferences :
@@ -83,7 +86,7 @@
         preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
       },
       title : o.title,
-      show: false
+      show : false
     }
 
     let child = new BrowserWindow( options );
@@ -92,16 +95,16 @@
     childWindows[ pid ] = child;
 
     child.loadURL( o.url );
-    
+
     child.on( 'closed', function ()
-    { 
-      ipc.of[ ipcHostId ].emit( 'electronChildClosed', { id : ipc.config.id, message : { pid : pid } } );
-    })
+    {
+      ipc.of[ ipcHostId ].emit( 'electronChildClosed', { id : ipc.config.id, message : { pid } } );
+    } )
 
     child.once( 'ready-to-show', () =>
     {
       child.show();
-    })
+    } )
 
     return true;
   }
@@ -114,24 +117,24 @@
     {
       if( msg.exit )
       app.quit()
-    })
+    } )
 
     setupIpc();
     setupKeyboardShortcuts();
 
     app.on( 'ready', () => ready.take( true ) );
 
-    app.on('window-all-closed', () =>  
-    { 
+    app.on( 'window-all-closed', () =>
+    {
       if( !reload )
       app.quit()
-      reload = false; 
-    })
+      reload = false;
+    } )
 
-    app.on( 'browser-window-created', function (e, window )
+    app.on( 'browser-window-created', function ( e, window )
     {
       window.setMenu( null );
-    })
+    } )
 
   }
 
@@ -142,8 +145,8 @@
     ipc.config.id = 'electon:' + process.pid;
     ipc.config.retry = 1500;
     ipc.config.silent = !Debug;
-    
-    ipc.connectTo( ipcHostId , () =>
+
+    ipc.connectTo( ipcHostId, () =>
     {
       /* creates window for new node process */
 
@@ -158,27 +161,27 @@
         else
         ready.then( () => childInit( o ) );
 
-      });
+      } );
 
       /*  */
 
       ipc.of[ ipcHostId ].emit( 'electronReady', { id : ipc.config.id, message : { ready : 1 } } );
 
-    });
+    } );
 
   }
-  
+
   //
-  
+
   function setupKeyboardShortcuts()
   {
-    ready.then( ( finallyGive ) => 
-    { 
+    ready.then( ( finallyGive ) =>
+    {
       globalShortcut.register( 'F5', handle );
       globalShortcut.register( 'Ctrl+R', handle );
       return finallyGive;
-    });
-    
+    } );
+
     function handle()
     {
       let windows = BrowserWindow.getAllWindows();
@@ -191,7 +194,7 @@
     }
   }
 
-})();
+} )();
 
 /*  */
 

@@ -1,4 +1,4 @@
-# DebugNode [![Build Status](https://travis-ci.org/Wandalen/DebugNode.svg?branch=master)](https://travis-ci.org/Wandalen/DebugNode)
+# DebugNode [![Status](https://github.com/Wandalen/DebugNode/workflows/Test/badge.svg)](https://github.com/Wandalen/DebugNode/actions?query=workflow%3ATest)
 Nodejs debugger based on Electron and Chrome DevTools.
 
 ## Screenshot
