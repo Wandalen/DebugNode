@@ -1,26 +1,30 @@
 #! /usr/bin/env node
 
-if( typeof module !== "undefined" )
+var ipc, request;
+
+if( typeof module !== 'undefined' )
 {
   require( 'wTools' );
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   _.include( 'wPathBasic' )
   _.include( 'wConsequence' )
   _.include( 'wFiles' )
   _.include( 'wCommandsAggregator' )
 
-  var ipc = require('node-ipc');
-  var request = require( 'request' );
+  ipc = require( 'node-ipc' );
+  request = require( 'request' );
 }
 
 
+let _ = _global_.wTools;
 var Parent = null;
-var Self = function NodeWithDebug( o )
+function NodeWithDebug( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
+var Self = NodeWithDebug;
 
 Self.shortName = 'DebugNode';
 
@@ -124,7 +128,7 @@ function setupIpc()
 
 /* node */
 
-function onNewNode( data,socket )
+function onNewNode( data, socket )
 {
   let self = this;
 
@@ -180,7 +184,7 @@ function onNewNode( data,socket )
   if( !skip )
   {
     node.isActive = true;
-    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message : message } );
+    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message } );
   }
 
   self.nodes.push( node );
@@ -189,7 +193,7 @@ function onNewNode( data,socket )
 
 //
 
-function onCurrentStateGet( data,socket )
+function onCurrentStateGet( data, socket )
 {
   let self = this;
   let pid = data.message.pid;
@@ -197,7 +201,7 @@ function onCurrentStateGet( data,socket )
 
   let parent = self.nodesMap[ ppid ];
   let parentIsActive = parent ? parent.isActive : true;
-  ipc.server.emit( socket, 'currentState', { id : ipc.config.id, message : { state : self.state, parentIsActive : parentIsActive } } )
+  ipc.server.emit( socket, 'currentState', { id : ipc.config.id, message : { state : self.state, parentIsActive } } )
 }
 
 //
@@ -281,7 +285,7 @@ function runNode()
   {
     mode : 'spawn',
     execPath,
-    env : env,
+    env,
     stdio : 'pipe',
     verbosity : Debug ? 2 : 0,
     outputPiping : Debug,
@@ -312,10 +316,10 @@ function runNode()
 
   let rl = readline.createInterface
   ({
-    input: shellOptions.process.stderr,
+    input : shellOptions.process.stderr,
   });
 
-  rl.on( 'line', output =>
+  rl.on( 'line', ( output ) =>
   {
     for( var f in stdErrFilter )
     if( _.strHas( output, stdErrFilter[ f ] ) )
@@ -337,8 +341,8 @@ function runElectron()
 
   var appPath = require( 'electron' );
 
-  var launcherPath  = _.path.resolve( __dirname, './browser/electron/ElectronProcess.ss' );
-  launcherPath  = _.fileProvider.path.nativize( launcherPath );
+  var launcherPath = _.path.resolve( __dirname, './browser/electron/ElectronProcess.ss' );
+  launcherPath = _.fileProvider.path.nativize( launcherPath );
 
   let env = process.env;
   env.nodewithdebugId = ipc.config.id;
@@ -351,7 +355,7 @@ function runElectron()
     execPath : appPath,
     args : [ '--no-sandbox', launcherPath ],
     stdio : 'pipe',
-    env : env,
+    env,
     ipc : 1,
     verbosity : Debug ? 2 : 0,
     outputPiping : Debug,
@@ -434,7 +438,7 @@ function exec()
   let ca = node._commandsMake();
   node.args = appArgs.scriptArgs;
 
-  return ca.appArgsPerform({ appArgs : appArgs });
+  return ca.appArgsPerform({ appArgs });
 }
 
 //
@@ -450,14 +454,14 @@ function _commandsMake()
   let commands =
   {
 
-    'help' :                    { e : _.routineJoin( node, node.commandHelp ),                        h : 'Get help.' },
-    'run' :                     { e : _.routineJoin( node, node.commandRun ),                         h : 'Debug script.' },
+    'help' : { e : _.routineJoin( node, node.commandHelp ), h : 'Get help.' },
+    'run' : { e : _.routineJoin( node, node.commandRun ), h : 'Debug script.' },
   }
 
   let ca = node.ca = _.CommandsAggregator
   ({
     basePath : fileProvider.path.current(),
-    commands : commands,
+    commands,
     commandPrefix : 'node ',
     logger : node.logger,
     onSyntaxError : ( o ) => node._commandHandleSyntaxError( o ),
@@ -539,7 +543,9 @@ function commandRun( e )
 
   function AndKeep( cons )
   {
-    return new _.Consequence().take( null ).andKeep( cons );
+    return new _.Consequence()
+    .take( null )
+    .andKeep( cons );
   }
 }
 
@@ -590,24 +596,24 @@ var Statics =
 var Extend =
 {
 
-  init : init,
+  init,
 
   checkScript,
 
-  setup : setup,
-  setupIpc : setupIpc,
-  runNode : runNode,
-  runElectron : runElectron,
+  setup,
+  setupIpc,
+  runNode,
+  runElectron,
 
-  onNewNode : onNewNode,
-  onCurrentStateGet : onCurrentStateGet,
-  onNewElectron : onNewElectron,
-  onElectronExit : onElectronExit,
-  onElectronReady : onElectronReady,
-  onElectronChildClose : onElectronChildClose,
-  onDebuggerRestart : onDebuggerRestart,
+  onNewNode,
+  onCurrentStateGet,
+  onNewElectron,
+  onElectronExit,
+  onElectronReady,
+  onElectronChildClose,
+  onDebuggerRestart,
 
-  close : close,
+  close,
 
   //
 
@@ -621,11 +627,11 @@ var Extend =
 
   // relationships
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics
 
 }
 
