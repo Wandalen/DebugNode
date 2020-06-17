@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-var ipc, request;
+var ipc, needle, portscanner;
 
 if( typeof module !== 'undefined' )
 {
@@ -14,7 +14,8 @@ if( typeof module !== 'undefined' )
   _.include( 'wCommandsAggregator' )
 
   ipc = require( 'node-ipc' );
-  request = require( 'request' );
+  needle = require( 'needle' );
+  portscanner = require( 'portscanner' );
 }
 
 
@@ -107,7 +108,7 @@ function setupIpc()
 
   ipc.config.id = 'nodewithdebug.' + process.pid;
   ipc.config.retry= 1500;
-  ipc.config.silent = true;
+  ipc.config.silent = !Debug;
 
   ipc.serve( () =>
   {
@@ -146,49 +147,51 @@ function onNewNode( data, socket )
   var port = node.debugPort;
   var requestUrl = 'http://localhost:' + port + '/json/list';
 
-  var con = new wConsequence();
-
   ipc.server.emit( socket, 'newNodeReady', { id : ipc.config.id, message : { ready : 1 } } )
 
-  request( requestUrl, ( err, res, data ) =>
-  {
-    if( err )
-    return con.error( err );
+  self.onInspectorServerReady( port )
+  .deasync()
+  .sync();
 
-    var info = JSON.parse( data )[ 0 ];
-    con.take( info );
+  needle.get( requestUrl, function( err, response )
+  {
+    if( err)
+    throw _.err( err );
+
+    if( response.statusCode !== 200 )
+    throw _.err( 'Request failed. StatusCode:', response.statusCode );
+
+    node.info = response.body[ 0 ];
+
+    node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
+
+    let message =
+    {
+      url : node.url,
+      pid : node.id,
+      ppid : node.ppid,
+      args : node.args,
+      title : node.title,
+      isMaster : !self.nodes.length
+    };
+
+    if( self.verbosity )
+    console.log( 'newNode:', message )
+
+    let parent;
+    if( node.ppid )
+    parent = self.nodesMap[ node.ppid ];
+    let skip = parent && !parent.isActive; // don't connect electron to child if parent is closed;
+
+    if( !skip )
+    {
+      node.isActive = true;
+      ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message } );
+    }
+
+    self.nodes.push( node );
+    self.nodesMap[ node.id ] = node;
   })
-
-  node.info = con.deasync().sync();
-
-  node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
-
-  let message =
-  {
-    url : node.url,
-    pid : node.id,
-    ppid : node.ppid,
-    args : node.args,
-    title : node.title,
-    isMaster : !self.nodes.length
-  };
-
-  if( self.verbosity )
-  console.log( 'newNode:', message )
-
-  let parent;
-  if( node.ppid )
-  parent = self.nodesMap[ node.ppid ];
-  let skip = parent && !parent.isActive; // don't connect electron to child if parent is closed;
-
-  if( !skip )
-  {
-    node.isActive = true;
-    ipc.server.broadcast( 'newNodeElectron', { id : ipc.config.id, message } );
-  }
-
-  self.nodes.push( node );
-  self.nodesMap[ node.id ] = node;
 }
 
 //
@@ -250,6 +253,40 @@ function onDebuggerRestart( data, socket )
   self.runNode();
 }
 
+//
+
+function onInspectorServerReady( port )
+{
+  let attempts = 50;
+  let errMsg = `Failed to check if nodejs debugger started at port: ${port} after ${attempts} attempts.`;
+
+  return check();
+
+  function check()
+  {
+    let con = new _.Consequence();
+
+    if( !attempts )
+    return con.error( errMsg );
+
+    attempts -= 1;
+    portscanner.checkPortStatus( port, '127.0.0.1', ( err, status ) =>
+    {
+      if( Debug )
+      _.errLogOnce( err );
+      con.take( status )
+    });
+
+    con.then( ( status ) =>
+    {
+      if( status === 'open' )
+      return true;
+      return _.time.out( 200, () => check() );
+    })
+
+    return con;
+  }
+}
 //
 
 function runNode()
@@ -357,8 +394,8 @@ function runElectron()
     stdio : 'pipe',
     env,
     ipc : 1,
-    verbosity : Debug ? 2 : 0,
-    outputPiping : Debug,
+    verbosity : 2,
+    outputPiping : 1,
     applyingExitCode : 0,
     throwingExitCode : 0
   }
@@ -612,6 +649,7 @@ var Extend =
   onElectronReady,
   onElectronChildClose,
   onDebuggerRestart,
+  onInspectorServerReady,
 
   close,
 

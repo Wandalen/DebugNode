@@ -35,7 +35,7 @@
     "has-ansi" : "=3.0.0",
     "node-ipc" : "=9.1.1",
     "portscanner" : "=2.2.0",
-    "request" : "=2.88.0",
+    "needle": "=2.5.0",
     "wConsequence" : "",
     "wCopyable" : "",
     "wFiles" : "",

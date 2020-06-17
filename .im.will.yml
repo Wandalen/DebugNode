@@ -19,8 +19,8 @@ submodule :
   portscanner :
     path : npm:///portscanner#2.2.0
     enabled : 0 # submodule
-  request :
-    path : npm:///request#2.88.0
+  needle :
+    path : npm:///needle#2.5.0
     enabled : 0 # submodule
   wConsequence :
     path : npm:///wConsequence
