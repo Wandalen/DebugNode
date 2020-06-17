@@ -149,7 +149,9 @@ function onNewNode( data, socket )
 
   ipc.server.emit( socket, 'newNodeReady', { id : ipc.config.id, message : { ready : 1 } } )
 
-  self.onInspectorServerReady( port ).deasync().sync();
+  self.onInspectorServerReady( port )
+  .deasync()
+  .sync();
 
   needle.get( requestUrl, function( err, response )
   {
@@ -270,6 +272,8 @@ function onInspectorServerReady( port )
     attempts -= 1;
     portscanner.checkPortStatus( port, '127.0.0.1', ( err, status ) =>
     {
+      if( Debug )
+      _.errLogOnce( err );
       con.take( status )
     });
 
