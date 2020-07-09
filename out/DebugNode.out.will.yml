@@ -40,7 +40,7 @@ module:
       npm.scripts:
         test: wtest .run proto/**
       npm.bin:
-        debugnode: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
+        debugnode: proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
       module.willfiles:
         criterion:
@@ -120,7 +120,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
+        path: ../proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -130,13 +130,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/nodeWithDebug/NodeWithDebug.ss'
+        path: '{path::out.*=1}/source/wtools/atop/nodeWithDebug/NodeWithDebug.ss'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/nodeWithDebug/NodeWithDebug.ss'
+        path: '{path::out.*=1}/source/wtools/atop/nodeWithDebug/NodeWithDebug.ss'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -163,36 +163,36 @@ module:
         path:
           - ../proto
           - ../proto/Integration.test.s
-          - ../proto/dwtools
-          - ../proto/dwtools/Tools.s
-          - ../proto/dwtools/abase
-          - ../proto/dwtools/amid
-          - ../proto/dwtools/atop
-          - ../proto/dwtools/atop/nodeWithDebug
-          - ../proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
-          - ../proto/dwtools/atop/nodeWithDebug/Preload.ss
-          - ../proto/dwtools/atop/nodeWithDebug/browser
-          - ../proto/dwtools/atop/nodeWithDebug/browser/electron
+          - ../proto/wtools
+          - ../proto/wtools/Tools.s
+          - ../proto/wtools/abase
+          - ../proto/wtools/amid
+          - ../proto/wtools/atop
+          - ../proto/wtools/atop/nodeWithDebug
+          - ../proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
+          - ../proto/wtools/atop/nodeWithDebug/Preload.ss
+          - ../proto/wtools/atop/nodeWithDebug/browser
+          - ../proto/wtools/atop/nodeWithDebug/browser/electron
           - >-
-            ../proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronPreload.ss
+            ../proto/wtools/atop/nodeWithDebug/browser/electron/ElectronPreload.ss
           - >-
-            ../proto/dwtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss
-          - ../proto/dwtools/atop/nodeWithDebug/entry
-          - ../proto/dwtools/atop/nodeWithDebug/entry/Exec
-          - ../proto/dwtools/atop/nodeWithDebug/entry/ExecDebug
-          - ../proto/dwtools/atop/nodeWithDebug/entry/ExecUnrestricted
-          - ../proto/dwtools/atop/nodeWithDebug/entry/Include.s
-          - ../proto/dwtools/atop/nodeWithDebug.test
-          - ../proto/dwtools/atop/nodeWithDebug.test/Ext.test.ss
-          - ../proto/dwtools/atop/nodeWithDebug.test/_asset
-          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/env
-          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/env/Child.js
-          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/env/Index.js
-          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally
+            ../proto/wtools/atop/nodeWithDebug/browser/electron/ElectronProcess.ss
+          - ../proto/wtools/atop/nodeWithDebug/entry
+          - ../proto/wtools/atop/nodeWithDebug/entry/Exec
+          - ../proto/wtools/atop/nodeWithDebug/entry/ExecDebug
+          - ../proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted
+          - ../proto/wtools/atop/nodeWithDebug/entry/Include.s
+          - ../proto/wtools/atop/nodeWithDebug.test
+          - ../proto/wtools/atop/nodeWithDebug.test/Ext.test.ss
+          - ../proto/wtools/atop/nodeWithDebug.test/_asset
+          - ../proto/wtools/atop/nodeWithDebug.test/_asset/env
+          - ../proto/wtools/atop/nodeWithDebug.test/_asset/env/Child.js
+          - ../proto/wtools/atop/nodeWithDebug.test/_asset/env/Index.js
+          - ../proto/wtools/atop/nodeWithDebug.test/_asset/install-locally
           - >-
-            ../proto/dwtools/atop/nodeWithDebug.test/_asset/install-locally/package.json
-          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/run
-          - ../proto/dwtools/atop/nodeWithDebug.test/_asset/run/Index.js
+            ../proto/wtools/atop/nodeWithDebug.test/_asset/install-locally/package.json
+          - ../proto/wtools/atop/nodeWithDebug.test/_asset/run
+          - ../proto/wtools/atop/nodeWithDebug.test/_asset/run/Index.js
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -916,7 +916,7 @@ module:
       npm.scripts:
         test: wtest .run proto/**
       npm.bin:
-        debugnode: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
+        debugnode: proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
       module.willfiles:
         criterion:
@@ -996,7 +996,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
+        path: proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -1006,13 +1006,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/nodeWithDebug/NodeWithDebug.ss'
+        path: '{path::out.*=1}/source/wtools/atop/nodeWithDebug/NodeWithDebug.ss'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/nodeWithDebug/NodeWithDebug.ss'
+        path: '{path::out.*=1}/source/wtools/atop/nodeWithDebug/NodeWithDebug.ss'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug

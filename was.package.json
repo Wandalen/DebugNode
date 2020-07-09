@@ -12,12 +12,12 @@
   "license" : "MIT",
   "bin" :
   {
-    "single-process-debugnode" : "proto/dwtools/atop/nodeWithDebug/entry/Exec",
-    "debug-debugnode" : "proto/dwtools/atop/nodeWithDebug/entry/ExecDebug",
-    "unrestricted-debugnode" : "proto/dwtools/atop/nodeWithDebug/entry/ExecUnrestricted",
-    "debugnode" : "proto/dwtools/atop/nodeWithDebug/entry/ExecUnrestricted"
+    "single-process-debugnode" : "proto/wtools/atop/nodeWithDebug/entry/Exec",
+    "debug-debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecDebug",
+    "unrestricted-debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted",
+    "debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted"
   },
-  "main" : "proto/dwtools/atop/nodeWithDebug/entry/Include.s",
+  "main" : "proto/wtools/atop/nodeWithDebug/entry/Include.s",
   "repository" :
   {
     "type" : "git",

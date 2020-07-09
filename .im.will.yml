@@ -101,7 +101,7 @@ path :
       content : prime
 
   entry.proto.no.tests :
-    path : proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss
+    path : proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
     criterion :
       tests : 'no.tests'
   entry.proto.only.tests :
@@ -109,11 +109,11 @@ path :
     criterion :
       tests : 'only.tests'
 
-  # npm.entry : proto/dwtools/abase/Layer2.s
+  # npm.entry : proto/wtools/abase/Layer2.s
   # npm.files : proto
 
   entry.out.raw.debug :
-    path : '{path::out.*=1}/source/dwtools/atop/nodeWithDebug/NodeWithDebug.ss'
+    path : '{path::out.*=1}/source/wtools/atop/nodeWithDebug/NodeWithDebug.ss'
     criterion :
       debug : [ debug, release ]
       raw : raw

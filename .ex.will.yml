@@ -26,7 +26,7 @@ about :
   npm.scripts :
     test : 'wtest .run proto/**'
   npm.bin :
-    debugnode : 'proto/dwtools/atop/nodeWithDebug/NodeWithDebug.ss'
+    debugnode : 'proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss'
 
 path :
 
