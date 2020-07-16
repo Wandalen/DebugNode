@@ -20,12 +20,12 @@ if( typeof module !== 'undefined' )
 
 
 let _ = _global_.wTools;
-var Parent = null;
+let Parent = null;
 function NodeWithDebug( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
-var Self = NodeWithDebug;
+let Self = NodeWithDebug;
 
 Self.shortName = 'DebugNode';
 
