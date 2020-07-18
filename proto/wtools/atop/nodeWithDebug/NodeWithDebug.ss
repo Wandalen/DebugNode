@@ -630,7 +630,7 @@ var Statics =
 // prototype
 // --
 
-var Extend =
+var Extension =
 {
 
   init,
@@ -679,7 +679,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Extend,
+  extend : Extension,
 });
 
 //

@@ -42,8 +42,8 @@ printer.log( 'default text' );
 
 // printer.log();
 // printer.log( 'Coloring is easier with shortcuts:' );
-// let fg = _.color.strFormatForeground;
-// let bg = _.color.strFormatBackground;
+// let fg = _.ct.fg;
+// let bg = _.ct.bg;
 // printer.log( '\n', fg( 'red text', 'red' ), 'default text' );
 
 // /**/
