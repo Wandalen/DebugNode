@@ -1,6 +1,6 @@
 {
   "name" : "debugnode",
-  "version" : "0.3.216",
+  "version" : "0.3.217",
   "engine" : "node >= 6.3.0",
   "description" : "Nodejs debugger",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
