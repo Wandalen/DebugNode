@@ -5,13 +5,13 @@ submodule :
     path : npm:///wTools
     enabled : 0 # submodule
   ansicolor :
-    path : npm:///ansicolor#1.1.81
+    path : npm:///ansicolor#1.1.93
     enabled : 0 # submodule
   electron :
-    path : npm:///electron#5.0.6
+    path : npm:///electron#9.1.1
     enabled : 0 # submodule
   has-ansi :
-    path : npm:///has-ansi#3.0.0
+    path : npm:///has-ansi#4.0.0
     enabled : 0 # submodule
   node-ipc :
     path : npm:///node-ipc#9.1.1
