@@ -1,51 +1,65 @@
 {
-  "name" : "debugnode",
-  "version" : "0.3.217",
-  "engine" : "node >= 6.3.0",
-  "description" : "Nodejs debugger",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "contributors" :
-  [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school>" },
-    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
+  "name": "debugnode",
+  "version": "0.3.217",
+  "engine": "node >= 6.3.0",
+  "description": "Nodejs debugger",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors": [
+    {
+      "name": "Kostiantyn Wandalen",
+      "email": "wanalen@01.school>"
+    },
+    {
+      "name": "Volodymyr M.",
+      "email": "volodymyr.migdal@gmail.com"
+    }
   ],
-  "license" : "MIT",
-  "bin" :
-  {
-    "single-process-debugnode" : "proto/wtools/atop/nodeWithDebug/entry/Exec",
-    "debug-debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecDebug",
-    "unrestricted-debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted",
-    "debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted"
+  "license": "MIT",
+  "bin": {
+    "single-process-debugnode": "proto/wtools/atop/nodeWithDebug/entry/Exec",
+    "debug-debugnode": "proto/wtools/atop/nodeWithDebug/entry/ExecDebug",
+    "unrestricted-debugnode": "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted",
+    "debugnode": "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted"
   },
-  "main" : "proto/wtools/atop/nodeWithDebug/entry/Include.s",
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/Wandalen/NodeWithDebug.git"
+  "main": "proto/wtools/atop/nodeWithDebug/entry/Include.s",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/NodeWithDebug.git"
   },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/NodeWithDebug/issues"
+  "bugs": {
+    "url": "https://github.com/Wandalen/NodeWithDebug/issues"
   },
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3" },
-  "dependencies" :
-  {
-    "ansicolor" : "=1.1.81",
-    "electron" : "=5.0.6",
-    "has-ansi" : "=3.0.0",
-    "node-ipc" : "=9.1.1",
-    "portscanner" : "=2.2.0",
-    "needle" : "=2.5.0",
-    "wConsequence" : "alpha",
-    "wCopyable" : "alpha",
-    "wFiles" : "alpha",
-    "wLogger" : "alpha",
-    "wProto" : "alpha",
-    "wTools" : "alpha",
-    "wprocess" : "alpha",
-    "wpathbasic" : "alpha",
-    "wcommandsaggregator" : "alpha"
+  "scripts": {
+    "test": "wtest .run 'proto/**' rapidity:-3"
   },
-  "devDependencies" : { "eslint" : "=7.1.0", "wTesting" : "alpha" },
-  "keywords" : [ "node", "debug", "debugger", "inspect", "debug node", "node debug", "trace" ]
+  "dependencies": {
+    "ansicolor": "=1.1.93",
+    "electron": "=9.1.1",
+    "has-ansi": "=4.0.0",
+    "node-ipc": "=9.1.1",
+    "portscanner": "=2.2.0",
+    "needle": "=2.5.0",
+    "wConsequence": "alpha",
+    "wCopyable": "alpha",
+    "wFiles": "alpha",
+    "wLogger": "alpha",
+    "wProto": "alpha",
+    "wTools": "alpha",
+    "wprocess": "alpha",
+    "wpathbasic": "alpha",
+    "wcommandsaggregator": "alpha"
+  },
+  "devDependencies": {
+    "eslint": "=7.1.0",
+    "wTesting": "alpha"
+  },
+  "keywords": [
+    "node",
+    "debug",
+    "debugger",
+    "inspect",
+    "debug node",
+    "node debug",
+    "trace"
+  ]
 }
