@@ -1,4 +1,4 @@
-# utility::DebugNode [![Status](https://github.com/Wandalen/DebugNode/workflows/VisualTest/badge.svg)](https://github.com/Wandalen/DebugNode/actions?query=workflow%3ATest)
+# utility::DebugNode [![Status](https://github.com/Wandalen/DebugNode/workflows/VisualTest/badge.svg)](https://github.com/Wandalen/DebugNode/actions?query=workflow%3ATest) [![stable](https://img.shields.io/badge/stability-stable-green.svg)](https://github.com/emersion/stability-badges#stable)
 Nodejs debugger based on Electron and Chrome DevTools.
 
 ![image](doc/img.png)
