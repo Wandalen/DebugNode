@@ -162,8 +162,8 @@ function onNewNode( data, socket )
     throw _.err( 'Request failed. StatusCode:', response.statusCode );
 
     node.info = response.body[ 0 ];
-
     node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
+    node.url = _.strRemoveBegin( node.url, 'chrome-' );
 
     let message =
     {
@@ -273,6 +273,7 @@ function onInspectorServerReady( port )
     portscanner.checkPortStatus( port, '127.0.0.1', ( err, status ) =>
     {
       if( Debug )
+      if( err )
       _.errLogOnce( err );
       con.take( status )
     });

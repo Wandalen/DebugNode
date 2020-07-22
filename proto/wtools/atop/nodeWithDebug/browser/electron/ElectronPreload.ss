@@ -37,6 +37,43 @@ window.onload = function()
 
   /**/
 
+  consoleModelWrapper();
+
+  /**/
+
+  focusWindowOnDebuggerPause();
+
+  /**/
+
+  closeWindowOnDisconnect();
+}
+
+//
+
+function consoleModelWrapper()
+{
+  let con = new wConsequence();
+
+  SDK.targetManager.addModelListener
+  (
+    SDK.RuntimeModel,
+    SDK.RuntimeModel.Events.ExecutionContextCreated,
+    () => con.take( true ),
+    this
+  );
+
+  con.thenKeep( ( finallyGive ) =>
+  {
+    _consoleModelWrapper();
+
+    return finallyGive;
+  })
+}
+
+//
+
+function _consoleModelWrapper()
+{
   let original = SDK.consoleModel.addMessage;
   SDK.consoleModel.addMessage = function addMessage( message )
   {
@@ -75,16 +112,9 @@ window.onload = function()
 
     original.call( SDK.consoleModel, message );
   }
-
-  /**/
-
-  focusWindowOnDebuggerPause();
-
-  /**/
-
-  closeWindowOnDisconnect();
 }
 
+//
 
 function closeWindowOnDisconnect()
 {
