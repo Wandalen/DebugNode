@@ -25,7 +25,7 @@ jobs :
     if : "!startsWith( github.event.head_commit.message, 'version' )"
     runs-on : ${{ matrix.os }}
     strategy :
-      fail-fast  : false
+      fail-fast : false
       matrix :
         os : [ ubuntu-latest, windows-latest, macos-latest ]
         node-version : [ 14.x ]
@@ -47,7 +47,7 @@ jobs :
     if : "startsWith( github.event.head_commit.message, 'version' )"
     runs-on : ${{ matrix.os }}
     strategy :
-      fail-fast  : false
+      fail-fast : false
       matrix :
         os : [ ubuntu-latest, windows-latest, macos-latest ]
         node-version : [ 10.x, 12.x, 13.x, 14.x ]
