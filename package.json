@@ -1,6 +1,6 @@
 {
   "name" : "debugnode",
-  "version" : "0.3.229",
+  "version" : "0.3.230",
   "engine" : "node >= 6.3.0",
   "description" : "Nodejs debugger",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
@@ -21,11 +21,11 @@
   "repository" :
   {
     "type" : "git",
-    "url" : "https://github.com/Wandalen/NodeWithDebug.git"
+    "url" : "https://github.com/Wandalen/DebugNode.git"
   },
   "bugs" :
   {
-    "url" : "https://github.com/Wandalen/NodeWithDebug/issues"
+    "url" : "https://github.com/Wandalen/DebugNode/issues"
   },
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3" },
   "dependencies" :
