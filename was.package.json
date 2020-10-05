@@ -21,11 +21,11 @@
   "repository" :
   {
     "type" : "git",
-    "url" : "https://github.com/Wandalen/NodeWithDebug.git"
+    "url" : "https://github.com/Wandalen/DebugNode.git"
   },
   "bugs" :
   {
-    "url" : "https://github.com/Wandalen/NodeWithDebug/issues"
+    "url" : "https://github.com/Wandalen/DebugNode/issues"
   },
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3" },
   "dependencies" :
