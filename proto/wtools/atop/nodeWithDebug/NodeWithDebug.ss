@@ -433,6 +433,7 @@ function close()
   console.log( 'closing' )
 
   if( self.electronProcess )
+  if( self.electronProcess.connected )
   self.electronProcess.send({ exit : 1 } );
 
   if( self.nodeProcess )
