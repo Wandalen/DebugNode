@@ -473,7 +473,7 @@ function Exec()
 function exec()
 {
   let node = this;
-  let appArgs = _.process.args({ keyValDelimeter : 0 });
+  let appArgs = _.process.input({ keyValDelimeter : 0 });
   let ca = node._commandsMake();
   node.args = appArgs.scriptArgs;
 
