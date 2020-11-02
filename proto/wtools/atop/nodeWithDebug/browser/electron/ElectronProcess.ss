@@ -130,8 +130,8 @@ function launch()
     app.quit()
     reload = false;
   })
-  
-  app.on( 'will-quit', () => 
+
+  app.on( 'will-quit', () =>
   {
     globalShortcut.unregisterAll();
   })
