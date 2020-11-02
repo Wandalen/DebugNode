@@ -5,7 +5,7 @@
 
 var inspector = require( 'inspector' );
 var ipc = require( 'node-ipc' );
-var deasync = require( 'deasync' );
+var deasync = require( 'wdeasync' );
 var url = require('url');
 
 ipc.config.id = process.pid;
