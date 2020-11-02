@@ -31,7 +31,7 @@
   "dependencies" :
   {
     "ansicolor" : "=1.1.93",
-    "electron" : "=10.1.4",
+    "electron" : "=9.1.1",
     "has-ansi" : "=4.0.0",
     "node-ipc" : "=9.1.1",
     "portscanner" : "=2.2.0",
