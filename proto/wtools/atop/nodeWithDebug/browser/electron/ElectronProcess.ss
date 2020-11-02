@@ -4,197 +4,203 @@
 'use strict';
 
 let electron, ipc;
-  if( typeof module !== 'undefined' )
-  {
+if( typeof module !== 'undefined' )
+{
 
-    require( 'wTools' );
-
-    let _ = _global_.wTools;
-
-    _.include( 'wConsequence' );
-    _.include( 'wStringsExtra' );
-    _.include( 'wPathBasic' );
-
-    electron = require( 'electron' );
-    ipc = require( 'node-ipc' );
-
-  }
+  require( 'wTools' );
 
   let _ = _global_.wTools;
-  var app = electron.app;
-  var BrowserWindow = electron.BrowserWindow;
-  var globalShortcut = electron.globalShortcut;
 
-  var window;
-  let ready = new _.Consequence();
-  let childWindows = Object.create( null );
-  let reload = false;
-  let ipcHostId = process.env.nodewithdebugId;
-  let Debug = false;
+  _.include( 'wConsequence' );
+  _.include( 'wStringsExtra' );
+  _.include( 'wPathBasic' );
 
-  /*  */
+  electron = require( 'electron' );
+  ipc = require( 'node-ipc' );
 
-  launch();
+}
 
-  /*  */
+let _ = _global_.wTools;
+var app = electron.app;
+var BrowserWindow = electron.BrowserWindow;
+var globalShortcut = electron.globalShortcut;
 
-  function masterInit( o )
+var window;
+let ready = new _.Consequence();
+let childWindows = Object.create( null );
+let reload = false;
+let ipcHostId = process.env.nodewithdebugId;
+let Debug = false;
+
+/*  */
+
+launch();
+
+/*  */
+
+function masterInit( o )
+{
+  let workArea = electron.screen.getPrimaryDisplay().workAreaSize; // window.maximize() works with some artifact
+
+  var options =
   {
-    let workArea = electron.screen.getPrimaryDisplay().workAreaSize; // window.maximize() works with some artifact
-
-    var options =
+    width : workArea.width,
+    height : workArea.height,
+    webPreferences :
     {
-      width : workArea.width,
-      height : workArea.height,
-      webPreferences :
-      {
-        nodeIntegration : true,
-        preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
-      },
-      title : o.title + ' [main]'
-    }
-
-    window = new BrowserWindow( options );
-
-    window.loadURL( o.url );
-    window.show();
-
-    // window.webContents.openDevTools();
-
-    window.on( 'closed', function ()
-    {
-      window = null;
-    } )
-
-    return true;
+      nodeIntegration : true,
+      preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
+    },
+    title : o.title + ' [main]'
   }
 
+  window = new BrowserWindow( options );
 
-  function childInit( o )
+  window.loadURL( o.url );
+  window.show();
+
+  // window.webContents.openDevTools();
+
+  window.on( 'closed', function ()
   {
-    _.assert( window );
+    window = null;
+  } )
 
-    var options =
+  return true;
+}
+
+
+function childInit( o )
+{
+  _.assert( window );
+
+  var options =
+  {
+    parent : window,
+    modal : false,
+    width : 1280,
+    height : 720,
+    webPreferences :
     {
-      parent : window,
-      modal : false,
-      width : 1280,
-      height : 720,
-      webPreferences :
-      {
-        nodeIntegration : true,
-        preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
-      },
-      title : o.title,
-      show : false
-    }
-
-    let child = new BrowserWindow( options );
-    let pid = o.pid;
-
-    childWindows[ pid ] = child;
-
-    child.loadURL( o.url );
-
-    child.on( 'closed', function ()
-    {
-      ipc.of[ ipcHostId ].emit( 'electronChildClosed', { id : ipc.config.id, message : { pid } } );
-    } )
-
-    child.once( 'ready-to-show', () =>
-    {
-      child.show();
-    } )
-
-    return true;
+      nodeIntegration : true,
+      preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
+    },
+    title : o.title,
+    show : false
   }
 
-  //
+  let child = new BrowserWindow( options );
+  let pid = o.pid;
 
-  function launch()
+  childWindows[ pid ] = child;
+
+  child.loadURL( o.url );
+
+  child.on( 'closed', function ()
   {
-    process.on( 'message', ( msg ) =>
-    {
-      if( msg.exit )
-      app.quit()
-    } )
+    ipc.of[ ipcHostId ].emit( 'electronChildClosed', { id : ipc.config.id, message : { pid } } );
+  } )
 
-    setupIpc();
-    setupKeyboardShortcuts();
-
-    app.on( 'ready', () => ready.take( true ) );
-
-    app.on( 'window-all-closed', () =>
-    {
-      if( !reload )
-      app.quit()
-      reload = false;
-    } )
-
-    app.on( 'browser-window-created', function ( e, window )
-    {
-      window.setMenu( null );
-    } )
-
-  }
-
-  function setupIpc()
+  child.once( 'ready-to-show', () =>
   {
-    let con = new _.Consequence();
+    child.show();
+  } )
 
-    ipc.config.id = 'electon:' + process.pid;
-    ipc.config.retry = 1500;
-    ipc.config.silent = !Debug;
+  return true;
+}
 
-    ipc.connectTo( ipcHostId, () =>
+//
+
+function launch()
+{
+  process.on( 'message', ( msg ) =>
+  {
+    if( msg.exit )
+    app.quit()
+  })
+
+  setupIpc();
+  setupKeyboardShortcuts();
+
+  app.on( 'ready', () => ready.take( true ) );
+
+  app.on( 'window-all-closed', () =>
+  {
+    if( !reload )
+    app.quit()
+    reload = false;
+  })
+  
+  app.on( 'will-quit', () => 
+  {
+    globalShortcut.unregisterAll();
+  })
+
+  app.on( 'browser-window-created', function ( e, window )
+  {
+    window.setMenu( null );
+  })
+
+}
+
+function setupIpc()
+{
+  let con = new _.Consequence();
+
+  ipc.config.id = 'electon:' + process.pid;
+  ipc.config.retry = 1500;
+  ipc.config.silent = !Debug;
+
+  ipc.connectTo( ipcHostId, () =>
+  {
+    /* creates window for new node process */
+
+    ipc.of[ ipcHostId ].on( 'newNodeElectron', ( data ) =>
     {
-      /* creates window for new node process */
+      var o = data.message;
 
-      ipc.of[ ipcHostId ].on( 'newNodeElectron', ( data ) =>
-      {
-        var o = data.message;
+      // console.log( o )
 
-        // console.log( o )
-
-        if( o.isMaster )
-        ready.then( () => masterInit( o ) );
-        else
-        ready.then( () => childInit( o ) );
-
-      } );
-
-      /*  */
-
-      ipc.of[ ipcHostId ].emit( 'electronReady', { id : ipc.config.id, message : { ready : 1 } } );
+      if( o.isMaster )
+      ready.then( () => masterInit( o ) );
+      else
+      ready.then( () => childInit( o ) );
 
     } );
 
-  }
+    /*  */
 
-  //
+    ipc.of[ ipcHostId ].emit( 'electronReady', { id : ipc.config.id, message : { ready : 1 } } );
 
-  function setupKeyboardShortcuts()
+  } );
+
+}
+
+//
+
+function setupKeyboardShortcuts()
+{
+  ready.then( ( arg ) =>
   {
-    ready.then( ( finallyGive ) =>
-    {
-      globalShortcut.register( 'F5', handle );
-      globalShortcut.register( 'Ctrl+R', handle );
-      return finallyGive;
-    } );
+    globalShortcut.register( 'F5', handle );
+    globalShortcut.register( 'CommandOrControl+R', handle );
+    return arg;
+  });
 
-    function handle()
-    {
-      let windows = BrowserWindow.getAllWindows();
-      let focused = windows.filter( ( w ) => w.isFocused() );
-      if( !focused.length )
-      return;
-      ipc.of[ ipcHostId ].emit( 'debuggerRestart', { id : ipc.config.id, message : { restart : 1 } } );
-      reload = true;
-      window.close();
-    }
+  function handle()
+  {
+    let windows = BrowserWindow.getAllWindows();
+    let focused = windows.filter( ( w ) => w.isFocused() );
+    if( !focused.length )
+    return;
+    ipc.of[ ipcHostId ].emit( 'debuggerRestart', { id : ipc.config.id, message : { restart : 1 } } );
+    reload = true;
+    if( window )
+    window.close();
   }
+}
 
-} )();
+})();
 
 /*  */
 
