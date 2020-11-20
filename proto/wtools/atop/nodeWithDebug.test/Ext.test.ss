@@ -75,7 +75,7 @@ function run( test )
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
-    test.is( _.strHas( got.output, `[ 'arg1', 'arg2' ]` ) )
+    test.true( _.strHas( got.output, `[ 'arg1', 'arg2' ]` ) )
     return null;
   })
 
@@ -94,8 +94,8 @@ function env( test )
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
-    test.is( _.strHas( got.output, `Index.js executed` ) )
-    test.is( _.strHas( got.output, `Child.js executed` ) )
+    test.true( _.strHas( got.output, `Index.js executed` ) )
+    test.true( _.strHas( got.output, `Child.js executed` ) )
     return null;
   })
 
