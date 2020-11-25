@@ -402,7 +402,7 @@ function runElectron()
   }
 
   self.electronCon = _.process.start( o );
-  self.electronProcess = o.process;
+  self.electronProcess = o.pnd;
 
   self.electronProcess.once( 'exit', () => { self.state.debug = 0; })
   self.electronProcess.once( 'SIGINT', () => { self.state.debug = 0; })
