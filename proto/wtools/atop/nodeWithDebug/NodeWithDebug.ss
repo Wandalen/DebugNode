@@ -335,7 +335,8 @@ function runNode()
 
   let nodeCon = _.process.start( shellOptions );
   self.nodeCons.push( nodeCon );
-  self.nodeProcess = shellOptions.process;
+  self.nodeProcess = shellOptions.pnd;
+  // self.nodeProcess = shellOptions.process;
 
   var readline = require('readline');
 
@@ -350,11 +351,12 @@ function runNode()
     'https://nodejs.org/en/docs/inspector'
   ];
 
-  shellOptions.process.stdout.pipe( process.stdout );
+  shellOptions.pnd.stdout.pipe( process.stdout );
+  // shellOptions.process.stdout.pipe( process.stdout );
 
   let rl = readline.createInterface
   ({
-    input : shellOptions.process.stderr,
+    input : shellOptions.pnd.stderr,
   });
 
   rl.on( 'line', ( output ) =>
