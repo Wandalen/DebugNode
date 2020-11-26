@@ -357,6 +357,7 @@ function runNode()
   let rl = readline.createInterface
   ({
     input : shellOptions.pnd.stderr,
+    // input : shellOptions.process.stderr,
   });
 
   rl.on( 'line', ( output ) =>
