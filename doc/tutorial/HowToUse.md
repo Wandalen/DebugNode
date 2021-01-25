@@ -12,7 +12,7 @@
 
 Example:
 
-```debugnode sample/Sample.s arg1 arg2 arg3```
+```debugnode sample/trivial/Sample.s arg1 arg2 arg3```
 
 *Script path can be absolute or relative to current working directory.*
 
