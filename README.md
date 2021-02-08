@@ -17,6 +17,6 @@ Nodejs debugger based on Electron and Chrome DevTools.
 
 ## Usage
 
-``` debugnode sample/Sample.s arg1 arg2 ```
+``` debugnode sample/trivial/Sample.s arg1 arg2 ```
 
 [More information about usage](./doc/tutorial/HowToUse.md)
