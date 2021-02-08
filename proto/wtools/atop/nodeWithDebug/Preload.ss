@@ -99,10 +99,10 @@ function strReplaceAll( str, search, replacement)
 
 function strAppendOnce( src, end )
 {
-  if( src.indexOf( end, src.length - end.length ) !== -1 )
-  return src;
-  else
+  if( src.indexOf( end, src.length - end.length ) === -1 )
   return src + end;
+  else
+  return src;
 }
 
 })();
