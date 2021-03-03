@@ -1,6 +1,6 @@
 {
   "name" : "debugnode",
-  "version" : "0.3.280",
+  "version" : "0.3.281",
   "engine" : "node >= 6.3.0",
   "description" : "Nodejs debugger",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
@@ -18,12 +18,7 @@
     "debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted"
   },
   "main" : "proto/wtools/atop/nodeWithDebug/entry/Include.s",
-  "files" : 
-  [
-    "proto/wtools/atop/nodeWithDebug",
-    "proto/wtools/Tools.s",
-    "out"
-  ],
+  "files" : [ "proto/wtools/atop/nodeWithDebug", "proto/wtools/Tools.s", "out" ],
   "repository" :
   {
     "type" : "git",
