@@ -8,7 +8,7 @@ submodule :
     path : npm:///ansicolor#1.1.93
     enabled : 0 # submodule
   electron :
-    path : npm:///electron#10.1.5
+    path : npm:///electron#13.3.0
     enabled : 0 # submodule
   has-ansi :
     path : npm:///has-ansi#4.0.0
