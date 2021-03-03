@@ -18,6 +18,12 @@
     "debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted"
   },
   "main" : "proto/wtools/atop/nodeWithDebug/entry/Include.s",
+  "files" : 
+  [
+    "proto/wtools/atop/nodeWithDebug",
+    "proto/wtools/Tools.s",
+    "out"
+  ],
   "repository" :
   {
     "type" : "git",
