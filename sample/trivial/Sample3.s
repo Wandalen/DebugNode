@@ -3,14 +3,12 @@ let _ = require( 'wTools' );
 _.include( 'wLogger' )
 _.include( 'wColor' )
 
-debugger
 
 let printer = new _.Logger({ output : console });
 
 /**/
 
 printer.log();
-debugger
 printer.log( 'Setting color through field:' );
 
 printer.foregroundColor = 'red'; /* sets foreground color to red */

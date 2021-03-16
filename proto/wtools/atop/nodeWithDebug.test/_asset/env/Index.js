@@ -1,8 +1,6 @@
 var ChildProcess = require( 'child_process' );
 var path = require( 'path' );
 
-// debugger
-
 let env = process.env;
 env.var = 1;
 
