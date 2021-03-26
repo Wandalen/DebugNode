@@ -5,15 +5,15 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../Tools.s' );
+  const _ = require( '../../Tools.s' );
 
   _.include( 'wTesting' );
   _.include( 'wProcess' );
   _.include( 'wFiles' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 //
@@ -228,7 +228,7 @@ env.timeOut = 30000;
 
 //
 
-let Self =
+const Proto =
 {
 
   name : 'Tools/atop/DebugNode',
@@ -257,7 +257,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

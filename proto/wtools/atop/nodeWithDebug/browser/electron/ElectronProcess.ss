@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 
   require( 'wTools' );
 
-  let _ = _global_.wTools;
+  const _ = _global_.wTools;
 
   _.include( 'wConsequence' );
   _.include( 'wStringsExtra' );
@@ -20,7 +20,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
 var globalShortcut = electron.globalShortcut;

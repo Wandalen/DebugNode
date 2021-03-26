@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
 {
   require( 'wTools' );
 
-  let _ = _global_.wTools;
+  const _ = _global_.wTools;
 
   _.include( 'wPathBasic' )
   _.include( 'wConsequence' )
@@ -19,17 +19,17 @@ if( typeof module !== 'undefined' )
 }
 
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 let Parent = null;
 function NodeWithDebug( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
-let Self = NodeWithDebug;
+const Self = NodeWithDebug;
 
 Self.shortName = 'DebugNode';
 
-let _global = _global_;
+const _global = _global_;
 let Debug = false;
 
 /*
