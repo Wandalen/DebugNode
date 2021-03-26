@@ -20,7 +20,7 @@ if( typeof module !== 'undefined' )
 
 
 const _ = _global_.wTools;
-let Parent = null;
+const Parent = null;
 function NodeWithDebug( o )
 {
   return _.workpiece.construct( Self, this, arguments );
