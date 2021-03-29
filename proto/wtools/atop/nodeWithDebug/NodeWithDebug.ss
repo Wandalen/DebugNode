@@ -488,7 +488,7 @@ function exec()
 function _commandsMake()
 {
   let node = this;
-  let fileProvider = _.fileProvider;
+  const fileProvider = _.fileProvider;
 
   _.assert( _.instanceIs( node ) );
   _.assert( arguments.length === 0 );
