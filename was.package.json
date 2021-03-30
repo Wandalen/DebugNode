@@ -22,7 +22,7 @@
     "debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted"
   },
   "main" : "proto/wtools/atop/nodeWithDebug/entry/Include.s",
-  "files" : [ "proto/wtools/atop/nodeWithDebug", "proto/wtools/Tools.s", "out" ],
+  "files" : [ "proto/wtools/atop/nodeWithDebug", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
   "repository" :
   {
     "type" : "git",
