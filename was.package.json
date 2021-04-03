@@ -21,7 +21,7 @@
     "debugnode.unrestricted" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted",
     "debugnode" : "proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted"
   },
-  "main" : "/pro/module/DebugNode/proto/node_modules/debugnode",
+  "main" : "proto/node_modules/debugnode",
   "files" : [ "proto/wtools/atop/nodeWithDebug", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
   "repository" :
   {
