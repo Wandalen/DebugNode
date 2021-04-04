@@ -1653,6 +1653,4 @@ module:
       ../.im.will.yml:
         hash: 47cb5f255f8fd6ae80b94bcff0fc5f74
         size: 5901
-      DebugNode.out.will.yml:
-        hash: d36fb199da8c9b71400b4a6ebc2b8fc2
-        size: 42677
+      DebugNode.out.will.yml: *ref_0
