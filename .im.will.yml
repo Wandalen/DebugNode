@@ -119,8 +119,8 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - /pro/module/DebugNode/proto/wtools/atop/nodeWithDebug/entry/Include.s
-    - /pro/module/DebugNode/proto/node_modules/debugnode
+    - proto/wtools/atop/nodeWithDebug/entry/Include.s
+    - proto/node_modules/debugnode
 reflector:
   reflect.proto:
     inherit: predefined.*
