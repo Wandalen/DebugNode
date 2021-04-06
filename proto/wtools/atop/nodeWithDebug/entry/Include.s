@@ -11,7 +11,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../NodeWithDebug.ss' );
+  const _ = require( '../NodeWithDebug.ss' );
   module[ 'exports' ] = _global_.wTools;
 
   if( !module.parent )

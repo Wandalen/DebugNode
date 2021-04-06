@@ -1,6 +1,6 @@
 let ansi = require ( 'ansicolor' )
 let hasAnsi = require( 'has-ansi' );
-let _ = require( 'wTools' );
+const _ = require( 'wTools' );
 _.include( 'wConsequence' )
 _.include( 'wPathBasic' )
 let electron = require( 'electron' );
