@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - DebugNode.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  DebugNode.out.will.yml: &ref_0
+    hash: 5a0d9b4c0b430e137df20efa868fa391
+    size: 42677
+  ../.ex.will.yml: &ref_1
     hash: fb7da5825c0e5ba7e6e70613f826f043
     size: 1832
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: 0914a10035d1519295d6405d0814c7c0
     size: 5857
 module:
@@ -16,11 +19,11 @@ module:
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - node
         - debug
         - debugger
@@ -30,13 +33,13 @@ module:
         - trace
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: debugnode
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
-      npm.bin: &ref_6
+      npm.bin:
         debugnode: proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
       module.willfiles:
@@ -167,8 +170,8 @@ module:
           - ../proto/Integration.test.ss
           - ../proto/node_modules
           - ../proto/node_modules/debugnode
+          - ../proto/node_modules/Tools
           - ../proto/wtools
-          - ../proto/wtools/Tools.s
           - ../proto/wtools/abase
           - ../proto/wtools/amid
           - ../proto/wtools/atop
@@ -783,6 +786,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          filePath: 'reflector::exported.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          filePath: 'reflector::exported.files.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -871,8 +892,9 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      DebugNode.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: DebugNode
@@ -880,14 +902,28 @@ module:
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - node
+        - debug
+        - debugger
+        - inspect
+        - debug node
+        - node debug
+        - trace
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
+        - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: debugnode
-      npm.scripts: *ref_5
-      npm.bin: *ref_6
+      npm.scripts:
+        test: wtest .run proto/**
+      npm.bin:
+        debugnode: proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
       module.willfiles:
         criterion:
@@ -1617,3 +1653,6 @@ module:
       ../.im.will.yml:
         hash: 0914a10035d1519295d6405d0814c7c0
         size: 5857
+      DebugNode.out.will.yml:
+        hash: 5a0d9b4c0b430e137df20efa868fa391
+        size: 42677
