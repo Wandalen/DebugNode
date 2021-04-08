@@ -47,7 +47,7 @@ function installLocally( test )
   let a = test.assetFor( 'install-locally' );
 
   a.reflect();
-  a.shell( 'will .npm.install' )
+  a.shell( 'npm i' )
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
