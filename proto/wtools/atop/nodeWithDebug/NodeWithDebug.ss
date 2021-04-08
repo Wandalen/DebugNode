@@ -4,9 +4,7 @@ var ipc, needle, portscanner;
 
 if( typeof module !== 'undefined' )
 {
-  require( 'wTools' );
-
-  const _ = _global_.wTools;
+  const _ = require( 'Tools' );
 
   _.include( 'wPathBasic' )
   _.include( 'wConsequence' )
@@ -480,7 +478,11 @@ function exec()
   let ca = node._commandsMake();
   node.args = appArgs.scriptArgs;
 
-  return ca.appArgsPerform({ appArgs });
+  return ca.programPerform
+  ({
+    program : _.strUnquote( appArgs.original ),
+    withParsed : 0,
+  });
 }
 
 //
@@ -510,7 +512,6 @@ function _commandsMake()
   })
 
   _.assert( ca.logger === node.logger );
-  _.assert( ca.verbosity === node.verbosity );
 
   ca.form();
 

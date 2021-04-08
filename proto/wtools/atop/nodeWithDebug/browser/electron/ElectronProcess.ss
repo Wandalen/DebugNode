@@ -6,10 +6,7 @@
 let electron, ipc;
 if( typeof module !== 'undefined' )
 {
-
-  require( 'wTools' );
-
-  const _ = _global_.wTools;
+  const _ = require( 'Tools' );
 
   _.include( 'wConsequence' );
   _.include( 'wStringsExtra' );
