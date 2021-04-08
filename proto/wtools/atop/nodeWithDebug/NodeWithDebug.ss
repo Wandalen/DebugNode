@@ -4,9 +4,7 @@ var ipc, needle, portscanner;
 
 if( typeof module !== 'undefined' )
 {
-  require( '../../../node_modules/Tools' );
-
-  const _ = _global_.wTools;
+  const _ = require( 'Tools' );
 
   _.include( 'wPathBasic' )
   _.include( 'wConsequence' )
