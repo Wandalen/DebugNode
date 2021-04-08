@@ -7,7 +7,7 @@ let electron, ipc;
 if( typeof module !== 'undefined' )
 {
 
-  require( 'wTools' );
+  require( '../../../../../node_modules/Tools' );
 
   const _ = _global_.wTools;
 

@@ -5,7 +5,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  const _ = require( 'Tools' );
+  const _ = require( '../../../node_modules/Tools' );
 
   _.include( 'wTesting' );
   _.include( 'wProcess' );
@@ -47,7 +47,7 @@ function installLocally( test )
   let a = test.assetFor( 'install-locally' );
 
   a.reflect();
-  a.shell( 'npm i' )
+  a.shell( 'will .npm.install' )
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
