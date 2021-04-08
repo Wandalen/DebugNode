@@ -47,6 +47,7 @@ function masterInit( o )
     {
       nodeIntegration : true,
       enableRemoteModule : true,
+      contextIsolation : false,
       preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
     },
     title : o.title + ' [main]'
@@ -82,7 +83,8 @@ function childInit( o )
     {
       nodeIntegration : true,
       enableRemoteModule : true,
-      preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
+      contextIsolation : false,
+      preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) ),
     },
     title : o.title,
     show : false
