@@ -160,7 +160,8 @@ function onNewNode( data, socket )
     throw _.err( 'Request failed. StatusCode:', response.statusCode );
 
     node.info = response.body[ 0 ];
-    node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat;
+    // node.url = node.info.devtoolsFrontendUrl || node.info.devtoolsFrontendUrlCompat; //qqq: revert back after https://github.com/electron/electron/issues/28472 fixed
+    node.url = node.info.devtoolsFrontendUrlCompat;
     node.url = _.strRemoveBegin( node.url, 'chrome-' );
 
     let message =
