@@ -499,11 +499,11 @@ function _commandsMake()
   let commands =
   {
 
-    'help' : { e : _.routineJoin( node, node.commandHelp ), h : 'Get help.' },
-    'run' : { e : _.routineJoin( node, node.commandRun ), h : 'Debug script.' },
+    'help' : { ro : _.routineJoin( node, node.commandHelp ), h : 'Get help.' },
+    'run' : { ro : _.routineJoin( node, node.commandRun ), h : 'Debug script.' },
   }
 
-  let ca = node.ca = _.CommandsAggregator
+  let ca = node.aggregator = _.CommandsAggregator
   ({
     basePath : fileProvider.path.current(),
     commands,
@@ -524,9 +524,9 @@ function _commandsMake()
 function _commandHandleSyntaxError( o )
 {
   let node = this;
-  let ca = node.ca;
+  let ca = node.aggregator;
   node.args.unshift( '.run' );
-  return ca.commandPerform({ command : '.run' });
+  return ca.instructionPerform({ command : '.run' });
 }
 
 //
@@ -534,7 +534,7 @@ function _commandHandleSyntaxError( o )
 function commandHelp( e )
 {
   let node = this;
-  let ca = e.ca;
+  let ca = e.aggregator;
   let logger = node.logger;
 
   logger.log( 'Known commands' );
@@ -551,7 +551,7 @@ function commandHelp( e )
 function commandRun( e )
 {
   let node = this;
-  let ca = e.ca;
+  let ca = e.aggregator;
 
   let ready = node.ready;
 
