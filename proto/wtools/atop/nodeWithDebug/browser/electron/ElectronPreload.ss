@@ -4,6 +4,7 @@ const _ = require( 'wTools' );
 _.include( 'wConsequence' )
 _.include( 'wPathBasic' )
 let electron = require( 'electron' );
+let electronWindow = null;
 
 ansi.rgb =
 {
@@ -33,19 +34,19 @@ ansi.rgb =
 
 window.onload = function()
 {
-  window.electronWidnow = electron.remote.getCurrentWindow();
+  electronWindow = electron.remote.getCurrentWindow();
 
   /**/
 
   consoleModelWrapper();
 
-  /**/
+  // /**/
 
   focusWindowOnDebuggerPause();
 
-  /**/
+  // /**/
 
-  closeWindowOnDisconnect();
+  // closeWindowOnDisconnect();
 }
 
 //
@@ -124,7 +125,11 @@ function closeWindowOnDisconnect()
   (
     SDK.RuntimeModel,
     SDK.RuntimeModel.Events.ExecutionContextDestroyed,
-    () => con.take( true ),
+    () =>
+    {
+      context = null;
+      con.take( true );
+    },
     this
   );
 
@@ -134,7 +139,7 @@ function closeWindowOnDisconnect()
     window.close();
 
     return finallyGive;
-  } )
+  })
 }
 
 //
@@ -151,7 +156,7 @@ function focusWindowOnDebuggerPause()
 
   function handler()
   {
-    if( !electronWidnow.isFocused() )
-    electronWidnow.focus();
+    if( !electronWindow.isFocused() )
+    electronWindow.focus();
   }
 }

@@ -6,7 +6,7 @@ submodule:
     path: 'npm:///ansicolor#1.1.93'
     enabled: 0
   electron:
-    path: 'npm:///electron#13.3.0'
+    path: 'npm:///electron#12.0.4'
     enabled: 0
   has-ansi:
     path: 'npm:///has-ansi#4.0.0'
