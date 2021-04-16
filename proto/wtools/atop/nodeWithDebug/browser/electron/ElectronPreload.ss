@@ -46,7 +46,7 @@ window.onload = function()
 
   // /**/
 
-  // closeWindowOnDisconnect();
+  closeWindowOnDisconnect();
 }
 
 //
@@ -125,9 +125,9 @@ function closeWindowOnDisconnect()
   (
     SDK.RuntimeModel,
     SDK.RuntimeModel.Events.ExecutionContextDestroyed,
-    () =>
+    ( context ) =>
     {
-      context = null;
+      if( context.data.debuggerModel.debuggerEnabled() )
       con.take( true );
     },
     this
