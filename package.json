@@ -1,6 +1,6 @@
 {
   "name" : "debugnode",
-  "version" : "0.3.313",
+  "version" : "0.3.314",
   "engine" : "node >= 6.3.0",
   "description" : "Nodejs debugger",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
@@ -43,7 +43,7 @@
   "dependencies" :
   {
     "ansicolor" : "=1.1.93",
-    "electron" : "=11.3.0",
+    "electron" : "=12.0.4",
     "has-ansi" : "=4.0.0",
     "node-ipc" : "=9.1.1",
     "portscanner" : "=2.2.0",
