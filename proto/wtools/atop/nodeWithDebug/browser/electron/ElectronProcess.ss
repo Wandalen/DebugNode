@@ -84,7 +84,7 @@ function childInit( o )
       nodeIntegration : true,
       enableRemoteModule : true,
       contextIsolation : false,
-      preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) ),
+      preload : _.path.nativize( _.path.join( __dirname, 'ElectronPreload.ss' ) )
     },
     title : o.title,
     show : false
