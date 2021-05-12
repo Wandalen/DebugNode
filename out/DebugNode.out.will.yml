@@ -2,12 +2,9 @@ format: outwillfile-2.0
 root:
   - DebugNode.out
 consistency:
-  ../.ex.will.yml: &ref_0
-    hash: fb7da5825c0e5ba7e6e70613f826f043
-    size: 1832
-  ../.im.will.yml: &ref_1
-    hash: 459a6124ae24d1faeb909bf42c987aa9
-    size: 5857
+  ../will.yml: &ref_0
+    hash: 50d2b301ce0d25303937b4584366882a
+    size: 7451
 module:
   DebugNode.out:
     about:
@@ -16,11 +13,12 @@ module:
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords: &ref_3
+      license: MIT
+      npm.name: debugnode
+      npm.bin: &ref_1
+        debugnode: proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: &ref_2
         - node
         - debug
         - debugger
@@ -28,16 +26,15 @@ module:
         - debug node
         - node debug
         - trace
-      license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors: &ref_3
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
-      npm.name: debugnode
+      interpreters: &ref_4
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
       npm.scripts: &ref_5
         test: wtest .run proto/**
-      npm.bin: &ref_6
-        debugnode: proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
     path:
       module.willfiles:
         criterion:
@@ -50,15 +47,11 @@ module:
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.in:
         criterion:
           predefined: 1
@@ -246,15 +239,15 @@ module:
         path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
-      wExecTools:
+      wprocess:
         path: 'npm:///wprocess'
         autoExporting: 0
         enabled: 0
-      wPathBasic:
+      wpathbasic:
         path: 'npm:///wpathbasic'
         autoExporting: 0
         enabled: 0
-      wCommandsAggregator:
+      wcommandsaggregator:
         path: 'npm:///wcommandsaggregator'
         autoExporting: 0
         enabled: 0
@@ -871,8 +864,7 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      ../will.yml: *ref_0
   ../:
     about:
       name: DebugNode
@@ -880,27 +872,23 @@ module:
       description: Nodejs debugger.
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
       npm.name: debugnode
+      npm.bin: *ref_1
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: *ref_2
+      contributors: *ref_3
+      interpreters: *ref_4
       npm.scripts: *ref_5
-      npm.bin: *ref_6
     path:
       module.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
@@ -1050,15 +1038,15 @@ module:
         path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
-      wExecTools:
+      wprocess:
         path: 'npm:///wprocess'
         autoExporting: 0
         enabled: 0
-      wPathBasic:
+      wpathbasic:
         path: 'npm:///wpathbasic'
         autoExporting: 0
         enabled: 0
-      wCommandsAggregator:
+      wcommandsaggregator:
         path: 'npm:///wcommandsaggregator'
         autoExporting: 0
         enabled: 0
@@ -1611,9 +1599,6 @@ module:
           - 'build::release'
           - 'build::npm'
     consistency:
-      ../.ex.will.yml:
-        hash: fb7da5825c0e5ba7e6e70613f826f043
-        size: 1832
-      ../.im.will.yml:
-        hash: 459a6124ae24d1faeb909bf42c987aa9
-        size: 5857
+      ../will.yml:
+        hash: 50d2b301ce0d25303937b4584366882a
+        size: 7451
