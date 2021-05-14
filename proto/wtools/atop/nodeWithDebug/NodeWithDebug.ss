@@ -593,7 +593,7 @@ function commandRun( e )
 }
 
 // --
-// relationships
+// relationss
 // --
 
 var Composes =
@@ -669,7 +669,7 @@ var Extension =
 
   exec,
 
-  // relationships
+  // relationss
 
   Composes,
   Aggregates,
