@@ -317,6 +317,13 @@ function runNode()
   env.nodewithdebugId = ipc.config.id;
   env.PATH = process.env.PATH;
 
+  if( !Debug )
+  {
+    /* disables inspector debug output */
+    let inspectorArg = '--inspect-publish-uid=http';
+    env.NODE_OPTIONS = env.NODE_OPTIONS ? env.NODE_OPTIONS + inspectorArg : inspectorArg;
+  }
+
   var shellOptions =
   {
     mode : 'spawn',
@@ -350,12 +357,10 @@ function runNode()
   ];
 
   shellOptions.pnd.stdout.pipe( process.stdout );
-  // shellOptions.process.stdout.pipe( process.stdout );
 
   let rl = readline.createInterface
   ({
     input : shellOptions.pnd.stderr,
-    // input : shellOptions.process.stderr,
   });
 
   rl.on( 'line', ( output ) =>
@@ -397,7 +402,8 @@ function runElectron()
     env,
     ipc : 1,
     verbosity : 2,
-    outputPiping : 1,
+    outputPiping : Debug,
+    inputMirroring : 0,
     applyingExitCode : 0,
     throwingExitCode : 0
   }
