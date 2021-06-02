@@ -1,4 +1,4 @@
-# utility::DebugNode [![status](https://github.com/Wandalen/DebugNode/actions/workflows/StandardPublish.yml/badge.svg)](https://github.com/Wandalen/DebugNode/actions/workflows/StandardPublish.yml) [![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)](https://github.com/emersion/stability-badges#stable)
+# utility::DebugNode [![status](https://github.com/Wandalen/DebugNode/actions/workflows/VisualPublish.yml/badge.svg)](https://github.com/Wandalen/DebugNode/actions/workflows/VisualPublish.yml) [![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)](https://github.com/emersion/stability-badges#stable)
 Nodejs debugger based on Electron and Chrome DevTools.
 
 ![image](doc/img.png)
