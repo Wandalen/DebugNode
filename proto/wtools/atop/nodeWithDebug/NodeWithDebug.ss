@@ -397,7 +397,8 @@ function runElectron()
     env,
     ipc : 1,
     verbosity : 2,
-    outputPiping : 1,
+    outputPiping : Debug,
+    inputMirroring : 0,
     applyingExitCode : 0,
     throwingExitCode : 0
   }
