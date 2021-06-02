@@ -47,7 +47,7 @@ function init( o )
 
   o = o || Object.create( null );
 
-  _.assert( arguments.length === 0 | arguments.length === 1 );
+  _.assert( arguments.length === 0 || arguments.length === 1 );
 
   self.ready = new _.Consequence();
   self.nodes = [];
