@@ -71,7 +71,7 @@ function masterInit( o )
 
 function childInit( o )
 {
-  _.assert( window );
+  _.assert( window !== null );
 
   var options =
   {
