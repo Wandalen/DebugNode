@@ -317,7 +317,9 @@ function runNode()
   env.nodewithdebugId = ipc.config.id;
   env.PATH = process.env.PATH;
 
-  if( !Debug )
+  let versionMajor = Number.parseInt( process.versions.node.split( '.' )[ 0 ] );
+
+  if( !Debug && versionMajor >= 12 )
   {
     /* disables inspector debug output */
     let inspectorArg = '--inspect-publish-uid=http';
