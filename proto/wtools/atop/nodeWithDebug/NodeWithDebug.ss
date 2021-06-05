@@ -323,7 +323,10 @@ function runNode()
   {
     /* disables inspector debug output */
     let inspectorArg = '--inspect-publish-uid=http';
-    env.NODE_OPTIONS = env.NODE_OPTIONS ? env.NODE_OPTIONS + inspectorArg : inspectorArg;
+    if( !env.NODE_OPTIONS )
+    env.NODE_OPTIONS = '';
+    if( !_.strHas( env.NODE_OPTIONS, inspectorArg ) )
+    env.NODE_OPTIONS += ' ' + inspectorArg;
   }
 
   var shellOptions =
