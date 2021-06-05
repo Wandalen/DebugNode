@@ -701,7 +701,5 @@ _.classDeclare
 // --
 
 _global_.wTools[ Self.shortName ] = Self;
-
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
-
