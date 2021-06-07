@@ -46,17 +46,15 @@ function installLocally( test )
   let self = this;
   let a = test.assetFor( 'install-locally' );
 
-  // a.reflect();
-  // a.shell( 'npm i' )
-  // .then( ( got ) =>
-  // {
-  //   test.identical( got.exitCode, 0 );
-  //   return null;
-  // })
+  a.reflect();
+  a.shell( 'npm i' )
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+    return null;
+  })
 
-  // return a.ready;
-
-  test.true( false )
+  return a.ready;
 
 }
 
