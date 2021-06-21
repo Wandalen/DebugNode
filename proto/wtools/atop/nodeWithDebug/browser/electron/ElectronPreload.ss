@@ -67,6 +67,14 @@ function focusSourceFile()
 
   function handler()
   {
+    SDK.targetManager.removeModelListener
+    (
+      SDK.DebuggerModel,
+      SDK.DebuggerModel.Events.DebuggerPaused,
+      handler,
+      this
+    );
+
     _.time.out( 500, () =>
     {
       try
