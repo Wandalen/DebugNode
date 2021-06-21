@@ -38,6 +38,10 @@ window.onload = function()
 
   /**/
 
+  focusSourceFile();
+
+  /**/
+
   consoleModelWrapper();
 
   // /**/
@@ -47,6 +51,34 @@ window.onload = function()
   // /**/
 
   closeWindowOnDisconnect();
+}
+
+//
+
+function focusSourceFile()
+{
+  SDK.targetManager.addModelListener
+  (
+    SDK.DebuggerModel,
+    SDK.DebuggerModel.Events.DebuggerPaused,
+    handler,
+    this
+  );
+
+  function handler()
+  {
+    _.time.out( 500, () =>
+    {
+      try
+      {
+        let view = UI.viewManager.view('Call Stack');
+        view._defaultFocusedElement.click();
+      }
+      catch( err )
+      {
+      }
+    })
+  }
 }
 
 //
