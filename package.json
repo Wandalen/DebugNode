@@ -1,6 +1,6 @@
 {
   "name": "debugnode",
-  "version": "0.3.347",
+  "version": "0.3.348",
   "engine": "node >= 6.3.0",
   "description": "Nodejs debugger",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
@@ -48,15 +48,15 @@
     "node.debug": "node proto/wtools/atop/nodeWithDebug/entry/ExecUnrestricted"
   },
   "dependencies": {
-    "wTools": "latest",
-    "wProto": "latest",
-    "wprocess": "latest",
-    "wpathbasic": "latest",
-    "wLogger": "latest",
-    "wFiles": "latest",
-    "wCopyable": "latest",
-    "wConsequence": "latest",
-    "wcommandsaggregator": "latest",
+    "wTools": "delta",
+    "wProto": "delta",
+    "wprocess": "delta",
+    "wpathbasic": "delta",
+    "wLogger": "delta",
+    "wFiles": "delta",
+    "wCopyable": "delta",
+    "wConsequence": "delta",
+    "wcommandsaggregator": "delta",
     "portscanner": "=2.2.0",
     "node-ipc": "=9.1.1",
     "needle": "=2.5.0",
@@ -65,7 +65,7 @@
     "ansicolor": "=1.1.93"
   },
   "devDependencies": {
-    "wTesting": "latest",
+    "wTesting": "delta",
     "eslint": "=7.1.0"
   },
   "keywords": [
