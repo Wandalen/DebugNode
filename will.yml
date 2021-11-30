@@ -7,7 +7,7 @@ about:
   npm.name: debugnode
   npm.bin:
     debugnode: proto/wtools/atop/nodeWithDebug/NodeWithDebug.ss
-  author: Kostiantyn Wandalen <wanalen@01.school>
+  author: Kostiantyn Wandalen <wandalen@obox.systems>
   keywords:
     - node
     - debug
@@ -17,7 +17,7 @@ about:
     - node debug
     - trace
   contributors:
-    - Kostiantyn Wandalen <wanalen@01.school>
+    - Kostiantyn Wandalen <wandalen@obox.systems>
     - Volodymyr M. <volodymyr.migdal@gmail.com>
   interpreters:
     - njs >= 10.0.0

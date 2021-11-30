@@ -3,11 +3,11 @@
   "version": "0.3.361",
   "engine": "node >= 6.3.0",
   "description": "Nodejs debugger",
-  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "author": "Kostiantyn Wandalen <wandalen@obox.systems>",
   "contributors": [
     {
       "name": "Kostiantyn Wandalen",
-      "email": "wanalen@01.school>"
+      "email": "wandalen@obox.systems>"
     },
     {
       "name": "Volodymyr M.",
