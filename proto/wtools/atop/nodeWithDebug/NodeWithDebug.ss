@@ -143,7 +143,7 @@ function onNewNode( data, socket )
   node.title += ' ' + node.args.join( ' ' );
 
   var port = node.debugPort;
-  var requestUrl = 'http://localhost:' + port + '/json/list';
+  var requestUrl = 'http://127.0.0.1:' + port + '/json/list';
 
   ipc.server.emit( socket, 'newNodeReady', { id : ipc.config.id, message : { ready : 1 } } )
 
