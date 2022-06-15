@@ -3,8 +3,8 @@ root:
   - DebugNode.out
 consistency:
   ../will.yml: &ref_0
-    hash: c7ae0725bc13a2ced6cf1b256c7842c5
-    size: 7318
+    hash: e664c4a432c53bef960d5b6509b1ab01
+    size: 7235
 module:
   DebugNode.out:
     about:
@@ -195,68 +195,62 @@ module:
         path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
-      ansicolor:
-        path: 'npm:///ansicolor#1.1.93'
-        autoExporting: 0
-        enabled: 0
-      electron:
-        path: 'npm:///electron#12.0.4'
-        autoExporting: 0
-        enabled: 0
-      has-ansi:
-        path: 'npm:///has-ansi#4.0.0'
-        autoExporting: 0
-        enabled: 0
-      node-ipc:
-        path: 'npm:///node-ipc#9.1.1'
-        autoExporting: 0
-        enabled: 0
-      portscanner:
-        path: 'npm:///portscanner#2.2.0'
-        autoExporting: 0
-        enabled: 0
-      needle:
-        path: 'npm:///needle#2.5.0'
-        autoExporting: 0
-        enabled: 0
-      wConsequence:
-        path: 'npm:///wConsequence'
+      wProto:
+        path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
       wCopyable:
         path: 'npm:///wCopyable'
         autoExporting: 0
         enabled: 0
-      wFiles:
-        path: 'npm:///wFiles'
-        autoExporting: 0
-        enabled: 0
-      wLogger:
-        path: 'npm:///wLogger'
-        autoExporting: 0
-        enabled: 0
-      wProto:
-        path: 'npm:///wProto'
-        autoExporting: 0
-        enabled: 0
-      wprocess:
-        path: 'npm:///wprocess'
+      wcommandsaggregator:
+        path: 'npm:///wcommandsaggregator'
         autoExporting: 0
         enabled: 0
       wpathbasic:
         path: 'npm:///wpathbasic'
         autoExporting: 0
         enabled: 0
-      wcommandsaggregator:
-        path: 'npm:///wcommandsaggregator'
+      wprocess:
+        path: 'npm:///wprocess'
         autoExporting: 0
         enabled: 0
-      debugnode:
-        path: 'hd://..'
+      wConsequence:
+        path: 'npm:///wConsequence'
         autoExporting: 0
         enabled: 0
-        criterion:
-          development: 1
+      wLogger:
+        path: 'npm:///wLogger'
+        autoExporting: 0
+        enabled: 0
+      wFiles:
+        path: 'npm:///wFiles'
+        autoExporting: 0
+        enabled: 0
+      ansicolor:
+        path: 'npm:///ansicolor!1.1.93'
+        autoExporting: 0
+        enabled: 0
+      electron:
+        path: 'npm:///electron!13.6.6'
+        autoExporting: 0
+        enabled: 0
+      has-ansi:
+        path: 'npm:///has-ansi!4.0.0'
+        autoExporting: 0
+        enabled: 0
+      needle:
+        path: 'npm:///needle!2.5.0'
+        autoExporting: 0
+        enabled: 0
+      node-ipc:
+        path: 'npm:///node-ipc!9.1.1'
+        autoExporting: 0
+        enabled: 0
+      portscanner:
+        path: 'npm:///portscanner!2.2.0'
+        autoExporting: 0
+        enabled: 0
       wTesting:
         path: 'npm:///wTesting'
         autoExporting: 0
@@ -264,7 +258,7 @@ module:
         criterion:
           development: 1
       eslint:
-        path: 'npm:///eslint#7.1.0'
+        path: 'npm:///eslint!7.1.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -985,68 +979,62 @@ module:
         path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
-      ansicolor:
-        path: 'npm:///ansicolor#1.1.93'
-        autoExporting: 0
-        enabled: 0
-      electron:
-        path: 'npm:///electron#12.0.4'
-        autoExporting: 0
-        enabled: 0
-      has-ansi:
-        path: 'npm:///has-ansi#4.0.0'
-        autoExporting: 0
-        enabled: 0
-      node-ipc:
-        path: 'npm:///node-ipc#9.1.1'
-        autoExporting: 0
-        enabled: 0
-      portscanner:
-        path: 'npm:///portscanner#2.2.0'
-        autoExporting: 0
-        enabled: 0
-      needle:
-        path: 'npm:///needle#2.5.0'
-        autoExporting: 0
-        enabled: 0
-      wConsequence:
-        path: 'npm:///wConsequence'
+      wProto:
+        path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
       wCopyable:
         path: 'npm:///wCopyable'
         autoExporting: 0
         enabled: 0
-      wFiles:
-        path: 'npm:///wFiles'
-        autoExporting: 0
-        enabled: 0
-      wLogger:
-        path: 'npm:///wLogger'
-        autoExporting: 0
-        enabled: 0
-      wProto:
-        path: 'npm:///wProto'
-        autoExporting: 0
-        enabled: 0
-      wprocess:
-        path: 'npm:///wprocess'
+      wcommandsaggregator:
+        path: 'npm:///wcommandsaggregator'
         autoExporting: 0
         enabled: 0
       wpathbasic:
         path: 'npm:///wpathbasic'
         autoExporting: 0
         enabled: 0
-      wcommandsaggregator:
-        path: 'npm:///wcommandsaggregator'
+      wprocess:
+        path: 'npm:///wprocess'
         autoExporting: 0
         enabled: 0
-      debugnode:
-        path: 'hd://.'
+      wConsequence:
+        path: 'npm:///wConsequence'
         autoExporting: 0
         enabled: 0
-        criterion:
-          development: 1
+      wLogger:
+        path: 'npm:///wLogger'
+        autoExporting: 0
+        enabled: 0
+      wFiles:
+        path: 'npm:///wFiles'
+        autoExporting: 0
+        enabled: 0
+      ansicolor:
+        path: 'npm:///ansicolor!1.1.93'
+        autoExporting: 0
+        enabled: 0
+      electron:
+        path: 'npm:///electron!13.6.6'
+        autoExporting: 0
+        enabled: 0
+      has-ansi:
+        path: 'npm:///has-ansi!4.0.0'
+        autoExporting: 0
+        enabled: 0
+      needle:
+        path: 'npm:///needle!2.5.0'
+        autoExporting: 0
+        enabled: 0
+      node-ipc:
+        path: 'npm:///node-ipc!9.1.1'
+        autoExporting: 0
+        enabled: 0
+      portscanner:
+        path: 'npm:///portscanner!2.2.0'
+        autoExporting: 0
+        enabled: 0
       wTesting:
         path: 'npm:///wTesting'
         autoExporting: 0
@@ -1054,7 +1042,7 @@ module:
         criterion:
           development: 1
       eslint:
-        path: 'npm:///eslint#7.1.0'
+        path: 'npm:///eslint!7.1.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1582,5 +1570,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: c7ae0725bc13a2ced6cf1b256c7842c5
-        size: 7318
+        hash: e664c4a432c53bef960d5b6509b1ab01
+        size: 7235
